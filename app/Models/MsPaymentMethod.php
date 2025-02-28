@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class MsPaymentMethod extends Model
+{
+    use HasFactory;
+
+    protected $table = 'ms_payment_methods';
+
+    protected $primaryKey = 'payment_method_id';
+
+    protected $guarded = ['payment_method_id'];
+
+    public function transactionheader(){
+        return $this->hasMany(TransactionHeader::class, 'payment_method_id', 'payment_method_id');
+    }
+
+    public function mstopup(){
+        return $this->hasOne(MsTopUp::class, 'payment_method_id', 'payment_method_id');
+    }
+
+    public function mshistory()
+    {
+        return $this->hasMany(MsHistory::class, 'payment_method_id', 'payment_method_id');
+    }
+}
