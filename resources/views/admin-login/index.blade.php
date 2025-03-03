@@ -1,4 +1,4 @@
-@extends('admin-sidebar.index')
+@extends('admin-layouts.main')
 
 <link rel="stylesheet" href="/css/admin-login.css">
 
@@ -23,9 +23,7 @@
     </div>
 @endif
 
-<div>
-    <h1>Login</h1>
-</div>
+
 
 <form action="/admin/login" method="post" class= "admin-login-container">
     @csrf
