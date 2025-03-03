@@ -5,13 +5,18 @@
     align-items: center;
     padding: 20px;
     border-radius: 5%;
-    margin-top: 180px; 
+    
   
 
 }
 
 body{
     background-color: #C7C2AB !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
     
 }
 
@@ -33,8 +38,8 @@ label{
 }
 
 .form-control {
-    border: 1px solid black !important; /* Warna biru */
-    border-radius: 5px; /* Membuat sudut sedikit melengkung */
+    border: 1px solid black !important; 
+    border-radius: 5px; 
     padding: 10px;
     opacity: 0.5;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.7);
@@ -43,8 +48,8 @@ label{
 .admin-login-container button{
     margin-top: 22px;
     padding: 10px 20px; 
-    font-size: 20px; /* Ukuran teks lebih besar */
-    width: 100%; /* Tombol melebar sesuai container */
+    font-size: 20px; 
+    width: 100%; 
     background-color: #D1D88D;
     color: black;
     border: none;
@@ -57,3 +62,26 @@ label{
     background-color: #485935;
    
 }
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; 
+}
+
+
+.toggle-password {
+    position: absolute;
+    right: 10px; 
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px; 
+}
+

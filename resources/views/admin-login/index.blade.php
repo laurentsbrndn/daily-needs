@@ -36,6 +36,7 @@
         <div class="form-group">    
             <label for="admin_email">Email</label>
             <input type="email" name="admin_email" id="admin_email" class="form-control @error('admin_email') is-invalid @enderror" placeholder="Enter your email" value="{{ old('admin_email') }}" autofocus required>
+            
             @error('admin_email')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -45,7 +46,10 @@
     
         <div class="form-group">
             <label for="admin_password">Password</label>
-            <input type="password" name="admin_password" id="admin_password" class="form-control @error('admin_password') is-invalid @enderror" placeholder="Enter your password" required>
+            <div class = "password-wrapper">
+                <input type="password" name="admin_password" id="admin_password" class="form-control @error('admin_password') is-invalid @enderror" placeholder="Enter your password" required>
+                <i class="bi bi-eye-slash toggle-password"></i>
+            </div>
         </div>
     </div>
     
@@ -54,6 +58,27 @@
     </div>
 
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.querySelector(".toggle-password");
+        const passwordInput = document.getElementById("admin_password");
+
+        togglePassword.addEventListener("click", function () {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                this.classList.remove("bi-eye-slash"); 
+                this.classList.add("bi-eye"); 
+            } else {
+                passwordInput.type = "password";
+                this.classList.remove("bi-eye"); 
+                this.classList.add("bi-eye-slash"); 
+            }
+        });
+    });
+</script>
+
+
 
 
 @endsection
