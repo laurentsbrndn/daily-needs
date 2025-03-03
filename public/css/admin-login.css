@@ -1,0 +1,59 @@
+.admin-login-container{
+    margin: auto;
+    width:500px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 5%;
+    margin-top: 180px; 
+  
+
+}
+
+body{
+    background-color: #C7C2AB !important;
+    
+}
+
+.go-signup{
+    color: #FF0004;
+}
+
+.signup{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px; 
+}
+
+label{
+    margin-bottom: 8px;
+}
+
+.form-control {
+    border: 1px solid black !important; /* Warna biru */
+    border-radius: 5px; /* Membuat sudut sedikit melengkung */
+    padding: 10px;
+    opacity: 0.5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.7);
+}
+
+.admin-login-container button{
+    margin-top: 22px;
+    padding: 10px 20px; 
+    font-size: 20px; /* Ukuran teks lebih besar */
+    width: 100%; /* Tombol melebar sesuai container */
+    background-color: #D1D88D;
+    color: black;
+    border: none;
+    border-radius: 5px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.admin-login-container button:hover{
+    background-color: #485935;
+   
+}
