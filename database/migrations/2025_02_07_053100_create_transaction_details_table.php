@@ -17,8 +17,10 @@ return new class extends Migration
             $table->integer('quantity');
             $table->timestamps();
 
+            $table->primary(['transaction_id', 'product_id']);
+
             $table->foreign('transaction_id')->references('transaction_id')->on('transaction_headers')->onDelete('cascade');
-            $table->foreign('product_id')->references('product_id')->on('ms_products')->onDelete('cascade');
+            $table->foreign('product_id')->references('product_id')->on('ms_products')->onDelete('restrict');
         });
     }
 

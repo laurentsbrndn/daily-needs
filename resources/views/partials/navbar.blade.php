@@ -31,6 +31,9 @@
 
     <ul>
         @auth('customer')
+            <li>
+                <a href="/cart"><i class="bi bi-cart2"></i></a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     @if(auth('customer')->user()->customer_photo)
@@ -38,9 +41,7 @@
                              alt="Profile" class="rounded-circle me-2" width="30" height="30">
                     @endif
                     Welcome back, {{ auth('customer')->user()->customer_first_name }} 
-                    
                 </a>
-                
                 
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/dashboard/myprofile"><i class="bi bi-person-circle"></i> My Dashboard</a></li>

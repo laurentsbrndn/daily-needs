@@ -14,17 +14,18 @@ return new class extends Migration
         Schema::create('ms_products', function (Blueprint $table) {
             $table->id('product_id');
             $table->string('product_name', length: 200);
-            $table->decimal('product_price', total: 12, places: 2);
-            $table->integer('product_stock');
+            $table->unsignedDecimal('product_price', total: 12, places: 2);
+            $table->unsignedInteger('product_stock');
             $table->string('product_image', length: 200);
             $table->text('product_description');
             $table->string('product_slug', length: 200)->unique();
+            $table->enum('product_status', ['Available', 'Out of Stock', 'Discontinued']);
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
 
-            $table->foreign('brand_id')->references('brand_id')->on('ms_brands')->onDelete('cascade');
-            $table->foreign('category_id')->references('category_id')->on('ms_categories')->onDelete('cascade');
+            $table->foreign('brand_id')->references('brand_id')->on('ms_brands')->onDelete('set null');
+            $table->foreign('category_id')->references('category_id')->on('ms_categories')->onDelete('set null');
         });
     }
 

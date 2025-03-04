@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('ms_top_ups', function (Blueprint $table) {
             $table->id('top_up_id');
-            $table->decimal('top_up_amount', total: 12, places: 2);
+            $table->unsignedDecimal('top_up_amount', total: 12, places: 2);
             $table->dateTime('top_up_date', precision: 0);
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('payment_method_id');
             $table->timestamps();
 
-            $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('cascade');
-            $table->foreign('payment_method_id')->references('payment_method_id')->on('ms_payment_methods')->onDelete('cascade');
+            $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('set null');
+            $table->foreign('payment_method_id')->references('payment_method_id')->on('ms_payment_methods')->onDelete('restrict');
         });
     }
 

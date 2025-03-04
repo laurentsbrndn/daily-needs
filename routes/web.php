@@ -12,6 +12,7 @@ use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\CustomerTopUpController;
 use App\Http\Controllers\CustomerSignUpController;
 use App\Http\Controllers\AdminCategoriesController;
+use App\Http\Controllers\CustomerViewCartController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AdminAddNewProductController;
 use App\Http\Controllers\AdminUpdateProductController;
@@ -40,6 +41,8 @@ Route::post('/logout', [CustomerLoginController::class, 'logout'])->middleware('
 
 Route::get('/signup', [CustomerSignUpController::class, 'index'])->middleware('guest.access');
 Route::post('/signup', [CustomerSignUpController::class, 'store']);
+
+Route::get('/cart', [CustomerViewCartController::class, 'index'])->middleware('customer.access');
 
 Route::get('/dashboard/myprofile', [CustomerUpdateProfileController::class, 'show'])->middleware('auth:customer', 'customer.access');
 Route::put('dashboard/myprofile/update', [CustomerUpdateProfileController::class, 'update'])->middleware('auth:customer', 'customer.access');
