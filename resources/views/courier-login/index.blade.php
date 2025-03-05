@@ -20,18 +20,20 @@
     </div>
 @endif
 
-<div>
-    <h1>Login</h1>
-</div>
 
-<form action="/courier/login" method="post">
+
+<form action="/courier/login" method="post" class= "courier-login-container">
     @csrf
 
     <div>
+        <h1>Login</h1>
+    </div>
+
+    <div>
         <div>
-            <p class="signup">Don't have any account? <a href="/courier/signup">Sign Up</a></p>
+            <p class="signup">Don't have any account? <a href="/courier/signup" class="go-signup">Sign Up</a></p>
         </div>
-        <div>    
+        <div class = "form-group">    
             <label for="courier_email">Email</label>
             <input type="email" name="courier_email" id="courier_email" class="form-control @error('courier_email') is-invalid @enderror" placeholder="Enter your email" value="{{ old('courier_email') }}" autofocus required>
             @error('courier_email')
@@ -41,9 +43,12 @@
             @enderror
         </div>
     
-        <div>
+        <div class = "form-group">
             <label for="courier_password">Password</label>
-            <input type="password" name="courier_password" id="courier_password" class="form-control @error('courier_password') is-invalid @enderror" placeholder="Enter your password" required>
+            <div class="password-wrapper">
+                <input type="password" name="courier_password" id="courier_password" class="form-control @error('courier_password') is-invalid @enderror" placeholder="Enter your password" required>
+                <i class="bi bi-eye-slash toggle-password"></i>
+            </div>
         </div>
     </div>
     
