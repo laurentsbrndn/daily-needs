@@ -1,0 +1,86 @@
+.courier-login-container{
+    margin: auto;
+    width:500px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 5%;
+}
+
+body{
+    background-color: #C7C2AB !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    
+}
+
+.go-signup{
+    color: #FF0004;
+}
+
+.signup{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px; 
+}
+
+label{
+    margin-bottom: 8px;
+}
+
+.form-control {
+    border: 1px solid black !important; 
+    border-radius: 5px; 
+    padding: 10px;
+    opacity: 0.5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.7);
+}
+
+
+
+
+.courier-login-container button{
+    margin-top: 22px;
+    padding: 10px 20px; 
+    font-size: 20px; 
+    width: 100%; 
+    background-color: #D1D88D;
+    color: black;
+    border: none;
+    border-radius: 5px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.courier-login-container button:hover{
+    background-color: #485935;
+   
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; 
+}
+
+
+.toggle-password {
+    position: absolute;
+    right: 10px; 
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px; 
+}
