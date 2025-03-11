@@ -1,6 +1,6 @@
 <nav class="navbar">
     <a class="brand-logo" href="/"><img src="assets/image/Title Icon.jpeg" alt=""></a>
-    <ul class="nav-link">
+    <ul class="nav-left">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Category
@@ -13,23 +13,18 @@
             </ul>
         </li>        
         <li>
-            <div class="row">
-                <div class="col-md-20">
-                    <form action="/" method="get">
-                        @if(request('category'))
-                            <input type="hidden" name="category" value="{{ request('category') }}">
-                        @endif
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Type here to search" name="search" value="{{ request('search') }}">
-                            <button class="btn btn-danger" type="submit">Search</button>
-                        </div>
-                    </form>
+            <form action="/" method="get">
+                @if(request('category'))
+                    <input type="hidden" name="category" value="{{ request('category') }}">
+                @endif
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request('search') }}">
                 </div>
-            </div>
+            </form>
         </li>
     </ul>
 
-    <ul>
+    <ul class="nav-right">
         @auth('customer')
             <li>
                 <a href="/cart"><i class="bi bi-cart2"></i></a>
@@ -58,14 +53,14 @@
                 </ul>
             </li>
         @else
-            <li class="nav-links">
+            <ul class="nav-links">
                 <li>
                     <a href="/login"><i class="bi bi-cart2"></i></a>
                 </li>
                 <li>
                     <a href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                 </li>
-            </li>
+            </ul>
         @endauth
     </ul>
 </nav>
