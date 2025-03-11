@@ -19,20 +19,26 @@
         </div>
         
         <div class="sidebar-container">
-            <div class = "menu-item">
-                <i class="bi bi-person" style="color: #D1D88D;"></i>
-                <a href="/admin/myprofile">Admin Profile</a>
-            </div>
+            <a href="/admin/myprofile" style="text-decoration: none; color: inherit;">
+                <div class = "menu-item">
+                    <i class="bi bi-person" style="color: #D1D88D;"></i>
+                    <span>Admin Profile</span>
+                </div>
+            </a>
 
-            <div class = "menu-item">
-                <i class="bi bi-archive" style="color: #D1D88D;"></i>
-                <a href="/admin/productlist">Product List</a>
-            </div>
+            <a href="/admin/productlist" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <i class="bi bi-archive" style="color: #D1D88D;"></i>
+                    <span>Product List</span>
+                </div>
+            </a>
 
-            <div class = "menu-item">
-                <i class="bi bi-wallet2" style="color: #D1D88D;"></i>
-                <a href="/admin/transactions">Transactions</a>
-            </div>
+            <a href="/admin/transactions" style="text-decoration: none; color: inherit;">
+                <div class = "menu-item">
+                    <i class="bi bi-wallet2" style="color: #D1D88D;"></i>
+                    <span>Transactions</span>
+                </div>
+            </a>
 
             <form action="/admin/logout" method="post" class="menu-item-logout">
                 @csrf

@@ -43,12 +43,11 @@ body {
     bottom: 20px;
 }
 
-
-
-.menu-item a{
-    color: white;
+.menu-item span{
+    color: rgba(255, 255, 255, 0.893);
     text-decoration: none;
-    font-size:18px;
+    font-size:16px;
+    font-weight: bold;
 }
 
 .menu-item i, .menu-item-logout i{
@@ -60,10 +59,11 @@ body {
 }
 
 .dropdown-item{
-    color: white;
-    text-decoration: underline;
+    color: rgba(255, 255, 255, 0.893);
     display: flex;
     align-items: center;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .sidebar form {
@@ -74,11 +74,11 @@ body {
 }
 
 .sidebar .menu-item:hover {
-    background-color: #495057;
+    background-color: #d0d88d2b;
 }
 
 .sidebar form:hover {
-    background-color: #495057;
+    background-color: #d0d88d2b;
 }
 
 .content {
