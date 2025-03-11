@@ -63,16 +63,6 @@
         </div>
 
         <div>
-            <label for="customer_address">Address</label>
-            <input type="text" name="customer_address" id="customer_address" class="form-control @error('customer_address') is-invalid @enderror" placeholder="Enter your address" value="{{ old('customer_address') }}" required>
-            @error('customer_address')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <div>
             <label for="customer_photo">Profile Photo</label>
             <input type="file" name="customer_photo" id="customer_photo" value="{{ old('customer_photo') }}">
         </div>

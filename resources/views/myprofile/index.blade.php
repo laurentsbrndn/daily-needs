@@ -54,16 +54,6 @@
             </div>
     
             <div class="form-group">
-                <label>Address</label>
-                <textarea name="customer_address" class="form-control @error('customer_address') is-invalid @enderror">{{ old('customer_address', $customers->customer_address)}}</textarea>
-                @error('customer_address')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-    
-            <div class="form-group">
                 <label>Password (Leave blank if you do not want to change it)</label>
                 <input type="password" name="customer_password" class="form-control @error('customer_password') is-invalid @enderror">
                 @error('customer_password')

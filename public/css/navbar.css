@@ -1,3 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 36px;
+    color: white;
+    background-color: #283106;
+    width: 100%;
+    position: fixed !important; 
+    flex-wrap: nowrap !important;
+}
+
+ .brand-logo{
+    margin-left: 30px;
+}
+
 .brand-logo img{
-    width: 200px;
+    width: 100px;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.nav-left .nav-item:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+.nav-right .nav-links a, .nav-right:last-child {
+    margin-right: 30px;
+}
+
+.nav-right .bi.bi-cart2 {
+    margin-right: 50px;
+    color: white !important;
+}
+
+.nav-right .nav-links a:hover{
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 6px;
+}
+
+.nav-left, .nav-right, .nav-right .nav-links {
+    list-style: none !important;
+}
+
+.nav-left li, .nav-right, .nav-right .nav-links li {
+    display: inline-flex !important;
+    padding: 0px 20px;
+}
+
+.nav-left .input-group {
+    max-width: 200px;
+}
+
+.input-group .form-control {
+    padding: 0;
+    font-size: 36px;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    border-bottom: 2px solid white; 
+}
+
+.input-group .form-control::placeholder {
+    transform: translateY(10px);
+    color: white;
+}
+
+.input-group .form-control:focus::placeholder {
+    opacity: 0;
+}
+
+.input-group .form-control:focus {
+    border: none;
+    border-bottom: 2px solid white; 
+    box-shadow: none;
+    background: transparent;
+    color: white;
+}
+ 
+.nav-links a {
+    color: white !important;
+    text-decoration: none !important; 
+}
+
+.dropdown-menu li {
+    width: 100%;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #283106; 
+    color: white; 
+    width: 100%;
+}
+
+.nav-item.dropdown .nav-link.dropdown-toggle.d-flex.align-items-center{
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 6px;
 }

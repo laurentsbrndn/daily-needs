@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\TransactionHeader;
+use App\Models\TransactionDetail;
 use App\Models\MsProduct;
 
 /**
@@ -18,10 +19,20 @@ class TransactionDetailFactory extends Factory
      */
     public function definition(): array
     {
+        $transaction = TransactionHeader::inRandomOrder()->first() ?? TransactionHeader::factory()->create();
+        $product = MsProduct::inRandomOrder()->first() ?? MsProduct::factory()->create();
+    
+        while (TransactionDetail::where('transaction_id', $transaction->transaction_id)
+                ->where('product_id', $product->product_id)
+                ->exists()) {
+            $product = MsProduct::inRandomOrder()->first() ?? MsProduct::factory()->create();
+        }
+    
         return [
-            'transaction_id' => TransactionHeader::inRandomOrder()->first()->transaction_id ?? TransactionHeader::factory(),
-            'product_id' => MsProduct::inRandomOrder()->first()->product_id ?? MsProduct::factory(),
+            'transaction_id' => $transaction->transaction_id,
+            'product_id' => $product->product_id,
             'quantity' => $this->faker->numberBetween(1, 10),
         ];
     }
+
 }

@@ -34,9 +34,4 @@ class TransactionHeader extends Model
     public function msshipment(){
         return $this->hasOne(MsShipment::class, 'transaction_id', 'transaction_id');
     }
-
-    public function mshistory()
-    {
-        return $this->hasMany(MsHistory::class, 'transaction_id', 'transaction_id');
-    }
 }

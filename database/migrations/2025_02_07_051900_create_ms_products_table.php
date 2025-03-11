@@ -20,8 +20,8 @@ return new class extends Migration
             $table->text('product_description');
             $table->string('product_slug', length: 200)->unique();
             $table->enum('product_status', ['Available', 'Out of Stock', 'Discontinued']);
-            $table->unsignedBigInteger('brand_id');
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
 
             $table->foreign('brand_id')->references('brand_id')->on('ms_brands')->onDelete('set null');
