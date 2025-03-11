@@ -60,6 +60,9 @@
         @else
             <li class="nav-links">
                 <li>
+                    <a href="/login"><i class="bi bi-cart2"></i></a>
+                </li>
+                <li>
                     <a href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                 </li>
             </li>

@@ -20,7 +20,6 @@ class MsCartFactory extends Factory
     {
         return [
             'quantity' => $this->faker->numberBetween(1, 10),
-            'added_date' => $this->faker->dateTimeThisYear(),
             
             'customer_id' => MsCustomer::inRandomOrder()->first()->customer_id ?? MsCustomer::factory(),
             'product_id' => MsProduct::inRandomOrder()->first()->product_id ?? MsProduct::factory(),

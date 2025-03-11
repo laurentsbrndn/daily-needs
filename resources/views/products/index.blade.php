@@ -20,11 +20,12 @@
                     <div class="products-card">
                         <a href="{{ url($product->msbrand->brand_slug . '/' . $product->product_slug) }}">
                             <img src="{{ asset('storage/product_photos/' . $product->product_image) }}" class="card-img-top" alt="{{ $product->product_name }}">
+
+                            <div class="card-body">
+                                <h3 class="products-card-name">{{ $product->product_name }}</h3>
+                                <p class="products-card-price">Rp{{ number_format($product->product_price, 2, ',', '.') }}</p>
+                            </div>
                         </a>
-                        <div class="card-body">
-                            <h3 class="products-card-name">{{ $product->product_name }}</h3>
-                            <p class="products-card-price">Rp{{ number_format($product->product_price, 2, ',', '.') }}</p>
-                        </div>
                     </div>
                 </div>
             @endforeach

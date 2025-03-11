@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('transaction_total_price', total: 12, places: 2);
             $table->enum('transaction_status', ['Pending', 'Completed', 'Cancelled']);
             $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('payment_method_id');
             $table->timestamps();
 
