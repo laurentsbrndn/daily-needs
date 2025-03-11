@@ -36,7 +36,7 @@
         <div class="form-group">    
             <label for="admin_email">Email</label>
             <input type="email" name="admin_email" id="admin_email" class="form-control @error('admin_email') is-invalid @enderror" placeholder="Enter your email" value="{{ old('admin_email') }}" autofocus required>
-            
+              
             @error('admin_email')
                 <div class="invalid-feedback">
                     {{ $message }}
