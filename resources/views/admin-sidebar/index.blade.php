@@ -12,14 +12,36 @@
 
 <body>
     <div class="sidebar">
-        <h4 class="text-center">Daily Needs</h4>
-        <a href="/admin/myprofile">My Profile</a>
-        <a href="/admin/productlist">Product List</a>
-        <a href="/admin/transactions">Transactions</a>
-        <form action="/admin/logout" method="post">
-            @csrf
-            <button type="submit" class="dropdown-item">Logout</button>
-        </form>
+       
+        <div class="logo-container">
+            <img src="{{ asset('assets/image/Title Icon.jpeg') }}" alt="Logo" class="logo">
+
+        </div>
+        
+        <div class="sidebar-container">
+            <div class = "menu-item">
+                <i class="bi bi-person" style="color: #D1D88D;"></i>
+                <a href="/admin/myprofile">Admin Profile</a>
+            </div>
+
+            <div class = "menu-item">
+                <i class="bi bi-archive" style="color: #D1D88D;"></i>
+                <a href="/admin/productlist">Product List</a>
+            </div>
+
+            <div class = "menu-item">
+                <i class="bi bi-wallet2" style="color: #D1D88D;"></i>
+                <a href="/admin/transactions">Transactions</a>
+            </div>
+
+            <form action="/admin/logout" method="post" class="menu-item-logout">
+                @csrf
+                <i class="bi bi-box-arrow-left" style="color: #D1D88D;"></i>
+                <button type="submit" class="dropdown-item">Log Out</button>
+            </form>
+
+        </div>
+            
     </div>
 
     @yield('container')
