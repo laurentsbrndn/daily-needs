@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_method_id');
             $table->timestamps();
 
-            $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('set null');
+            $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('payment_method_id')->on('ms_payment_methods')->onDelete('restrict');
         });
     }

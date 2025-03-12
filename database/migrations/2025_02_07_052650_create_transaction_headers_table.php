@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('restrict');
-            $table->foreign('admin_id')->references('admin_id')->on('ms_admins')->onDelete('set null');
+            $table->foreign('admin_id')->references('admin_id')->on('ms_admins')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('payment_method_id')->on('ms_payment_methods')->onDelete('restrict');
         });
     }
