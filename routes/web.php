@@ -42,11 +42,15 @@ Route::post('/logout', [CustomerLoginController::class, 'logout'])->middleware('
 Route::get('/signup', [CustomerSignUpController::class, 'index'])->middleware('guest.access');
 Route::post('/signup', [CustomerSignUpController::class, 'store']);
 
-Route::get('/cart', [CustomerViewCartController::class, 'index'])->middleware('customer.access');
+Route::get('/cart', [CustomerViewCartController::class, 'index'])->middleware('auth:customer', 'customer.access');
+Route::post('/cart', [CustomerViewCartController::class, 'store'])->middleware('auth:customer', 'customer.access');
+Route::post('/cart/subtotal', [CustomerViewCartController::class, 'getSubtotal'])->middleware('auth:customer', 'customer.access');
+Route::patch('/cart/{brand_slug}/{product_slug}/update', [CustomerViewCartController::class, 'update'])->middleware('auth:customer', 'customer.access')->name('cart.update');
+Route::delete('/cart/{brand_slug}/{product_slug}/delete', [CustomerViewCartController::class, 'destroy'])->middleware('auth:customer', 'customer.access')->name('cart.delete');
 
 Route::get('/dashboard/myprofile', [CustomerUpdateProfileController::class, 'show'])->middleware('auth:customer', 'customer.access');
 Route::put('dashboard/myprofile/update', [CustomerUpdateProfileController::class, 'update'])->middleware('auth:customer', 'customer.access');
-
+    
 Route::get('/dashboard/topup', [CustomerTopUpController::class, 'show'])->middleware('auth:customer', 'customer.access');
 Route::put('/dashboard/topup/update', [CustomerTopUpController::class, 'update'])->middleware('auth:customer', 'customer.access');
 

@@ -22,9 +22,4 @@ class MsShipment extends Model
     public function mscourier(){
         return $this->belongsTo(MsCourier::class, 'courier_id', 'courier_id');
     }
-
-    public function mshistory()
-    {
-        return $this->hasMany(MsShipment::class, 'shipment_id', 'shipment_id');
-    }
 }

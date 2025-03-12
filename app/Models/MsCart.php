@@ -11,6 +11,10 @@ class MsCart extends Model
 
     protected $table = 'ms_carts';
 
+    protected $primaryKey = 'cart_id';
+
+    protected $guarded = ['cart_id'];
+
     public function mscustomer(){
         return $this->belongsTo(MsCustomer::class, 'customer_id', 'customer_id');
     }
@@ -18,4 +22,22 @@ class MsCart extends Model
     public function msproduct(){
         return $this->belongsTo(MsProduct::class, 'product_id', 'product_id');
     }
+
+    public function scopeCartItem($query, $customerId, $productId)
+    {
+        return $query->where('customer_id', $customerId)
+                     ->where('product_id', $productId);
+    }
+
+    public function scopeFilterSubtotal($query, $customerId, $selectedProducts)
+    {
+        return $query->where('customer_id', $customerId)
+            ->whereIn('product_id', $selectedProducts)
+            ->with('msproduct')
+            ->get()
+            ->sum(function ($item) {
+                return $item->msproduct->product_price * $item->quantity;
+            });
+    }
+
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('brand_id')->unique();
             $table->string('brand_name', length: 200)->unique();
             $table->string('brand_slug', length: 200)->unique();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('company_id')->on('ms_companies')->onDelete('cascade');

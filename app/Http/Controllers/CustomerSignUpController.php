@@ -21,7 +21,6 @@ class CustomerSignUpController extends Controller
             'customer_email' => 'required|email:dns|unique:ms_customers',
             'customer_password' => 'required|min:8|max:20',
             'customer_phone_number' => 'required|max:199',
-            'customer_address' => 'required|max:255',
             'customer_photo' => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'customer_gender' => 'required|in:Male,Female,Prefer not to say',
         ]);

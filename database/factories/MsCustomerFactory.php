@@ -22,7 +22,6 @@ class MsCustomerFactory extends Factory
             'customer_email' => $this->faker->unique()->safeEmail(),
             'customer_password' => $this->faker->password(8, 20),
             'customer_phone_number' => $this->faker->phoneNumber,
-            'customer_address' => $this->faker->address,
             'customer_photo' => $this->faker->name,
             'customer_gender' => $this->faker->randomElement(['Male', 'Female', 'Prefer not to say']),
             'customer_balance' => $this->faker->randomFloat(2, 0, 10000000000),

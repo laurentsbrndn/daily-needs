@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('top_up_id');
             $table->unsignedDecimal('top_up_amount', total: 12, places: 2);
             $table->dateTime('top_up_date', precision: 0);
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('payment_method_id');
             $table->timestamps();
 

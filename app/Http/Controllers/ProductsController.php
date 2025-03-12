@@ -8,6 +8,7 @@ use App\Models\MsProduct;
 use App\Models\MsBrand;
 use App\Models\MsCompany;
 use App\Models\MsCustomer;
+use App\Models\MsCart;
 use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('customer_email', length: 200)->unique();
             $table->string('customer_password', length: 200);
             $table->string('customer_phone_number', length: 200);
-            $table->text('customer_address');
             $table->string('customer_photo', length: 200)->nullable();
             $table->enum('customer_gender', ['Male', 'Female', 'Prefer not to say']);
             $table->decimal('customer_balance', total: 12, places: 2)->default(0);

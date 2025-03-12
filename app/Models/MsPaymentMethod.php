@@ -22,9 +22,4 @@ class MsPaymentMethod extends Model
     public function mstopup(){
         return $this->hasOne(MsTopUp::class, 'payment_method_id', 'payment_method_id');
     }
-
-    public function mshistory()
-    {
-        return $this->hasMany(MsHistory::class, 'payment_method_id', 'payment_method_id');
-    }
 }
