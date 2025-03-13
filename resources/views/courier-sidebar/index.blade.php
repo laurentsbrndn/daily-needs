@@ -12,12 +12,30 @@
 
 <body>
     <div class="sidebar">
-        <h4 class="text-center">Daily Needs</h4>
-        <a href="/courier/myprofile">My Profile</a>
-        <form action="/courier/logout" method="post">
-            @csrf
-            <button type="submit" class="dropdown-item">Logout</button>
-        </form>
+        <div class="logo-container">
+            <img src="{{ asset('assets/image/Title Icon.jpeg') }}" alt="Logo" class="logo">
+
+        </div>
+        <div class="sidebar-container">
+            <a href="/courier/myprofile" style="text-decoration: none; color: inherit;">
+                <div class = "menu-item">
+                    <i class="bi bi-person" style="color: #D1D88D;"></i>
+                    <span>Courier Profile</span>
+                </div>
+            </a>
+            <a href="/courier/deliverproduct" style="text-decoration: none; color: inherit;">
+                <div class = "menu-item">
+                    <i class="bi bi-truck" style="color: #D1D88D;"></i>
+                    <span>Deliver Order</span>
+                </div>
+            </a>
+            <form action="/courier/logout" method="post" class="menu-item-logout">
+                @csrf
+                <i class="bi bi-box-arrow-left" style="color: #D1D88D;"></i>
+                <button type="submit" class="dropdown-item">Log Out</button>
+            </form>
+        </div>
+
     </div>
 
     @yield('container')
