@@ -70,59 +70,49 @@ class CustomerViewCartController extends Controller
 
     public function update(Request $request, $brand_slug, $product_slug)
     {
+        
         $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:0'
         ]);
-
+    
         $customer = auth('customer')->user();
         $product = MsProduct::where('product_slug', $product_slug)->first();
-
+    
         if (!$product) {
             return response()->json(['error' => 'Product not found!'], 404);
         }
-
+    
         $cartItem = MsCart::CartItem($customer->customer_id, $product->product_id)->first();
-
+    
         if (!$cartItem) {
             return response()->json(['error' => 'Product not in cart!'], 404);
         }
-
+    
         $maxStock = $product->product_stock;
-        $currentQuantity = $cartItem->quantity; // Simpan jumlah sebelum update
-
-        if ($request->has('quantity') && !$request->has('action')) {
-            if ($request->quantity > $maxStock) {
-                $cartItem->update(['quantity' => $maxStock]);
-                return response()->json([
-                    'error' => "Stock not enough! Maximum stock available is $maxStock.",
-                    'max_stock' => $maxStock,
-                    'prev_quantity' => $currentQuantity
-                ], 400);
-            } elseif ($request->quantity == 0) {
-                return response()->json([
-                    'error' => "Cart quantity cannot be 0!",
-                    'prev_quantity' => $currentQuantity
-                ], 400);
-            }
-
-            $cartItem->update(['quantity' => $request->quantity]);
-        } 
-        else if ($request->action === 'increase') {
-            if ($cartItem->quantity + 1 > $maxStock) {
-                return response()->json(['error' => "Stock not enough! Maximum stock available is $maxStock.", 'max_stock' => $maxStock], 400);
-            }
-            $cartItem->increment('quantity');
-        } 
-        else if ($request->action === 'decrease' && $cartItem->quantity > 1) {
-            $cartItem->decrement('quantity');
-        } 
-        else {
+        $currentQuantity = $cartItem->quantity;
+        $newQuantity = $request->quantity;
+    
+        if ($newQuantity > $maxStock) {
+            $cartItem->update(['quantity' => $maxStock]);
             return response()->json([
-                'error' => 'Quantity must be at least 1!',
-                'prev_quantity' => $currentQuantity
+                'error' => "Stock not enough! Maximum stock available is $maxStock.",
+                'max_stock' => $maxStock,
+                'prev_quantity' => $currentQuantity,
+                'new_quantity' => $maxStock
             ], 400);
         }
-
+    
+        if ($newQuantity < 1) {
+            $cartItem->update(['quantity' => 1]);
+            return response()->json([
+                'error' => "Minimum quantity is 1!",
+                'prev_quantity' => $currentQuantity,
+                'new_quantity' => 1
+            ], 400);
+        }
+    
+        $cartItem->update(['quantity' => $newQuantity]);
+    
         return response()->json([
             'success' => true,
             'message' => 'Cart updated successfully!',
@@ -137,17 +127,21 @@ class CustomerViewCartController extends Controller
         $product = MsProduct::where('product_slug', $product_slug)->first();
 
         if (!$product) {
-            return redirect()->back()->with('error', 'Product not found!');
+            return response()->json(['error' => 'Product not found!'], 404);
         }
 
         $cartItem = MsCart::CartItem($customer->customer_id, $product->product_id)->first();
 
         if (!$cartItem) {
-            return redirect()->back()->with('error', 'Product not in cart!');
+            return response()->json(['error' => 'Product not in cart!'], 404);
         }
 
         $cartItem->delete();
 
-        return redirect()->back()->with('success', 'Product removed from cart!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Product removed from cart!',
+            'product_slug' => $product_slug
+        ]);
     }
 }

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // ✅ Fungsi untuk update harga subtotal
     function updateTotalPrice() {
         let selectedProducts = [];
         let totalPrice = 0;
@@ -28,11 +27,9 @@ $(document).ready(function () {
         });
     }
 
-    // ✅ Jalankan update subtotal saat checkbox diubah
     $('.cart-checkbox').on("change", updateTotalPrice);
-    updateTotalPrice(); // Panggil saat halaman pertama kali dimuat
+    updateTotalPrice(); 
 
-    // ✅ Prevent page reload saat menambahkan produk ke dalam keranjang
     $('#addToCartForm').submit(function (event) {
         event.preventDefault();
 
@@ -53,113 +50,63 @@ $(document).ready(function () {
         });
     });
 
-    // ✅ Update jumlah produk di keranjang dengan AJAX
-    // $('.quantity-input').on('change', function () {
-    //     var input = $(this);
-    //     var form = input.closest('.update-cart-form');
-    //     var url = form.data('url');
+    function updateButtons(input) {
+        var value = parseInt(input.val());
+        var maxStock = parseInt(input.data('max-stock'));
+        var decreaseBtn = input.siblings('.decrease-btn');
+        var increaseBtn = input.siblings('.increase-btn');
 
-    //     $.ajax({
-    //         url: url,
-    //         method: 'PATCH',
-    //         data: form.serialize(),
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 input.val(response.new_quantity).trigger('input'); // Update input quantity
-    //                 updateTotalPrice();
-    //             }
-    //             if (response.max_stock) {
-    //                 input.val(response.max_stock).trigger('input'); // ✅ Pastikan input sesuai stok maksimum
-    //                 input.closest(".update-cart-form").find(".error-message").html(`
-    //                     <div class="alert alert-warning p-2 mt-1" role="alert">
-    //                         Maksimal stok produk hanya ${response.max_stock}
-    //                     </div>
-    //                 `);
-    //             }
-    //         },
-    //         error: function (xhr) {
-    //             console.error("Update error", xhr);
-    //         }
-    //         // error: function (xhr) {
-    //         //     var response = xhr.responseJSON;
-    //         //     if (response && response.error) {
-    //         //         var row = input.closest('tr');
-    //         //         row.find('.error-message').html(`
-    //         //             <div class="alert alert-danger p-2 mt-1" role="alert">
-    //         //                 ${response.error}
-    //         //             </div>
-    //         //         `);
-    //         //         if (response.max_stock) {
-    //         //             input.val(response.max_stock);
-    //         //         }
-    //         //     }
-    //         // }
-    //     });
-    // });
+        decreaseBtn.prop('disabled', value <= 1);
+        increaseBtn.prop('disabled', value >= maxStock);
+    }
 
     $('.quantity-input').on('change', function () {
+        
         var input = $(this);
         var form = input.closest('.update-cart-form');
         var url = form.data('url');
+        var value = parseInt(input.val());
     
+        updateButtons(input);
         $.ajax({
             url: url,
             method: 'PATCH',
             data: form.serialize(),
             success: function (response) {
-                if (response.success) {
-                    input.val(response.new_quantity).trigger('input'); // ✅ Update input quantity
-                    updateTotalPrice();
-                }
-                if (response.max_stock) {
-                    input.val(response.max_stock).trigger('input'); // ✅ Pastikan input sesuai stok maksimum
-                    input.closest(".update-cart-form").find(".error-message").html(`
-                        <div class="alert alert-warning p-2 mt-1" role="alert">
-                            Maksimal stok produk hanya ${response.max_stock}
-                        </div>
-                    `);
-                }
-            },
-            error: function (xhr) {
-                var response = xhr.responseJSON;
-                if (response && response.prev_quantity !== undefined) {
-                    input.val(response.prev_quantity).trigger('input'); // ✅ Kembalikan ke angka sebelum diubah
+                var newValue = response.new_quantity ?? value;  
+                input.val(newValue).trigger('input');
+                if (response.error) {
                     input.closest(".update-cart-form").find(".error-message").html(`
                         <div class="alert alert-danger p-2 mt-1" role="alert">
                             ${response.error}
                         </div>
                     `);
+                } 
+                else {
+                    input.closest(".update-cart-form").find(".error-message").html(''); 
                 }
+                updateTotalPrice();
+            },
+            error: function (xhr) {
+                var response = xhr.responseJSON;
+        
+                if (response && response.error) {
+                    input.closest(".update-cart-form").find(".error-message").html(`
+                        <div class="alert alert-danger p-2 mt-1" role="alert">
+                            ${response.error}
+                        </div>
+                    `);
+                    var newValue = response.new_quantity ?? value;
+                    input.val(newValue).trigger('input'); 
+                }
+                else {
+                    input.closest(".update-cart-form").find(".error-message").html('');
+                }
+                updateButtons(input);
             }
         });
+    
     });
-    //     event.preventDefault();
-    
-    //     var input = $(this).siblings('.quantity-input');
-    //     var form = input.closest('.update-cart-form');  
-    //     var url = form.data('url');
-    //     var action = $(this).hasClass('increase-btn') ? 1 : -1; 
-    
-    //     var newValue = parseInt(input.val()) + action; 
-    
-    //     if (newValue >= 1) { 
-    //         input.val(newValue); 
-            
-    //         $.ajax({
-    //             url: url,
-    //             method: 'PATCH',
-    //             data: form.serialize(),
-    //             success: function (response) {
-    //                 if (response.success) {
-    //                     input.val(response.new_quantity); d
-    //                     updateTotalPrice(); 
-    //             },
-    //             error: function (xhr) {
-    //                 console.error("Update error", xhr);
-    //             }
-    //         });
-    //     }
-    // });
 
     $('.increase-btn, .decrease-btn').on('click', function (event) {
         event.preventDefault();
@@ -169,39 +116,80 @@ $(document).ready(function () {
         var url = form.data('url');  
         var action = $(this).hasClass('increase-btn') ? 'increase' : 'decrease'; 
         
-        var newValue = parseInt(input.val()) + (action === 'increase' ? 1 : -1); 
+        var currentValue = parseInt(input.val());
+        var maxStock = parseInt(input.data('max-stock'));
         
-        if (newValue >= 1) { 
-            input.val(newValue); 
-            
-            $.ajax({
-                url: url,
-                method: 'PATCH',
-                data: form.serialize() + '&action=' + action, 
-                success: function (response) {
-                    if (response.success) {
-                        input.val(response.new_quantity);d
-                        updateTotalPrice(); 
-                    }
-                },
-                error: function (xhr) {
-                    var response = xhr.responseJSON;
-                    if (response && response.max_stock) {
-                        input.val(response.max_stock);
-                        input.closest(".update-cart-form").find(".error-message").html(`
-                            <div class="alert alert-warning p-2 mt-1" role="alert">
-                                Stock not enough! Maximum stock available is ${response.max_stock}
-                            </div>
-                        `);
-                    }
-                }
-            });
+        var newValue = action === 'increase' ? currentValue + 1 : currentValue - 1;
+
+        if (newValue < 1) {
+            newValue = 1;
         }
+        else if (newValue > maxStock) {
+            newValue = maxStock;
+        }
+    
+        input.val(newValue);
+        updateButtons(input);
+        
+        $.ajax({
+            url: url,
+            method: 'PATCH',
+            data: form.serialize() + '&action=' + action, 
+            success: function (response) {
+                if (response.success) {
+                    input.val(response.new_quantity);
+                    
+                    updateTotalPrice(); 
+                }
+                updateButtons(input);
+            },
+            error: function (xhr) {
+                var response = xhr.responseJSON;
+                if (response && response.max_stock) {
+                    input.val(response.max_stock).trigger('input');
+                    input.closest(".update-cart-form").find(".error-message").html(`
+                        <div class="alert alert-danger p-2 mt-1" role="alert">
+                            ${response.error}
+                        </div>
+                    `);
+                }
+                updateButtons(input);
+            }
+        });
+    });
+
+    $(document).on('submit', '.delete-cart-form', function(e) {
+        e.preventDefault(); 
+    
+        var form = $(this); 
+        var url = form.attr('action');
+        var row = form.closest('tr'); 
+    
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    // row.fadeOut(500, function () { $(this).remove(); });
+                    row.remove();
+                    updateTotalPrice();
+                } 
+                else {
+                    alert(response.error);
+                }
+            },
+            error: function(xhr) {
+                alert('Error removing item. Please try again.');
+            }
+        });
     });
     
 
-
-    // Prevent reload saat form update quantity dikirim
+    $('.quantity-input').each(function() {
+        updateButtons($(this));
+    });
+    
     $('.update-cart-form').on('submit', function (event) {
         event.preventDefault();
 

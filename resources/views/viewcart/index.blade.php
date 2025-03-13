@@ -47,18 +47,18 @@
 
                                 <input type="hidden" name="product_id" value="{{ $item->msproduct->product_id }}">
 
-                                <button type="submit" name="action" value="decrease" class="btn btn-outline-secondary decrease-btn">-</button>
-                                <input type="number" name="quantity" class="form-control mx-2 text-center quantity-input" value="{{ $item->quantity }}" min="1" max="{{ $item->msproduct->product_stock }}" style="width: 50px">
-                                <button type="submit" name="action" value="increase" class="btn btn-outline-secondary increase-btn">+</button>
+                                <button type="button" name="action" value="decrease" class="btn btn-outline-secondary decrease-btn">-</button>
+                                <input type="number" name="quantity" value="{{ $item->quantity }}" class="quantity-input form-control mx-2 text-center" min="1" max="{{ $item->msproduct->product_stock }}" data-max-stock="{{ $item->msproduct->product_stock }}" style="width: 50px">
+                                <button type="button" name="action" value="increase" class="btn btn-outline-secondary increase-btn">+</button>
                                 <div class="error-message text-danger mt-1"></div>
                             </form>
                         </td>
                         <td>Rp {{ number_format($item->msproduct->product_price * $item->quantity, 0, ',', '.') }}</td>
                         <td>
-                            <form action="{{ route('cart.delete', ['brand_slug' => $item->msproduct->msbrand->brand_slug, 'product_slug' => $item->msproduct->product_slug]) }}" method="POST">
+                            <form class="delete-cart-form" action="{{ route('cart.delete', ['brand_slug' => $item->msproduct->msbrand->brand_slug, 'product_slug' => $item->msproduct->product_slug]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">🗑</button>
+                                <button type="submit" class="delete-cart-item">🗑</button>
                             </form>
                         </td>
                     </tr>
