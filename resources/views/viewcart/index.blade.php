@@ -23,7 +23,7 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Total</th>
-                        <th>Action</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,10 +35,12 @@
                                 data-price="{{ $item->msproduct->product_price * $item->quantity }}">
                         </td>
                         <td>
-                            <img src="{{ asset('storage/products/' . ($item->msproduct->product_image ?? 'default.png')) }}" 
+                            <a href="{{ url($item->msproduct->msbrand->brand_slug . '/' . $item->msproduct->product_slug) }}">
+                                <img src="{{ asset('storage/products/' . ($item->msproduct->product_image ?? 'default.png')) }}" 
                                 alt="{{ $item->msproduct->product_name }}" 
                                 class="img-thumbnail" width="80">
-                            {{ $item->msproduct->product_name }}
+                                {{ $item->msproduct->product_name }}
+                            </a>
                         </td>
                         <td>
                             <form class="update-cart-form d-flex align-items-center" method="post" action="{{ route('cart.update', ['brand_slug' => $item->msproduct->msbrand->brand_slug, 'product_slug' => $item->msproduct->product_slug]) }}" data-url="{{ route('cart.update', ['brand_slug' => $item->msproduct->msbrand->brand_slug, 'product_slug' => $item->msproduct->product_slug]) }}">
@@ -53,12 +55,13 @@
                                 <div class="error-message text-danger mt-1"></div>
                             </form>
                         </td>
-                        <td>Rp {{ number_format($item->msproduct->product_price * $item->quantity, 0, ',', '.') }}</td>
+                        <td class="total-price-per-item" data-unit-price="{{ $item->msproduct->product_price }}">
+                            Rp {{ number_format($item->msproduct->product_price * $item->quantity, 0, ',', '.') }}</td>
                         <td>
                             <form class="delete-cart-form" action="{{ route('cart.delete', ['brand_slug' => $item->msproduct->msbrand->brand_slug, 'product_slug' => $item->msproduct->product_slug]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="delete-cart-item">🗑</button>
+                                <button type="submit" class="delete-cart-item"><i class="bi bi-trash3"></i></button>
                             </form>
                         </td>
                     </tr>

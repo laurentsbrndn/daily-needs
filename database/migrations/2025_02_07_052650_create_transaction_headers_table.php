@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id('transaction_id')->unique();
             $table->dateTime('transaction_date', precision: 0);
             $table->decimal('transaction_total_price', total: 12, places: 2);
-            $table->enum('transaction_status', ['Pending', 'Completed', 'Cancelled']);
+            $table->enum('transaction_status', ['Pending', 'Completed']);
             $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_address_id');
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('payment_method_id');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('customer_id')->on('ms_customers')->onDelete('restrict');
+            $table->foreign('customer_address_id')->references('customer_address_id')->on('ms_customer_addresses')->onDelete('restrict');
             $table->foreign('admin_id')->references('admin_id')->on('ms_admins')->onDelete('set null');
             $table->foreign('payment_method_id')->references('payment_method_id')->on('ms_payment_methods')->onDelete('restrict');
         });

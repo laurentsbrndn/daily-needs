@@ -24,49 +24,87 @@ class CustomerViewCartController extends Controller
     public function getSubtotal(Request $request)
     {
         $customer = auth('customer')->user();
-    
+
         $selectedProducts = $request->input('selected_products', []);
-    
+
         if (empty($selectedProducts)) {
             return response()->json(['subtotal' => 0]);
         }
 
-        $subtotal = MsCart::filterSubtotal($customer->customer_id, $selectedProducts);
+        $cartItems = MsCart::filterSubtotal($customer->customer_id, $selectedProducts)->get();
 
-        $subtotal = number_format($subtotal, 0, ',', '.');
-        return response()->json(['subtotal' => $subtotal]);
+        $subtotal = $cartItems->sum(function ($item) {
+            return optional($item->msproduct)->product_price * $item->quantity;
+        });
+    
+        $formattedSubtotal = number_format($subtotal, 0, ',', '.');
+
+        return response()->json(['subtotal' => $formattedSubtotal]);
     }
-
 
     public function store(Request $request)
     {
-        $validateData = $request->validate([
+        $request->validate([
             'product_id' => 'required|exists:ms_products,product_id',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:0',
         ]);
 
-        $customers = auth('customer')->user();
+        $customer = auth('customer')->user();
+        $product = MsProduct::where('product_id', $request->product_id)->first();
 
-        $cartItems = MsCart::CartItem($customers->customer_id, $request->product_id)->first();
+        if (!$product) {
+            return response()->json(['error' => 'Product not found!'], 404);
+        }
 
-        if ($cartItems) {
-            $cartItems->increment('quantity', $request->quantity);
-        } 
-        
-        else {
+        $cartItem = MsCart::CartItem($customer->customer_id, $product->product_id)->first();
+        $maxStock = $product->product_stock;
+        $inputQuantity = $request->quantity;
+    
+        if ($inputQuantity < 1) {
+            $cartItem->update(['quantity' => 1]);
+            return response()->json([
+                'error' => "Minimum quantity is 1!",
+                'new_quantity' => 1
+            ], 400);
+        }
+
+        if (!$cartItem) {
+            if ($inputQuantity > $maxStock) {
+                return response()->json([
+                    'error' => "Stock not enough! Maximum stock available is $maxStock.",
+                    'max_stock' => $maxStock,
+                    'new_quantity' => $maxStock
+                ], 400);
+            }
+
             MsCart::create([
-                'customer_id' => $customers->customer_id,
+                'customer_id' => $customer->customer_id,
                 'product_id' => $request->product_id,
-                'quantity' => $request->quantity
+                'quantity' => $inputQuantity
             ]);
         }
-        
-        return response()->json([
-            'message' => 'Product added to cart!',
-            'cart_count' => MsCart::where('customer_id', $customers->customer_id)->count()
-        ]);
 
+        else {
+            $currentQuantity = $cartItem->quantity;
+            $totalQuantity = $currentQuantity + $inputQuantity;
+
+            if ($totalQuantity > $maxStock) {
+                return response()->json([
+                    'error' => "Maximum stock available is $maxStock and you already have $currentQuantity of this item in your cart.",
+                    'current_cart' => $currentQuantity,
+                ], 400);
+            }
+
+            $cartItem->increment('quantity', $inputQuantity);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product added to cart!',
+            'new_quantity' => MsCart::CartItem($customer->customer_id, $product->product_id)->first()->quantity
+        ]);
     }
+
 
     public function update(Request $request, $brand_slug, $product_slug)
     {
@@ -98,7 +136,8 @@ class CustomerViewCartController extends Controller
                 'error' => "Stock not enough! Maximum stock available is $maxStock.",
                 'max_stock' => $maxStock,
                 'prev_quantity' => $currentQuantity,
-                'new_quantity' => $maxStock
+                'new_quantity' => $maxStock,
+                'total_price' => $product->product_price * $maxStock 
             ], 400);
         }
     
@@ -107,17 +146,20 @@ class CustomerViewCartController extends Controller
             return response()->json([
                 'error' => "Minimum quantity is 1!",
                 'prev_quantity' => $currentQuantity,
-                'new_quantity' => 1
+                'new_quantity' => 1,
+                'total_price' => $product->product_price * 1
             ], 400);
         }
     
         $cartItem->update(['quantity' => $newQuantity]);
+        $totalPrice = $product->product_price * $newQuantity; 
     
         return response()->json([
             'success' => true,
             'message' => 'Cart updated successfully!',
-            'new_quantity' => $cartItem->quantity
-        ]);
+            'new_quantity' => $cartItem->quantity,
+            'total_price' => $totalPrice
+        ], 200);
     }
 
     public function destroy($brand_slug, $product_slug)

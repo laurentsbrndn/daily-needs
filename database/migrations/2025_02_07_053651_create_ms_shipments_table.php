@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('ms_shipments', function (Blueprint $table) {
             $table->id('shipment_id');
-            $table->text('shipment_address');
             $table->dateTime('shipment_date_start', precision: 0);
             $table->dateTime('shipment_date_end', precision: 0)->nullable();
             $table->string('shipment_recipient', length: 200);
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('transaction_id')->on('transaction_headers')->onDelete('restrict');
-            $table->foreign('courier_id')->references('courier_id')->on('ms_couriers')->onDelete('cascade');
+            $table->foreign('courier_id')->references('courier_id')->on('ms_couriers')->onDelete('set null');
         });
     }
 
