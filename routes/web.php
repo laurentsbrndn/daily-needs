@@ -52,6 +52,7 @@ Route::middleware(['auth:customer', 'customer.access'])->group(function () {
         Route::delete('/{brand_slug}/{product_slug}/delete', [CustomerViewCartController::class, 'destroy'])->name('cart.delete');
     });
 
+    Route::post('/checkout', [CustomerBuyProductController::class, 'checkout'])->name('checkout.process');
     Route::get('/checkout', [CustomerBuyProductController::class, 'index'])->name('checkout.page');
 
     Route::prefix('dashboard')->group(function () {

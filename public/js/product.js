@@ -31,43 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateButtons();
 
-    // $('.input-quantity').on('change', function () {
-    //     var input = $(this);
-    //     var form = input.closest('.quantity');
-    //     var productId = $('input[name="product_id"]').val();
-    //     var quantity = parseInt(input.val());
-    //     var errorDiv = $('#quantity-error');
-
-    //     $.ajax({
-    //         url: "{{ route('cart.store') }}",
-    //         type: "POST",
-    //         data: {
-    //             _token: "{{ csrf_token() }}",
-    //             product_id: productId,
-    //             quantity: quantity
-    //         },
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 $('#quantity_add').val(response.new_quantity);
-    //                 $('#quantity_checkout').val(response.new_quantity);
-    //                 errorDiv.addClass('d-none').text(''); 
-    //             }
-    //         },
-    //         error: function (xhr) {
-    //             var response = xhr.responseJSON;
-    //             if (response.error) {
-    //                 errorDiv.removeClass('d-none').text(response.error);
-    //                 input.val(response.new_quantity || input.attr('min'));
-    //             }
-    //         }
-    //     });
-    // });
-
-    $('.input-quantity').on('change', function () {
-        var input = $(this);
-        var quantity = parseInt(input.val());
-        var maxStock = parseInt(input.attr('max'));
-        var errorDiv = $('#quantity-error');
+    $('.quantity-input').on('change', function () {
+        let input = $(this);
+        let quantity = parseInt(input.val());
+        let maxStock = parseInt(input.attr('max'));
+        let errorDiv = $('#quantity-error');
     
         if (quantity < 1) {
             input.val(1);

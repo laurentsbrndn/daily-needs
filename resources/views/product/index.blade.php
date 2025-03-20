@@ -13,7 +13,7 @@
 
         <div class="quantity input-group mb-3" style="max-width: 200px;">
             <button class="btn btn-outline-secondary decrease-button" type="button">-</button>
-            <input type="number" name="quantity" id="product_quantity" class="input-quantity form-control mx-2 text-center" value="1" min="1" max="{{ $product->product_stock }}">
+            <input type="number" name="quantity" id="product_quantity" class="quantity-input form-control mx-2 text-center" value="1" min="1" max="{{ $product->product_stock }}">
             <button class="btn btn-outline-secondary increase-button" type="button">+</button>
             <div id="quantity-error"></div>
         </div> 
@@ -30,21 +30,23 @@
 
             <div id="cartPopup">
                 Item successfully added to cart! <a href="/cart" >View your cart</a>
-            </div>
+            </div>  
         
         @else
             <a href="{{ route('login') }}"><button type="submit" class="btn btn-success">Add to Cart</button></a>
         @endauth
         
         @auth('customer')
-            <form action="{{ route('checkout.page') }}" method="get">
+            <form action="{{ route('checkout.process') }}" method="post">
+                @csrf
                 <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                <input type="hidden" name="quantity" id="quantity_checkout">
+                <input type="hidden" name="quantity" id="quantity_checkout" value="1">
                 <button type="submit" class="btn btn-primary">Buy</button>
             </form>
         @else
-            <a href="{{ route('login') }}"><button type="submit" class="btn btn-primary">Buy</button></a>
+            <a href="{{ route('login') }}" class="btn btn-primary">Buy</a>
         @endauth
+
         
     </div>
 @endsection

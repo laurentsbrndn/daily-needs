@@ -27,21 +27,21 @@ $(document).ready(function () {
     updateTotalPrice(); 
 
     function updateButtons(input) {
-        var value = parseInt(input.val());
-        var maxStock = parseInt(input.data('max-stock'));
-        var decreaseBtn = input.siblings('.decrease-btn');
-        var increaseBtn = input.siblings('.increase-btn');
+        let value = parseInt(input.val());
+        let maxStock = parseInt(input.data('max-stock'));
+        let decreaseBtn = input.siblings('.decrease-btn');
+        let increaseBtn = input.siblings('.increase-btn');
 
         decreaseBtn.prop('disabled', value <= 1);
         increaseBtn.prop('disabled', value >= maxStock);
     }
 
     $('.quantity-input').on('change', function () {
-        var input = $(this);
-        var form = input.closest('.update-cart-form');
-        var url = form.data('url');
-        var value = parseInt(input.val());
-        var totalPriceElement = form.closest('tr').find('.total-price-per-item');
+        let input = $(this);
+        let form = input.closest('.update-cart-form');
+        let url = form.data('url');
+        let value = parseInt(input.val());
+        let totalPriceElement = form.closest('tr').find('.total-price-per-item');
 
         input.val(value);
         updateButtons(input);
@@ -51,7 +51,7 @@ $(document).ready(function () {
             method: 'PATCH',
             data: form.serialize(),
             success: function (response) {
-                var newValue = response.new_quantity ?? value;
+                let newValue = response.new_quantity ?? value;
                 input.val(newValue).trigger('input');
 
                 if (response.success) {
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                var response = xhr.responseJSON;
+                let response = xhr.responseJSON;
 
                 if (response && response.error) {
                     totalPriceElement.html("Rp " + response.total_price.toLocaleString());
@@ -81,15 +81,15 @@ $(document).ready(function () {
     $('.increase-btn, .decrease-btn').on('click', function (event) {
         event.preventDefault();
     
-        var input = $(this).siblings('.quantity-input');
-        var form = input.closest('.update-cart-form');        
-        var url = form.data('url');  
-        var action = $(this).hasClass('increase-btn') ? 'increase' : 'decrease'; 
+        let input = $(this).siblings('.quantity-input');
+        let form = input.closest('.update-cart-form');        
+        let url = form.data('url');  
+        let action = $(this).hasClass('increase-btn') ? 'increase' : 'decrease'; 
         
-        var currentValue = parseInt(input.val());
-        var maxStock = parseInt(input.data('max-stock'));
+        let currentValue = parseInt(input.val());
+        let maxStock = parseInt(input.data('max-stock'));
         
-        var newValue = action === 'increase' ? currentValue + 1 : currentValue - 1;
+        let newValue = action === 'increase' ? currentValue + 1 : currentValue - 1;
 
         if (newValue < 1) {
             newValue = 1;
@@ -100,7 +100,7 @@ $(document).ready(function () {
     
         input.val(newValue);
 
-        var totalPriceElement = form.closest('tr').find('.total-price-per-item');
+        let totalPriceElement = form.closest('tr').find('.total-price-per-item');
 
         updateButtons(input);
         
@@ -118,7 +118,7 @@ $(document).ready(function () {
                 updateButtons(input);
             },
             error: function (xhr) {
-                var response = xhr.responseJSON;
+                let response = xhr.responseJSON;
                 if (response && response.max_stock) {
                     input.val(response.max_stock).trigger('input');
                     input.closest(".update-cart-form").find(".error-message").html(`
@@ -136,9 +136,9 @@ $(document).ready(function () {
     $(document).on('submit', '.delete-cart-form', function(e) {
         e.preventDefault(); 
     
-        var form = $(this); 
-        var url = form.attr('action');
-        var row = form.closest('tr'); 
+        let form = $(this); 
+        let url = form.attr('action');
+        let row = form.closest('tr'); 
     
         $.ajax({
             url: url,
@@ -167,8 +167,8 @@ $(document).ready(function () {
     $('.update-cart-form').on('submit', function (event) {
         event.preventDefault();
 
-        var form = $(this);
-        var url = form.data('url');
+        let form = $(this);
+        let url = form.data('url');
 
         $.ajax({
             url: url,
