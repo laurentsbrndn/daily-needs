@@ -12,6 +12,7 @@ use App\Models\MsCategory;
 use App\Models\MsCompany;
 use App\Models\MsCourier;
 use App\Models\MsCustomer;
+use App\Models\MsCustomerAddress;
 use App\Models\MsPaymentMethod;
 use App\Models\MsProduct;
 use App\Models\MsShipment;
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder
         MsCompany::factory(5)->create();
         MsBrand::factory(15)->create();
         MsTopUp::factory(10)->create();
+        MsCustomerAddress::factory(30)->create();
         TransactionHeader::factory(30)->create();
         MsProduct::factory(20)->create();
         TransactionDetail::factory(50)->create();

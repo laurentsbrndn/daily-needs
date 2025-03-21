@@ -37,10 +37,10 @@
         @endauth
         
         @auth('customer')
-            <form action="{{ route('checkout.process') }}" method="post">
+            <form id="checkoutForm" action="{{ route('checkout.process') }}" method="post">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                <input type="hidden" name="quantity" id="quantity_checkout" value="1">
+                <input type="hidden" name="quantity" id="quantity_checkout">
                 <button type="submit" class="btn btn-primary">Buy</button>
             </form>
         @else

@@ -90,13 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-    
 
-    
-    
-    
-
-    // document.getElementById("checkoutForm").addEventListener("submit", function (event) {
-    //     document.getElementById("quantity_checkout").value = quantityInput.value;
-    // });
+    if (checkoutForm) { 
+        checkoutForm.addEventListener("submit", function () {
+            document.getElementById("quantity_checkout").value = quantityInput.value;
+        });
+    }
 });

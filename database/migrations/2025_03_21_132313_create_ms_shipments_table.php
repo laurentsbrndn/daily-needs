@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('shipment_recipient', length: 200);
             $table->enum('shipment_status', ['Pending', 'Completed']);
             $table->unsignedBigInteger('transaction_id');
-            $table->unsignedBigInteger('courier_id');
+            $table->unsignedBigInteger('courier_id')->nullable();
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('transaction_id')->on('transaction_headers')->onDelete('restrict');

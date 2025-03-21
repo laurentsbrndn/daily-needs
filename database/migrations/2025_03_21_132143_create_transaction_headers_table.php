@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('transaction_id')->unique();
             $table->dateTime('transaction_date', precision: 0);
             $table->decimal('transaction_total_price', total: 12, places: 2);
-            $table->enum('transaction_status', ['Pending', 'Completed']);
+            $table->enum('transaction_status', ['Pending', 'Processing', 'Shipped', 'Completed']);
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('customer_address_id');
             $table->unsignedBigInteger('admin_id')->nullable();

@@ -40,9 +40,13 @@ class CustomerBuyProductController extends Controller
         }
 
         $product = MsProduct::where('product_id', $productId)->first();
+
+        $totalPrice = $product->product_price * $quantity;
+
+        $paymentMethods = MsPaymentMethod::all();
         $categories = MsCategory::all();
         $customers = Auth::guard('customer')->user();
-        return view('checkout.index', compact('customers', 'categories', 'product', 'quantity'));
+        return view('checkout.index', compact('customers', 'categories', 'product', 'quantity', 'totalPrice', 'paymentMethods'));
     }
 
 }
