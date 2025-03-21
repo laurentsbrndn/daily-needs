@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
-@section
-
+@section('footer')
     <div class="lol">
         <p>haiiiii</p>
     </div>
