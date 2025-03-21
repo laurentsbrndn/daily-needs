@@ -1,8 +1,12 @@
-@extends('layouts.main')
+<div>
+    <h2>Daily Needs</h2>
+    <p>Copyright 2025 Daily Needs. All Rights Reserved.</p>
+</div>
 
-@section('footer')
-    <div class="lol">
-        <p>haiiiii</p>
-    </div>
+<div>
+    <h2>Contacts</h2>
+    <p>+62 21234567</p>
+    <p>dailyneeds@gmail.com</p>
+    <p>Jl. Benteng Takeshi</p>
 
-@endsection
+</div>
