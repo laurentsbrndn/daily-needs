@@ -29,6 +29,44 @@ class MsCustomer extends Authenticatable
         return $this->customer_password;
     }
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::creating(function ($customer) {
+    //         if (!$customer->customer_id) {
+    //             $customer->customer_id = self::generateCustomerId();
+    //         }
+    //     });
+    // }
+
+    // public static function generateCustomerId()
+    // {
+    //     \DB::beginTransaction();
+    
+    //     try {
+    //         // Ambil angka terbesar dari customer_id dengan format CUx
+    //         $lastCustomer = \DB::table('ms_customers')
+    //             ->where('customer_id', 'LIKE', 'CU%')
+    //             ->selectRaw("MAX(CAST(SUBSTRING(customer_id, 3) AS SIGNED)) as last_number")
+    //             ->lockForUpdate()
+    //             ->first();
+    
+    //         // Jika tidak ada data, mulai dari 1
+    //         $newNumber = ($lastCustomer->last_number ?? 0) + 1;
+    
+    //         \DB::commit();
+    
+    //         return 'CU' . $newNumber;
+    //     } catch (\Exception $e) {
+    //         \DB::rollBack();
+    //         throw $e;
+    //     }
+    // }
+    
+
+
+
     public function mstopup()
     {
         return $this->hasMany(MsTopUp::class, 'customer_id', 'customer_id');

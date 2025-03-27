@@ -22,7 +22,7 @@ class MsCustomerAddressFactory extends Factory
             'customer_address_street' => $this->faker->streetAddress(),
             'customer_address_postal_code' => $this->faker->postcode(),
             'customer_address_district' => $this->faker->citySuffix(),
-            'customer_address_regency/city' => $this->faker->city(), 
+            'customer_address_regency_city' => $this->faker->city(), 
             'customer_address_province' => $this->faker->state(),
             'customer_address_country' => $this->faker->country(),
 

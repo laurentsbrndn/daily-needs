@@ -1,62 +1,213 @@
-// document.getElementById("chooseAddressBtn").addEventListener("click", function() {
-//     fetch('/addresses')
-//     .then(response => response.json())
-//     .then(data => {
-//         let addressList = document.getElementById("addressList");
-//         addressList.innerHTML = "";
-        
-//         data.forEach(address => {
-//             let addressItem = document.createElement("div");
-//             addressItem.innerHTML = `
-//                 <p><strong>${address.customer_address_name}</strong></p>
-//                 <p>${address.customer_address_street}, ${address.customer_address_city}</p>
-//                 <button class="selectAddress" data-id="${address.customer_address_id}" data-name="${address.customer_address_name}">Pilih</button>
-//                 <hr>
-//             `;
-//             addressList.appendChild(addressItem);
-//         });
+$(document).ready(function() {
 
-//         document.querySelectorAll(".selectAddress").forEach(button => {
-//             button.addEventListener("click", function() {
-//                 let addressId = this.getAttribute("data-id");
-//                 let addressName = this.getAttribute("data-name");
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
-//                 document.getElementById("selectedAddress").innerHTML = `Dikirim ke: <strong>${addressName}</strong>`;
-//                 document.getElementById("selectedAddressId").value = addressId;
-//                 document.getElementById("addressModal").style.display = "none";
-//             });
-//         });
-//     });
-
-//     document.getElementById("addressModal").style.display = "block";
-// });
-
-// document.getElementById("addNewAddressBtn").addEventListener("click", function() {
-//     document.getElementById("newAddressForm").style.display = "block";
-// });
-
-// document.getElementById("cancelNewAddress").addEventListener("click", function() {
-//     document.getElementById("newAddressForm").style.display = "none";
-// });
-
-// document.getElementById("addAddressForm").addEventListener("submit", function(event) {
-//     event.preventDefault();
-
-//     let formData = new FormData(this);
+    function fetchAddressList() {
+        $.ajax({
+            url: '/address',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                let addressList = $('#address-list');
+                addressList.empty();
     
-//     fetch('/addresses', {
-//         method: "POST",
-//         body: JSON.stringify(Object.fromEntries(formData)),
-//         headers: { "Content-Type": "application/json" }
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         alert("Alamat berhasil ditambahkan!");
-//         document.getElementById("newAddressForm").style.display = "none";
-//         document.getElementById("chooseAddressBtn").click();
-//     });
-// });
+                if (response.addresses.length === 0) {
+                    addressList.append('<p>No address available.</p>');
+                    return;
+                }
 
-// document.getElementById("closeModal").addEventListener("click", function() {
-//     document.getElementById("addressModal").style.display = "none";
-// });
+                addressList.append(`
+                    <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                        Add New Address
+                    </button>
+                `);
+    
+                response.addresses.forEach(address => {
+                    addressList.append(`
+                        <div class="card p-3 mb-2">
+                            <button class="btn btn-warning btn-sm edit-address"
+                                data-id="${address.customer_address_id}"
+                                data-name="${address.customer_address_name}"
+                                data-street="${address.customer_address_street}"
+                                data-district="${address.customer_address_district}"
+                                data-city="${address.customer_address_regency_city}"
+                                data-province="${address.customer_address_province}"
+                                data-country="${address.customer_address_country}"
+                                data-postal="${address.customer_address_postal_code}"
+                                data-bs-toggle="modal" data-bs-target="#updateAddressModal">
+                                Edit
+                            </button>
+                            <form class="delete-address" action="/address/delete/${address.customer_address_id}" method="POST">
+                                <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                                <input type="hidden" name="_method" value="DELETE"> 
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </form>
+                            <strong>${address.customer_address_name}</strong>
+                            <p>${address.customer_address_street}, ${address.customer_address_district}, ${address.customer_address_regency_city}, ${address.customer_address_province}, ${address.customer_address_country}, ${address.customer_address_postal_code}</p>
+                            <button class="btn btn-success btn-sm select-address" data-address="${address.customer_address_name}">
+                                Select
+                            </button>
+                        </div>
+                    `);
+                });
+    
+                $('#addressModal').modal('show');
+                if (callback) callback();
+            }
+        });
+    }
+    
+
+    $('#saveAddress').click(function (e) {
+        e.preventDefault();
+
+        let form = $('#addressForm');
+        let url = $(this).data('url');
+        let formData = form.serialize();
+
+        $('.error-message').text('');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('.notification').html(
+                        `<div class="alert alert-success">${response.message}</div>`
+                    );
+
+                    form[0].reset();
+
+                    fetchAddressList();
+
+                    $('#addAddressModal').modal('hide');
+                }
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    
+                    $.each(errors, function (field, messages) {
+                        let inputField = $(`[name="${field}"]`);
+                        let errorMessage = messages[0];
+                        inputField.next('.error-message').text(errorMessage);
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on("click", ".edit-address", function() {
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+        let street = $(this).data("street");
+        let district = $(this).data("district");
+        let city = $(this).data("city");
+        let province = $(this).data("province");
+        let country = $(this).data("country");
+        let postal = $(this).data("postal");
+
+        $("#update_address_id").val(id);
+        $("#update_address_name").val(name);
+        $("#update_street").val(street);
+        $("#update_postal_code").val(postal);
+        $("#update_district").val(district);
+        $("#update_regency_city").val(city);
+        $("#update_province").val(province);
+        $("#update_country").val(country);
+
+        $("#updateAddressModal").modal("show");
+    });
+
+    $('#updateAddress').click(function(e) {
+        e.preventDefault();
+
+        let id = $("#update_address_id").val(); 
+        let form = $('#updateAddressForm');
+        let formData = form.serialize();
+        let url = `/address/update/${id}`;
+
+        $('.error-message').text('');
+
+        $.ajax({
+            type: 'PUT',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('.notification').html(
+                        `<div class="alert alert-success">${response.message}</div>`
+                    );
+
+                    $('#updateAddressModal').modal('hide');
+
+                    fetchAddressList(function() {
+                        $('#addressModal').modal('show');
+                    });
+                }
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    
+                    $.each(errors, function (field, messages) {
+                        let inputField = $(`[name="${field}"]`);
+                        let errorMessage = messages[0];
+                        inputField.next('.error-message').text(errorMessage);
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on('submit', '.delete-address', function(e) {
+        e.preventDefault(); 
+    
+        let form = $(this); 
+        let url = form.attr('action');
+        let card = form.closest('.card'); 
+    
+        $.ajax({
+            url: url,
+            method: 'DELETE',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    card.remove();
+                    $('.notification').html(
+                        `<div class="alert alert-success">${response.message}</div>`
+                    );
+                } 
+                else {
+                    alert(response.error);
+                }
+            },
+            error: function(xhr) {
+                alert('Error removing address. Please try again.');
+            }
+        });
+    });
+
+    $(document).on('click', '.select-address', function () {
+        let card = $(this).closest('.card');
+        let addressName = card.find('strong').text();
+        let fullAddress = card.find('p').text();
+    
+        let selectedFullAddress = `<span style="font-weight: 600;">${addressName}</span><br>${fullAddress}`;
+    
+        $('#selectedAddressText').html(selectedFullAddress);
+        $('#selectedAddress').val(selectedFullAddress);
+        $('#addressModal').modal('hide');
+    });
+    
+    
+});

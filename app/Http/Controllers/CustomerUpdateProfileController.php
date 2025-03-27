@@ -22,6 +22,7 @@ class CustomerUpdateProfileController extends Controller
             'customer_first_name' => 'nullable|max:199',
             'customer_last_name' => 'nullable|max:199',
             'customer_phone_number' => 'nullable|max:199',
+            'customer_gender' => 'nullable|in:Male,Female,Prefer not to say',
             'customer_password' => 'nullable|min:8|max:20|confirmed',
         ]);
 
@@ -37,6 +38,10 @@ class CustomerUpdateProfileController extends Controller
             return back()->withErrors(['customer_phone_number' => 'Phone number cannot be empty.'])->withInput();
         }
 
+        if (empty($request->customer_gender)) {
+            return back()->withErrors(['customer_gender' => 'gender cannot be empty.'])->withInput();
+        }
+
         if ($request->hasFile('customer_photo')) {
             if ($customers->customer_photo) {
                 Storage::delete('public/customer_photos/' . $customers->customer_photo);
@@ -50,6 +55,7 @@ class CustomerUpdateProfileController extends Controller
         $customers->customer_first_name = $validateData['customer_first_name'];
         $customers->customer_last_name = $validateData['customer_last_name'];
         $customers->customer_phone_number = $validateData['customer_phone_number'];
+        $customers->customer_gender = $validateData['customer_gender'];
 
         if ($request->customer_password){
             $customers->customer_password = bcrypt($request->customer_password);
