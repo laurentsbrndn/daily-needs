@@ -199,15 +199,14 @@ $(document).ready(function() {
 
     $(document).on('click', '.select-address', function () {
         let card = $(this).closest('.card');
+        let addressId = $(this).data('id');
         let addressName = card.find('strong').text();
         let fullAddress = card.find('p').text();
     
         let selectedFullAddress = `<span style="font-weight: 600;">${addressName}</span><br>${fullAddress}`;
     
         $('#selectedAddressText').html(selectedFullAddress);
-        $('#selectedAddress').val(selectedFullAddress);
+        $('#selectedAddress').val(addressId);
         $('#addressModal').modal('hide');
     });
-    
-    
 });

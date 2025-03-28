@@ -11,6 +11,12 @@ class TransactionDetail extends Model
 
     protected $table = 'transaction_details';
 
+    protected $fillable = [
+        'transaction_id',
+        'product_id',
+        'quantity',
+    ];
+
     public function transactionheader(){
         return $this->belongsTo(TransactionHeader::class, 'transaction_id', 'transaction_id');
     }

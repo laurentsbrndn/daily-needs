@@ -17,40 +17,90 @@ class CustomerBuyProductController extends Controller
 {
     public function checkout(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:ms_products,product_id',
-            'quantity' => 'required|integer|min:1'
-        ]);
+        if ($request->has('cart')) {
+            $cart = session()->get('cart', []);
+    
+            if (empty($cart)) {
+                return redirect()->back()->with('error', 'Cart is empty!');
+            }
+    
+            session(['checkout_cart' => $cart]);
+            return redirect()->route('checkout.page');
+        }
+        else {
+            $request->validate([
+                'product_id' => 'required|exists:ms_products,product_id',
+                'quantity' => 'required|integer|min:1'
+            ]);
 
-        session([
-            'checkout_product_id' => $request->product_id,
-            'checkout_quantity' => $request->quantity
-        ]);
+            session([
+                'checkout_product_id' => $request->product_id,
+                'checkout_quantity' => $request->quantity
+            ]);
 
-        return redirect()->route('checkout.page');
+            return redirect()->route('checkout.page');
+        }
+            
     }
 
     public function index()
     {
         $customers = Auth::guard('customer')->user();
 
+        $cart = session('checkout_cart');
         $productId = session('checkout_product_id');
         $quantity = session('checkout_quantity');
 
-        if (!$productId || !$quantity) {
+        if ($cart){
+            $products = MsProduct::whereIn('product_id', array_column($cart, 'product_id'))->get();
+            $totalPrice = collect($cart)->sum(fn($item) => $item['product_price'] * $item['quantity']);
+        }
+
+        else if ($productId && $quantity){
+            $product = MsProduct::where('product_id', $productId)->first();
+            $products = [$product];
+            $totalPrice = $product->product_price * $quantity;
+        }
+
+        else {
             return redirect()->back()->with('error', 'Checkout invalid!');
         }
 
-        $product = MsProduct::where('product_id', $productId)->first();
-
-        $totalPrice = $product->product_price * $quantity;
-
         $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->get();
-
         $paymentMethods = MsPaymentMethod::all();
         $categories = MsCategory::all();
+
+        return view('checkout.index', compact('customers', 'categories', 'products', 'quantity', 'totalPrice', 'paymentMethods', 'addresses'));
+    }
+
+    public function store(Request $request)
+    {
         $customers = Auth::guard('customer')->user();
-        return view('checkout.index', compact('customers', 'categories', 'product', 'quantity', 'totalPrice', 'paymentMethods', 'addresses'));
+
+        if (!$customers) {
+            return redirect()->route('login')->with('error', 'You need to login first.');
+        }
+
+        $validateData = $request->validate([
+            'product_id' => 'required|exists:ms_products,product_id',
+            'quantity' => 'required|integer|min:1',
+            'payment_method_id' => 'required|exists:ms_payment_methods,payment_method_id',
+            'customer_address_id' => 'required|exists:ms_customer_addresses,customer_address_id',
+        ]);
+
+        $transactionHeader = TransactionHeader::create([
+            'transaction_date' => now(),
+            'transaction_status' => 'Pending',
+            'customer_id' => $customers->customer_id,
+            'customer_address_id' => $validateData['customer_address_id'],
+            'payment_method_id' => $validateData['payment_method_id']
+        ]);
+
+        TransactionDetail::create([
+            'transaction_id' => $transactionHeader->transaction_id,
+            'product_id' => $validateData['product_id'],
+            'quantity'=> $validateData['quantity']
+        ]);
     }
 
     public function storeAddress(Request $request)

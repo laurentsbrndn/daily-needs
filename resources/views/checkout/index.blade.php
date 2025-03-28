@@ -10,25 +10,38 @@
         <h1>Checkout</h1>
     </div>
 
-    <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
-    <p>{{ $product->product_name ?? 'Produk tidak ditemukan' }}</p>
-    <p>Rp{{ number_format($product->product_price, 0, ',', '.') }}</p>
-    <p><strong>Quantity:</strong> {{ $quantity }}</p>
-    <p><strong>Total:</strong> Rp{{ number_format($totalPrice, 0, ',', '.') }}</p>
-
-
-    <p><strong>Payment Methods</strong></p>
-    <select name="payment_method" id="paymentMethod" class="form-select">
-        @foreach ($paymentMethods as $paymentMethod)
-            <option value="{{ $paymentMethod->payment_method_id }}" 
-                {{ $loop->first ? 'selected' : '' }}>
-                {{ $paymentMethod->payment_method_name }}
-            </option>
+    @if(isset($cart) && count($cart) > 0)
+        @foreach($cart as $item)
+            <img src="{{ asset('storage/' . $item->product_image ) }}" alt="{{ $item->product_name }}">
+            <p>{{ $item->product_name ?? 'Produk tidak ditemukan' }}</p>
+            <p>Rp{{ number_format($item->product_price, 0, ',', '.') }}</p>
+            <p><strong>Quantity:</strong> {{ $item->quantity }}</p>
+            <p><strong>Total:</strong> Rp{{ number_format($item->product_price * $item->quantity, 0, ',', '.') }}</p>
+            <hr>
         @endforeach
-    </select>
+        <p><strong>Grand Total:</strong> Rp{{ number_format($grandTotal, 0, ',', '.') }}</p>
 
-    
-    <input type="hidden" name="selected_payment" id="selectedPayment" value="{{ $paymentMethods->first()->payment_method_id ?? '' }}">
+    @else
+        @foreach($products as $product)
+            <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
+            <p>{{ $product->product_name ?? 'Produk tidak ditemukan' }}</p>
+            <p>Rp{{ number_format($product->product_price, 0, ',', '.') }}</p>
+            <p><strong>Quantity:</strong> {{ $quantity }}</p>
+            <p><strong>Total:</strong> Rp{{ number_format($totalPrice, 0, ',', '.') }}</p>
+        @endforeach
+    @endif
+
+    <div class="payment-method-selector mt-3">
+        <p><strong>Payment Method</strong></p>
+        <select id="paymentMethod" class="form-select">
+            @foreach ($paymentMethods as $paymentMethod)
+                <option value="{{ $paymentMethod->payment_method_id }}">
+                    {{ $paymentMethod->payment_method_name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="card p-3 shadow-sm">
         <h3 class="mb-3">Select Address</h3>
         <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addressModal">
@@ -37,9 +50,7 @@
         <div class="mt-3">
             <h5>Send To:</h5>
             <p id="selectedAddressText">No address selected</p>
-            <input type="hidden" name="selected_address" id="selectedAddress" value="">
         </div> 
-        
     </div>
     
     <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
@@ -78,7 +89,7 @@
                             </form>
                             <strong>{{ $address->customer_address_name }}</strong>
                             <p>{{ $address->customer_address_street }}, {{ $address->customer_address_district }}, {{ $address->customer_address_regency_city }}, {{ $address->customer_address_province }}, {{ $address->customer_address_country }}, {{ $address->customer_address_postal_code }}</p>
-                            <button class="btn btn-success btn-sm select-address" data-address="{{ $address->customer_address_name }}">
+                            <button class="btn btn-success btn-sm select-address" data-id="{{ $address->customer_address_id }}">
                                 Select
                             </button>
                         </div>
@@ -203,4 +214,16 @@
             </div>
         </div>
     </div>
+
+    <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
+        @csrf
+
+        <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+        <input type="hidden" name="quantity" value="{{ $quantity }}">
+        <input type="hidden" name="payment_method_id" id="selectedPayment" value="">
+        <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
+    
+        <button type="submit" class="btn btn-primary">Checkout</button>
+    </form>
+    
 @endsection

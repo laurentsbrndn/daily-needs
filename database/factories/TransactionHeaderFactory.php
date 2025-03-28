@@ -22,7 +22,6 @@ class TransactionHeaderFactory extends Factory
     {
         return [
             'transaction_date' => $this->faker->dateTimeThisYear(),
-            'transaction_total_price' => $this->faker->randomFloat(2, 0, 1000000),
             'transaction_status' => $this->faker->randomElement(['Pending', 'Processing', 'Shipped', 'Completed']),
 
             'admin_id' => MsAdmin::inRandomOrder()->first()->admin_id ?? MsAdmin::factory(),

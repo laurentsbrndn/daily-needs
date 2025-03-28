@@ -154,7 +154,7 @@ $(document).ready(function () {
                     alert(response.error);
                 }
             },
-            error: function(xhr) {
+            error: function(xhr) { 
                 alert('Error removing item. Please try again.');
             }
         });
