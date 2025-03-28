@@ -17,9 +17,11 @@ use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AdminAddNewProductController;
 use App\Http\Controllers\AdminUpdateProductController;
 use App\Http\Controllers\AdminUpdateProfileController;
+use App\Http\Controllers\CustomerBuyProductController;
 use App\Http\Controllers\CourierUpdateProfileController;
 use App\Http\Controllers\CustomerUpdateProfileController;
 use App\Http\Controllers\CustomerPurchaseHistoryController;
+use App\Http\Controllers\CustomerAddressController;
 
 
 /*
@@ -42,19 +44,34 @@ Route::post('/logout', [CustomerLoginController::class, 'logout'])->middleware('
 Route::get('/signup', [CustomerSignUpController::class, 'index'])->middleware('guest.access');
 Route::post('/signup', [CustomerSignUpController::class, 'store']);
 
-Route::get('/cart', [CustomerViewCartController::class, 'index'])->middleware('auth:customer', 'customer.access');
-Route::post('/cart', [CustomerViewCartController::class, 'store'])->middleware('auth:customer', 'customer.access');
-Route::post('/cart/subtotal', [CustomerViewCartController::class, 'getSubtotal'])->middleware('auth:customer', 'customer.access');
-Route::patch('/cart/{brand_slug}/{product_slug}/update', [CustomerViewCartController::class, 'update'])->middleware('auth:customer', 'customer.access')->name('cart.update');
-Route::delete('/cart/{brand_slug}/{product_slug}/delete', [CustomerViewCartController::class, 'destroy'])->middleware('auth:customer', 'customer.access')->name('cart.delete');
+Route::middleware(['auth:customer', 'customer.access'])->group(function () {
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CustomerViewCartController::class, 'index']);
+        Route::post('/', [CustomerViewCartController::class, 'store'])->name('cart.store');
+        Route::post('/subtotal', [CustomerViewCartController::class, 'getSubtotal'])->name('cart.subtotal');
+        Route::patch('/{brand_slug}/{product_slug}/update', [CustomerViewCartController::class, 'update'])->name('cart.update');
+        Route::delete('/{brand_slug}/{product_slug}/delete', [CustomerViewCartController::class, 'destroy'])->name('cart.delete');
+    });
 
-Route::get('/dashboard/myprofile', [CustomerUpdateProfileController::class, 'show'])->middleware('auth:customer', 'customer.access');
-Route::put('dashboard/myprofile/update', [CustomerUpdateProfileController::class, 'update'])->middleware('auth:customer', 'customer.access');
+    Route::post('/checkout/process', [CustomerBuyProductController::class, 'checkout'])->name('checkout.process');
+    Route::get('/checkout', [CustomerBuyProductController::class, 'index'])->name('checkout.page');
+    Route::post('/checkout/payment', [CustomerBuyProductController::class, 'store'])->name('checkout.payment');
+
+    Route::post('/address', [CustomerBuyProductController::class, 'storeAddress'])->name('address.store');
+    Route::get('/address', [CustomerBuyProductController::class, 'showAddress']);
+    Route::put('address/update/{customer_address_id}', [CustomerBuyProductController::class, 'updateAddress'])->name('address.update');
+    Route::delete('address/delete/{customer_address_id}', [CustomerBuyProductController::class, 'destroyAddress'])->name('address.destroy');
     
-Route::get('/dashboard/topup', [CustomerTopUpController::class, 'show'])->middleware('auth:customer', 'customer.access');
-Route::put('/dashboard/topup/update', [CustomerTopUpController::class, 'update'])->middleware('auth:customer', 'customer.access');
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/myprofile', [CustomerUpdateProfileController::class, 'show']);
+        Route::put('/myprofile/update', [CustomerUpdateProfileController::class, 'update']);
 
-Route::get('/dashboard/purchasehistory', [CustomerPurchaseHistoryController::class, 'index'])->middleware('auth:customer', 'customer.access');
+        Route::get('/topup', [CustomerTopUpController::class, 'show']);
+        Route::put('/topup/update', [CustomerTopUpController::class, 'update']);
+
+        Route::get('/purchasehistory', [CustomerPurchaseHistoryController::class, 'index']);
+    });
+});
 
 Route::prefix('admin')->group(function(){
     Route::get('/signup', [AdminSignUpController::class, 'index'])->middleware('guest.access');

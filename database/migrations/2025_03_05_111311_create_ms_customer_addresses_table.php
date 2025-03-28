@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('customer_address_street', length: 200);
             $table->string('customer_address_postal_code', length: 200);
             $table->string('customer_address_district', length: 200);
-            $table->string('customer_address_regency/city', length: 200)->unique();
+            $table->string('customer_address_regency_city', length: 200);
             $table->string('customer_address_province', length: 200);
             $table->string('customer_address_country', length: 200);
             $table->unsignedBigInteger('customer_id');

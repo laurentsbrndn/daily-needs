@@ -19,7 +19,6 @@ class MsShipmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'shipment_address' => $this->faker->address,
             'shipment_date_start' => $this->faker->dateTimeThisYear(),
             'shipment_date_end' => $this->faker->dateTimeThisYear(),
             'shipment_recipient' => $this->faker->name,

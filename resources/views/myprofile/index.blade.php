@@ -44,6 +44,35 @@
             </div>
     
             <div class="form-group">
+                <label for="customer_gender">Gender</label>
+                <div>
+                    <div>
+                        <input type="radio" name="customer_gender" id="male" class="form-check-input @error('customer_gender') is-invalid @enderror" value="Male"
+                            {{ old('customer_gender', $customers->customer_gender) == 'Male' ? 'checked' : '' }}>
+                        <label for="male">Male</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" name="customer_gender" id="female" class="form-check-input @error('customer_gender') is-invalid @enderror" value="Female"
+                            {{ old('customer_gender', $customers->customer_gender) == 'Female' ? 'checked' : '' }}>
+                        <label for="female">Female</label>
+                    </div>
+                    
+                    <div>
+                        <input type="radio" name="customer_gender" id="prefer_not_to_say" class="form-check-input @error('customer_gender') is-invalid @enderror" value="Prefer not to say"
+                            {{ old('customer_gender', $customers->customer_gender) == 'Prefer not to say' ? 'checked' : '' }}>
+                        <label for="prefer_not_to_say">Prefer not to say</label>
+                    </div>
+
+                </div>
+                @error('customer_gender')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <div class="form-group">
                 <label>Phone Number</label>
                 <input type="text" name="customer_phone_number" class="form-control @error('customer_phone_number') is-invalid @enderror" value="{{ old('customer_phone_number', $customers->customer_phone_number) }}">
                 @error('customer_phone_number')

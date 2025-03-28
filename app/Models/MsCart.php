@@ -32,12 +32,7 @@ class MsCart extends Model
     public function scopeFilterSubtotal($query, $customerId, $selectedProducts)
     {
         return $query->where('customer_id', $customerId)
-            ->whereIn('product_id', $selectedProducts)
-            ->with('msproduct')
-            ->get()
-            ->sum(function ($item) {
-                return $item->msproduct->product_price * $item->quantity;
-            });
+            ->whereIn('product_id', (array) $selectedProducts)
+            ->with('msproduct');
     }
-
 }

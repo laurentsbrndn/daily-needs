@@ -10,9 +10,9 @@ class MsCustomerAddress extends Model
     use HasFactory;
 
     protected $table = 'ms_customer_addresses';
-    protected $primaryKey = 'address_id';
+    protected $primaryKey = 'customer_address_id';
 
-    protected $guarded = ['address_id'];
+    protected $guarded = ['customer_address_id'];
 
     public function mscustomer()
     {
