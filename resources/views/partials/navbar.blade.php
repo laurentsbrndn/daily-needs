@@ -34,11 +34,12 @@
                     @if(auth('customer')->user()->customer_photo)
                         <img src="{{ asset('storage/customer_photos/' . auth('customer')->user()->customer_photo) }}" 
                              alt="Profile" class="rounded-circle me-2" width="30" height="30">
+                    @else
+                        <i class="bi bi-person-circle fs-4 me-2"></i>
                     @endif
-                    Welcome back, {{ auth('customer')->user()->customer_first_name }} 
                 </a>
                 
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/dashboard/myprofile"><i class="bi bi-person-circle"></i> My Dashboard</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
@@ -55,10 +56,7 @@
         @else
             <ul class="nav-links">
                 <li>
-                    <a href="/login"><i class="bi bi-cart2"></i></a>
-                </li>
-                <li>
-                    <a href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    <a href="/login"><button>Login</button></a>
                 </li>
             </ul>
         @endauth

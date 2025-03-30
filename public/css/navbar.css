@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
-
 .navbar{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: "Instrument Serif", serif;
+    font-family: Arial, sans-serif;
     font-weight: 400;
-    font-size: 36px;
+    font-size: 25px;
     color: white;
     background-color: #283106;
     width: 100%;
@@ -14,24 +12,36 @@
     flex-wrap: nowrap !important;
 }
 
- .brand-logo{
+.brand-logo{
     margin-left: 30px;
 }
 
 .brand-logo img{
-    width: 100px;
+    width: 80px;
 }
 
 .nav-left {
     display: flex;
     align-items: center;
     flex-grow: 1;
+    margin: 0 50px !important;
+    gap: 70px;
+    
 }
 
-.nav-left .nav-item:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
+.nav-left .nav-item:before{
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: .3s;
+}
+
+.nav-left .nav-item:hover:before {
+    width: 100%;
 }
 
 .nav-right .nav-links a, .nav-right:last-child {
@@ -55,7 +65,7 @@
 
 .nav-left li, .nav-right, .nav-right .nav-links li {
     display: inline-flex !important;
-    padding: 0px 20px;
+    margin: 0 20px;
 }
 
 .nav-left .input-group {
@@ -64,7 +74,7 @@
 
 .input-group .form-control {
     padding: 0;
-    font-size: 36px;
+    font-size: 25px;
     border: none;
     border-radius: 0;
     background-color: transparent;
@@ -72,7 +82,7 @@
 }
 
 .input-group .form-control::placeholder {
-    transform: translateY(10px);
+    transform: translateY(8px);
     color: white;
 }
 
@@ -87,10 +97,20 @@
     background: transparent;
     color: white;
 }
- 
-.nav-links a {
-    color: white !important;
-    text-decoration: none !important; 
+
+.nav-links button {
+    padding: 7px 40px;
+    background-color: rgba(209, 216, 141, 1);
+    border: none;
+    border-radius: 50px !important;
+    cursor: pointer;
+    font-size: 20px !important;
+    transition: all 0.3s ease 0s;
+}
+
+.nav-links button:hover {
+    color: white;
+    background-color: rgba(209, 216, 141, 0.7); 
 }
 
 .dropdown-menu li {
@@ -98,6 +118,12 @@
 }
 
 .dropdown-menu .dropdown-item:hover {
+    background-color: #283106; 
+    color: white; 
+    width: 80%;
+}
+
+.dropdown-menu-end .dropdown-item:hover {
     background-color: #283106; 
     color: white; 
     width: 100%;
@@ -108,3 +134,4 @@
     text-decoration-thickness: 2px !important;
     text-underline-offset: 6px;
 }
+
