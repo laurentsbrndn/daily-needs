@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\MsProduct;
 use App\Models\MsBrand;
 use App\Models\MsCategory;
@@ -32,6 +33,10 @@ class AdminAddNewProductController extends Controller
             'brand_id.required' => 'Brand is required. Please select a brand.',
             'category_id.required' => 'Category is required. Please select a category.',
         ]);
+
+        if (empty($request->product_slug)) {
+            $validatedData['product_slug'] = Str::slug($request->product_name);
+        }
 
         if ($request->hasFile('product_image')) {
             $file = $request->file('product_image');

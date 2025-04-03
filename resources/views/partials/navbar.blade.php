@@ -56,6 +56,9 @@
         @else
             <ul class="nav-links">
                 <li>
+                    <a href="/login"><i class="bi bi-cart2"></i></a>
+                </li>
+                <li>
                     <a href="/login"><button>Login</button></a>
                 </li>
             </ul>

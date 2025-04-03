@@ -27,7 +27,7 @@
                                 <p>Add Image</p>
                             </div>
                         </div>
-                        <input type="file" name="product_image" id="product_image" class="d-none" accept="image/*">
+                        <input type="file" name="product_image" id="product_image" class="form-control @error('product_image') is-invalid @enderror">
                         </label>
                         @error('product_image')
                             <div class="invalid-feedback">
@@ -54,6 +54,24 @@
                                 </div>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label>Brand Name</label>
+                            <select name="brand_id" class="form-control @error('brand_id') is-invalid @enderror">
+                                <option value="">Select Brand</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->brand_id }}" 
+                                        {{ old('brand_id') == $brand->brand_id ? 'selected' : '' }}>
+                                        {{ $brand->brand_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('brand_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                         
                         <div class="form-group">
                             <label>Product Name</label>
@@ -65,29 +83,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label>Product Price</label>
-                            <input type="number" name="product_price" class="form-control @error('product_price') is-invalid @enderror" value="{{ old('product_price') }}">
-                            @error('product_price')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label>Stock</label>
-                            <div class="stock-input">
-                                <button class="btn btn-outline-secondary" id="decrease-btn" type="button" onclick="decreaseQuantity()">-</button>
-                                <input type="number" name="product_stock" class="form-control @error('product_stock') is-invalid @enderror" value="{{ old('product_stock') }}">
-                                <button class="btn btn-outline-secondary" id="increase-btn" type="button" onclick="increaseQuantity()">+</button>
-                            </div>
-                            @error('product_stock')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -96,6 +92,30 @@
                 <h3>Detail</h3>
 
                 <div class="detail-container">
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <div class="stock-input">
+                            <button class="btn btn-outline-secondary" id="decrease-btn" type="button" onclick="decreaseQuantity()">-</button>
+                            <input type="number" name="product_stock" class="form-control @error('product_stock') is-invalid @enderror" value="{{ old('product_stock') }}">
+                            <button class="btn btn-outline-secondary" id="increase-btn" type="button" onclick="increaseQuantity()">+</button>
+                        </div>
+                        @error('product_stock')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Product Price</label>
+                        <input type="number" name="product_price" class="form-control @error('product_price') is-invalid @enderror" value="{{ old('product_price') }}">
+                        @error('product_price')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+            
                     <div class="form-group">
                         <label>Product Description</label>
                         <input type="text" name="product_description" class="form-control @error('product_description') is-invalid @enderror" value="{{ old('product_description') }}">
@@ -106,33 +126,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label>Product Slug</label>
-                        <input type="text" name="product_slug" class="form-control @error('product_slug') is-invalid @enderror" value="{{ old('product_slug') }}">
-                        @error('product_slug')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label>Brand Name</label>
-                        <select name="brand_id" class="form-control @error('brand_id') is-invalid @enderror">
-                            <option value="">Select Brand</option>
-                            @foreach ($brands as $brand)
-                                <option value="{{ $brand->brand_id }}" 
-                                    {{ old('brand_id') == $brand->brand_id ? 'selected' : '' }}>
-                                    {{ $brand->brand_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('brand_id')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
+                    
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Add</button>

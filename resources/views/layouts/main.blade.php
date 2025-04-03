@@ -31,5 +31,6 @@
     <script src="/js/cart.js"></script>
     <script src="/js/checkout.js"></script>
     <script src="/js/address.js"></script>
+    <script src="/js/paymentmethod.js"></script>
 </body>
 </html>
