@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('brand_id')->references('brand_id')->on('ms_brands')->onDelete('cascade');
-            $table->foreign('category_id')->references('category_id')->on('ms_categories')->onDelete('cascade');
+            $table->foreign('brand_id')->references('brand_id')->on('ms_brands')->onDelete('set null');
+            $table->foreign('category_id')->references('category_id')->on('ms_categories')->onDelete('set null');
         });
     }
 
