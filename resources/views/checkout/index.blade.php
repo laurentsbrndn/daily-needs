@@ -31,7 +31,7 @@
         @endforeach
     @endif
 
-    <div class="payment-method-selector mt-3">
+    <div class="payment-method-selector mt-3 mb-5">
         <p><strong>Payment Method</strong></p>
         <select id="paymentMethod" class="form-select">
             @foreach ($paymentMethods as $paymentMethod)
@@ -40,6 +40,7 @@
                 </option>
             @endforeach
         </select>
+        <span class="error-message text-danger" id="error_payment_method"></span>
     </div>
 
     <div class="card p-3 shadow-sm">
@@ -51,6 +52,7 @@
             <h5>Send To:</h5>
             <p id="selectedAddressText">No address selected</p>
         </div> 
+        <span class="error-message text-danger" id="error_customer_address"></span>
     </div>
     
     <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
@@ -223,7 +225,7 @@
         <input type="hidden" name="payment_method_id" id="selectedPayment" value="">
         <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
     
-        <button type="submit" class="btn btn-primary">Checkout</button>
+        <button type="submit" class="btn btn-primary">Place order</button>
     </form>
     
 @endsection

@@ -171,3 +171,8 @@ h3 {
     color: #D1D88D;
 }
 
+.invalid-feedback {
+    display: block !important;
+}
+
+

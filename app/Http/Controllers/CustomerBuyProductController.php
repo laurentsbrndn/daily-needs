@@ -81,26 +81,37 @@ class CustomerBuyProductController extends Controller
             return redirect()->route('login')->with('error', 'You need to login first.');
         }
 
-        $validateData = $request->validate([
-            'product_id' => 'required|exists:ms_products,product_id',
-            'quantity' => 'required|integer|min:1',
-            'payment_method_id' => 'required|exists:ms_payment_methods,payment_method_id',
-            'customer_address_id' => 'required|exists:ms_customer_addresses,customer_address_id',
-        ]);
+        try {
+            $validateData = $request->validate([
+                'product_id' => 'required|exists:ms_products,product_id',
+                'quantity' => 'required|integer|min:1',
+                'payment_method_id' => 'required|exists:ms_payment_methods,payment_method_id',
+                'customer_address_id' => 'required|exists:ms_customer_addresses,customer_address_id',
+            ]);
+    
+            $transactionHeader = TransactionHeader::create([
+                'transaction_date' => now(),
+                'transaction_status' => 'Pending',
+                'customer_id' => $customers->customer_id,
+                'customer_address_id' => $validateData['customer_address_id'],
+                'payment_method_id' => $validateData['payment_method_id']
+            ]);
+    
+            TransactionDetail::create([
+                'transaction_id' => $transactionHeader->transaction_id,
+                'product_id' => $validateData['product_id'],
+                'quantity'=> $validateData['quantity']
+            ]);
+            
+        }
 
-        $transactionHeader = TransactionHeader::create([
-            'transaction_date' => now(),
-            'transaction_status' => 'Pending',
-            'customer_id' => $customers->customer_id,
-            'customer_address_id' => $validateData['customer_address_id'],
-            'payment_method_id' => $validateData['payment_method_id']
-        ]);
-
-        TransactionDetail::create([
-            'transaction_id' => $transactionHeader->transaction_id,
-            'product_id' => $validateData['product_id'],
-            'quantity'=> $validateData['quantity']
-        ]);
+        catch (\Illuminate\Validation\ValidationException $e){
+            return response()->json([
+                'status' => 'error',
+                'errors' => $e->validator->errors()
+            ], 422);
+        }
+        
     }
 
     public function storeAddress(Request $request)
