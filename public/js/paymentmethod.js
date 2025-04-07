@@ -1,3 +1,10 @@
-document.getElementById("paymentMethod").addEventListener("change", function() {
-    document.getElementById("selectedPayment").value = this.value;
+document.addEventListener("DOMContentLoaded", function() {
+    let paymentSelect = document.getElementById("paymentMethod");
+    let selectedPayment = document.getElementById("selectedPayment");
+
+    selectedPayment.value = paymentSelect.value;
+
+    paymentSelect.addEventListener("change", function() {
+        selectedPayment.value = this.value;
+    });
 });

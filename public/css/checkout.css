@@ -1,0 +1,23 @@
+.checkout-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 16px 0;
+}
+.checkout-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.checkout-details {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+.checkout-total {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: right;
+    color: red;
+}

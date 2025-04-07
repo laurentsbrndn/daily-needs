@@ -36,6 +36,29 @@ $(document).ready(function () {
         increaseBtn.prop('disabled', value >= maxStock);
     }
 
+    $('#cartCheckoutForm').on('submit', function (e) {
+        let selectedItems = [];
+    
+        $('.cart-checkbox:checked').each(function () {
+            const productId = $(this).data('product-id');
+            const quantity = $(this).closest('tr').find('input[name="quantity"]').val();
+    
+            selectedItems.push({
+                product_id: productId,
+                quantity: parseInt(quantity)
+            });
+        });
+    
+        if (selectedItems.length === 0) {
+            e.preventDefault();
+            alert("Please select at least one product to checkout.");
+            return;
+        }
+    
+        $('#selected_items_input').val(JSON.stringify(selectedItems));
+    });
+    
+
     $('.quantity-input').on('change', function () {
         let input = $(this);
         let form = input.closest('.update-cart-form');

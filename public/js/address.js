@@ -178,7 +178,7 @@ $(document).ready(function() {
     
         $.ajax({
             url: url,
-            method: 'DELETE',
+            type: 'POST',
             data: form.serialize(),
             success: function(response) {
                 if (response.success) {

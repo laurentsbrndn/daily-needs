@@ -74,9 +74,12 @@
                 <h4 id="total-price">0</h4>
             </div>
 
-            {{-- <div class="text-center mt-3">
-                <a href="{{ route('checkout') }}" class="btn btn-success w-100">Proceed to Checkout</a>
-            </div> --}}
+            <form id="cartCheckoutForm" action="{{ route('checkout.process') }}" method="post">
+                @csrf
+                <input type="hidden" name="selected_items" id="selected_items_input">
+                <button type="submit" class="btn btn-primary">Buy</button>
+            </form>
+            
         </div>
     </div>
 

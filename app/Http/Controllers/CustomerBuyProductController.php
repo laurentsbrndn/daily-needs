@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\CustomerService;
 use App\Models\TransactionHeader;
 use App\Models\TransactionDetail;
 use App\Models\MsAdmin;
@@ -12,19 +13,23 @@ use App\Models\MsProduct;
 use App\Models\MsCustomerAddress;
 use App\Models\MsPaymentMethod;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CustomerBuyProductController extends Controller
 {
     public function checkout(Request $request)
-    {
-        if ($request->has('cart')) {
-            $cart = session()->get('cart', []);
+    { 
+        if ($request->has('selected_items')) {
+            $selectedItems = json_decode($request->input('selected_items'), true);
     
-            if (empty($cart)) {
-                return redirect()->back()->with('error', 'Cart is empty!');
+            if (empty($selectedItems)) {
+                return redirect()->back()->with('error', 'No items selected for checkout.');
             }
     
-            session(['checkout_cart' => $cart]);
+            session(['checkout_cart' => $selectedItems]);
+            session()->forget(['checkout_product_id', 'checkout_quantity']);
+    
             return redirect()->route('checkout.page');
         }
         else {
@@ -37,6 +42,8 @@ class CustomerBuyProductController extends Controller
                 'checkout_product_id' => $request->product_id,
                 'checkout_quantity' => $request->quantity
             ]);
+
+            session()->forget('checkout_cart');
 
             return redirect()->route('checkout.page');
         }
@@ -52,21 +59,30 @@ class CustomerBuyProductController extends Controller
         $quantity = session('checkout_quantity');
 
         if ($cart){
-            $products = MsProduct::whereIn('product_id', array_column($cart, 'product_id'))->get();
-            $totalPrice = collect($cart)->sum(fn($item) => $item['product_price'] * $item['quantity']);
+            $productIds = collect($cart)->pluck('product_id')->toArray();
+            $products = MsProduct::whereIn('product_id', $productIds)->get();
+
+            $products = $products->map(function ($product) use ($cart) {
+                $found = collect($cart)->firstWhere('product_id', $product->product_id);
+                $product->cart_quantity = $found['quantity'] ?? 1;
+                return $product;
+            });
+
+            $totalPrice = $products->sum(fn($item) => $item->product_price * $item->cart_quantity);
         }
 
         else if ($productId && $quantity){
             $product = MsProduct::where('product_id', $productId)->first();
+            $product->cart_quantity = $quantity;
             $products = [$product];
             $totalPrice = $product->product_price * $quantity;
         }
 
         else {
-            return redirect()->back()->with('error', 'Checkout invalid!');
+            return redirect()->back()->with('error', 'Invalid checkout!');
         }
 
-        $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->get();
+        $addresses = CustomerService::getAddresses($customers->customer_id);
         $paymentMethods = MsPaymentMethod::all();
         $categories = MsCategory::all();
 
@@ -81,137 +97,109 @@ class CustomerBuyProductController extends Controller
             return redirect()->route('login')->with('error', 'You need to login first.');
         }
 
-        try {
-            $validateData = $request->validate([
+        $cart = session('checkout_cart');
+        $productId = session('checkout_product_id');
+        $quantity = session('checkout_quantity');
+
+        $request->validate([
+            'payment_method_id' => 'required|exists:ms_payment_methods,payment_method_id',
+            'customer_address_id' => 'required|exists:ms_customer_addresses,customer_address_id',
+        ]);
+
+        if (!$cart && !$productId) {
+            return redirect()->back()->with('error', 'Invalid checkout session.');
+        }
+
+        if (!$cart) {
+            $request->validate([
                 'product_id' => 'required|exists:ms_products,product_id',
                 'quantity' => 'required|integer|min:1',
-                'payment_method_id' => 'required|exists:ms_payment_methods,payment_method_id',
-                'customer_address_id' => 'required|exists:ms_customer_addresses,customer_address_id',
             ]);
-    
+        }
+
+        DB::beginTransaction();
+
+        try {
             $transactionHeader = TransactionHeader::create([
                 'transaction_date' => now(),
                 'transaction_status' => 'Pending',
                 'customer_id' => $customers->customer_id,
-                'customer_address_id' => $validateData['customer_address_id'],
-                'payment_method_id' => $validateData['payment_method_id']
+                'customer_address_id' => $request->customer_address_id,
+                'payment_method_id' => $request->payment_method_id,
             ]);
-    
-            TransactionDetail::create([
-                'transaction_id' => $transactionHeader->transaction_id,
-                'product_id' => $validateData['product_id'],
-                'quantity'=> $validateData['quantity']
-            ]);
-            
+
+            $totalPrice = 0;
+
+            if ($cart) {
+                foreach ($cart as $item) {
+                    $product = MsProduct::find($item['product_id']);
+
+                    if (!$product) {
+                        throw new \Exception("Product not found.");
+                    }
+
+                    if ($product->product_stock < $item['quantity']) {
+                        throw new \Exception("Stock not enough for {$product->product_name}");
+                    }
+
+                    $totalPrice += $product->product_price * $item['quantity'];
+
+                    $product->product_stock -= $item['quantity'];
+                    $product->save();
+
+                    TransactionDetail::create([
+                        'transaction_id' => $transactionHeader->transaction_id,
+                        'product_id' => $product->product_id,
+                        'quantity' => $item['quantity'],
+                    ]);
+
+                    DB::table('ms_carts')
+                        ->where('customer_id', $customers->customer_id)
+                        ->where('product_id', $product->product_id)
+                        ->delete();
+                }
+            }
+
+            else if ($productId && $quantity) {
+                $product = MsProduct::find($productId);
+
+                if (!$product) {
+                    throw new \Exception("Product not found.");
+                }
+
+                if ($product->product_stock < $quantity) {
+                    throw new \Exception("Stock not enough for {$product->product_name}");
+                }
+
+                $totalPrice = $product->product_price * $quantity;
+
+                $product->product_stock -= $quantity;
+                $product->save();
+
+                TransactionDetail::create([
+                    'transaction_id' => $transactionHeader->transaction_id,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                ]);
+            }
+
+            if ($request->payment_method_id == 1) {
+                if ($customers->customer_balance < $totalPrice) {
+                    throw new \Exception('Oops! Your current balance isn’t enough. Your current balance is Rp' . number_format($customers->customer_balance, 2));
+                }
+
+                $customers->customer_balance -= $totalPrice;
+                $customers->save();
+            }
+
+            DB::commit();
+            session()->forget(['checkout_cart', 'checkout_product_id', 'checkout_quantity']);
+
+            return redirect('/')->with('success', 'Your order has been placed successfully!');
+        } 
+        catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        catch (\Illuminate\Validation\ValidationException $e){
-            return response()->json([
-                'status' => 'error',
-                'errors' => $e->validator->errors()
-            ], 422);
-        }
-        
-    }
-
-    public function storeAddress(Request $request)
-    {
-        $validateData = $request->validate([
-            'customer_address_name' => 'required|string|max:199',
-            'customer_address_street' => 'required|string|max:199',
-            'customer_address_postal_code' => 'required|string|max:199',
-            'customer_address_district' => 'required|string|max:199',
-            'customer_address_regency_city' => 'required|string|max:199',
-            'customer_address_province' => 'required|string|max:199',
-            'customer_address_country' => 'required|string|max:199',
-        ]);
-
-        $customers = Auth::guard('customer')->user();
-
-        if (!$customers) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Please Login!'
-            ], 400);
-        }
-
-        MsCustomerAddress::create([
-            'customer_address_name' => $request->customer_address_name,
-            'customer_address_street' => $request->customer_address_street,
-            'customer_address_postal_code' => $request->customer_address_postal_code,
-            'customer_address_district' => $request->customer_address_district,
-            'customer_address_regency_city' => $request->customer_address_regency_city,
-            'customer_address_province' => $request->customer_address_province,
-            'customer_address_country' => $request->customer_address_country,
-            'customer_id' => $customers->customer_id
-        ]);
-
-        $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->get();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Address successfully added!',
-            'addresses' => $addresses
-        ], 200);
-    }
-
-    public function showAddress()
-    {
-        $customers = Auth::guard('customer')->user();
-
-        if (!$customers) {
-            return response()->json(['addresses' => []], 400);
-        }
-
-        $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->get();
-
-        return response()->json(['addresses' => $addresses]);
-    }
-
-    public function updateAddress(Request $request, $customer_address_id)
-    {
-        
-        $customers = Auth::guard('customer')->user();
-
-        $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->where('customer_address_id', $customer_address_id)->firstOrFail();
-
-        $validateData = $request->validate([
-            'customer_address_name' => 'sometimes|required|max:199',
-            'customer_address_street' => 'sometimes|required|max:199',
-            'customer_address_district' => 'sometimes|required|max:199',
-            'customer_address_regency_city' => 'sometimes|required|max:199',
-            'customer_address_province' => 'sometimes|required|max:199',
-            'customer_address_country' => 'sometimes|required|max:199',
-            'customer_address_postal_code' => 'sometimes|required|max:199',
-        ]);
-
-        $addresses->update($validateData);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Address successfully updated!',
-            'updated_address' => $addresses
-        ], 200);
-    }
-
-    public function destroyAddress($customer_address_id)
-    {
-        $customers = Auth::guard('customer')->user();
-
-        $addresses = MsCustomerAddress::where('customer_id', $customers->customer_id)->where('customer_address_id', $customer_address_id)->first();
-
-        if (!$addresses) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Address not found or unauthorized access.'
-            ], 404);
-        }
-    
-        $addresses->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Address successfully deleted.'
-        ]);
     }
 }

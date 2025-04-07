@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\MsProduct;
 use App\Models\MsBrand;
 use App\Models\MsCategory;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -38,14 +39,13 @@ class AdminUpdateProductController extends Controller
         }
 
         $validateData = $request->validate([
-            'product_name' => 'nullable|max:199',
-            'product_price' => 'nullable|numeric|min:1',
-            'product_stock' => 'nullable|integer|min:1',
-            'product_description' => 'nullable|max:65000',
-            'product_slug' => 'nullable|max:199',
-            'product_image' => 'nullable|mimes:jpg,jpeg,png|max:2048',
-            'brand_id' => 'nullable|exists:ms_brands,brand_id',
-            'category_id' => 'nullable|exists:ms_categories,category_id',
+            'product_name' => 'sometimes|required|max:199',
+            'product_price' => 'sometimes|required|numeric|min:1',
+            'product_stock' => 'sometimes|required|integer|min:1',
+            'product_description' => 'sometimes|required|max:65000',
+            'product_image' => 'sometimes|required|mimes:jpg,jpeg,png|max:2048',
+            'brand_id' => 'sometimes|required|exists:ms_brands,brand_id',
+            'category_id' => 'sometimes|required|exists:ms_categories,category_id',
         ]);
 
         if ($request->hasFile('product_image')) {
@@ -61,6 +61,7 @@ class AdminUpdateProductController extends Controller
 
         if ($request->filled('product_name')) {
             $products->product_name = $validateData['product_name'];
+            $products->product_slug = Str::slug($validateData['product_name']);
         }
         if ($request->filled('product_price')) {
             $products->product_price = $validateData['product_price'];

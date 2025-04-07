@@ -92,16 +92,6 @@
             </div>
 
             <div class="form-group">
-                <label>Product Slug</label>
-                <input type="text" name="product_slug" class="form-control @error('product_slug') is-invalid @enderror" value="{{ old('product_slug', $products->product_slug)}}">
-                @error('product_slug')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-
-            <div class="form-group">
                 <label>Stock:</label>
                 <div class="input-group mb-3" style="max-width: 200px;">
                     <button class="btn btn-outline-secondary" id="decrease-btn" type="button" onclick="decreaseQuantity()">-</button>

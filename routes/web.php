@@ -57,16 +57,16 @@ Route::middleware(['auth:customer', 'customer.access'])->group(function () {
     Route::get('/checkout', [CustomerBuyProductController::class, 'index'])->name('checkout.page');
     Route::post('/checkout/payment', [CustomerBuyProductController::class, 'store'])->name('checkout.payment');
 
-    Route::post('/address', [CustomerBuyProductController::class, 'storeAddress'])->name('address.store');
-    Route::get('/address', [CustomerBuyProductController::class, 'showAddress']);
-    Route::put('address/update/{customer_address_id}', [CustomerBuyProductController::class, 'updateAddress'])->name('address.update');
-    Route::delete('address/delete/{customer_address_id}', [CustomerBuyProductController::class, 'destroyAddress'])->name('address.destroy');
+    Route::post('/address', [CustomerAddressController::class, 'store'])->name('address.store');
+    Route::get('/address', [CustomerAddressController::class, 'show']);
+    Route::put('address/update/{customer_address_id}', [CustomerAddressController::class, 'update'])->name('address.update');
+    Route::delete('address/delete/{customer_address_id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
     
     Route::prefix('dashboard')->group(function () {
         Route::get('/myprofile', [CustomerUpdateProfileController::class, 'show']);
         Route::put('/myprofile/update', [CustomerUpdateProfileController::class, 'update']);
 
-        Route::get('/topup', [CustomerTopUpController::class, 'show']);
+        Route::get('/topup', [CustomerTopUpController::class, 'show'])->name('topup.show');
         Route::put('/topup/update', [CustomerTopUpController::class, 'update']);
 
         Route::get('/purchasehistory', [CustomerPurchaseHistoryController::class, 'index']);

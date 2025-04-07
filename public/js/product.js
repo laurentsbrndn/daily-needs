@@ -91,9 +91,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    const InputQuantity = document.getElementById("product_quantity");
+    const checkoutForm = document.getElementById("checkoutForm");
+
     if (checkoutForm) { 
         checkoutForm.addEventListener("submit", function () {
-            document.getElementById("quantity_checkout").value = quantityInput.value;
+            event.preventDefault();
+            let quantityCheckout = document.getElementById("quantity_checkout");
+            if (quantityCheckout) {
+                quantityCheckout.value = InputQuantity.value;
+            } 
+            else {
+                console.error("Element #quantity_checkout not found!");
+            }
+            checkoutForm.submit();
         });
     }
 });

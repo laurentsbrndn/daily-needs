@@ -10,7 +10,6 @@ $(document).ready(function() {
         let selectedPayment = $(this).val();
         console.log("Selected Payment Method:", selectedPayment);
         $('#selectedPayment').val(selectedPayment);
-        // $('#error_payment_method').text('');
     });
 
     $('#checkoutForm').submit(function(e) {
@@ -30,6 +29,11 @@ $(document).ready(function() {
 
         if (!paymentMethod || !customerAddress) {
             return;
+        }
+
+        if (typeof handleInsufficientBalance === 'function') {
+            let isEnough = handleInsufficientBalance(this);
+            if (!isEnough) return;
         }
 
         this.submit();

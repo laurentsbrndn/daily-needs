@@ -2,40 +2,47 @@
 
 @section('container')
 
+    <div class="mt-10">
+        <h1><strong>Checkout</strong></h1>
+    </div>
+    
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif  
 
-    <div class="mt-10">
-        <h1>Checkout</h1>
-    </div>
+    @php $grandTotal = 0; @endphp
 
-    @if(isset($cart) && count($cart) > 0)
-        @foreach($cart as $item)
-            <img src="{{ asset('storage/' . $item->product_image ) }}" alt="{{ $item->product_name }}">
-            <p>{{ $item->product_name ?? 'Produk tidak ditemukan' }}</p>
-            <p>Rp{{ number_format($item->product_price, 0, ',', '.') }}</p>
-            <p><strong>Quantity:</strong> {{ $item->quantity }}</p>
-            <p><strong>Total:</strong> Rp{{ number_format($item->product_price * $item->quantity, 0, ',', '.') }}</p>
-            <hr>
-        @endforeach
-        <p><strong>Grand Total:</strong> Rp{{ number_format($grandTotal, 0, ',', '.') }}</p>
 
-    @else
-        @foreach($products as $product)
+    @foreach($products as $product)
+        @php
+            $qty = $product->cart_quantity ?? $quantity ?? 1;
+            $subtotal = $product->product_price * $qty;
+            $grandTotal += $subtotal;
+        @endphp
+
+        <div class="checkout-card">
             <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
-            <p>{{ $product->product_name ?? 'Produk tidak ditemukan' }}</p>
-            <p>Rp{{ number_format($product->product_price, 0, ',', '.') }}</p>
-            <p><strong>Quantity:</strong> {{ $quantity }}</p>
-            <p><strong>Total:</strong> Rp{{ number_format($totalPrice, 0, ',', '.') }}</p>
-        @endforeach
-    @endif
+            <div class="checkout-details">
+                <div><strong>{{ $product->product_name }}</strong></div>
+                <div>Qty: {{ $qty }}</div>
+            </div>
+            <div class="checkout-total">
+                Rp{{ number_format($subtotal, 0, ',', '.') }}
+            </div>
+        </div>
+    @endforeach
+
+    <hr>
+    <div class="checkout-total" style="margin-top: 20px;">
+        <strong>Total:</strong> Rp{{ number_format($grandTotal, 0, ',', '.') }}
+    </div>
 
     <div class="payment-method-selector mt-3 mb-5">
         <p><strong>Payment Method</strong></p>
         <select id="paymentMethod" class="form-select">
             @foreach ($paymentMethods as $paymentMethod)
-                <option value="{{ $paymentMethod->payment_method_id }}">
+                <option value="{{ $paymentMethod->payment_method_id }}"
+                    {{ $loop->first ? 'selected' : '' }}>
                     {{ $paymentMethod->payment_method_name }}
                 </option>
             @endforeach
@@ -220,12 +227,41 @@
     <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
         @csrf
 
-        <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-        <input type="hidden" name="quantity" value="{{ $quantity }}">
+        @if(isset($quantity) && count($products) === 1)
+            <input type="hidden" name="product_id" value="{{ $products[0]->product_id }}">
+            <input type="hidden" name="quantity" value="{{ $quantity }}">
+            <input type="hidden" id="totalPrice" value="{{ $products[0]->product_price * $quantity }}">
+        @else
+            @foreach ($products as $product)
+                <input type="hidden" name="product_ids[]" value="{{ $product->product_id }}">
+                <input type="hidden" name="quantities[]" value="{{ $product->cart_quantity ?? 1 }}">
+            @endforeach
+            <input type="hidden" id="totalPrice" value="{{ $grandTotal }}">
+        @endif
+
         <input type="hidden" name="payment_method_id" id="selectedPayment" value="">
         <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
-    
+        <input type="hidden" id="customerBalance" value="{{ $customers->customer_balance }}">
+
         <button type="submit" class="btn btn-primary">Place order</button>
     </form>
-    
+
+    <div class="modal fade" id="insufficientBalanceModal" tabindex="-1" aria-labelledby="insufficientBalanceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title" id="insufficientBalanceLabel">Oops! You don't have enough balance.</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+              <p>Your current balance is:</p> <strong id="currentBalanceText">Rp0</strong></p>
+              <p>Looks like your purchase total is higher than your balance. Please top up or select another payment method to continue.</p>
+            </div>
+            <div class="modal-footer">
+              <a href="{{ route('topup.show') }}" class="btn btn-warning">Top Up</a>
+            </div>
+          </div>
+        </div>
+    </div>
+
 @endsection
