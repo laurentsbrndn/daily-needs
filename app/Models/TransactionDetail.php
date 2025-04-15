@@ -15,6 +15,7 @@ class TransactionDetail extends Model
         'transaction_id',
         'product_id',
         'quantity',
+        'unit_price_at_buy'
     ];
 
     public function transactionheader(){
@@ -24,4 +25,10 @@ class TransactionDetail extends Model
     public function msproduct(){
         return $this->belongsTo(MsProduct::class, 'product_id', 'product_id');
     }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->unit_price_at_buy * $this->quantity;
+    }
+
 }

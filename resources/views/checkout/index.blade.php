@@ -10,31 +10,22 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif  
 
-    @php $grandTotal = 0; @endphp
-
-
     @foreach($products as $product)
-        @php
-            $qty = $product->cart_quantity ?? $quantity ?? 1;
-            $subtotal = $product->product_price * $qty;
-            $grandTotal += $subtotal;
-        @endphp
-
         <div class="checkout-card">
             <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
             <div class="checkout-details">
                 <div><strong>{{ $product->product_name }}</strong></div>
-                <div>Qty: {{ $qty }}</div>
+                <div>Quantity: {{ $product->cart_quantity }}</div>
             </div>
             <div class="checkout-total">
-                Rp{{ number_format($subtotal, 0, ',', '.') }}
+                Rp{{ number_format($product->product_price * $product->cart_quantity, 0, ',', '.') }}
             </div>
         </div>
     @endforeach
 
     <hr>
     <div class="checkout-total" style="margin-top: 20px;">
-        <strong>Total:</strong> Rp{{ number_format($grandTotal, 0, ',', '.') }}
+        <strong>Total:</strong> Rp{{ number_format($totalPrice, 0, ',', '.') }}
     </div>
 
     <div class="payment-method-selector mt-3 mb-5">
@@ -236,7 +227,7 @@
                 <input type="hidden" name="product_ids[]" value="{{ $product->product_id }}">
                 <input type="hidden" name="quantities[]" value="{{ $product->cart_quantity ?? 1 }}">
             @endforeach
-            <input type="hidden" id="totalPrice" value="{{ $grandTotal }}">
+            <input type="hidden" id="totalPrice" value="{{ $totalPrice }}">
         @endif
 
         <input type="hidden" name="payment_method_id" id="selectedPayment" value="">

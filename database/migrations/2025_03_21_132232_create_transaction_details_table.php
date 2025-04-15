@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity');
+            $table->decimal('unit_price_at_buy', total: 12, places: 2);
             $table->timestamps();
 
             // $table->primary(['transaction_id', 'product_id']);

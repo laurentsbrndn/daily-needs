@@ -142,6 +142,7 @@ class CustomerBuyProductController extends Controller
                         throw new \Exception("Stock not enough for {$product->product_name}");
                     }
 
+                    $unitPrice = $product->product_price;
                     $totalPrice += $product->product_price * $item['quantity'];
 
                     $product->product_stock -= $item['quantity'];
@@ -151,6 +152,7 @@ class CustomerBuyProductController extends Controller
                         'transaction_id' => $transactionHeader->transaction_id,
                         'product_id' => $product->product_id,
                         'quantity' => $item['quantity'],
+                        'unit_price_at_buy' => $unitPrice,
                     ]);
 
                     DB::table('ms_carts')
@@ -158,7 +160,7 @@ class CustomerBuyProductController extends Controller
                         ->where('product_id', $product->product_id)
                         ->delete();
                 }
-            }
+            }   
 
             else if ($productId && $quantity) {
                 $product = MsProduct::find($productId);
@@ -171,6 +173,7 @@ class CustomerBuyProductController extends Controller
                     throw new \Exception("Stock not enough for {$product->product_name}");
                 }
 
+                $unitPrice = $product->product_price;
                 $totalPrice = $product->product_price * $quantity;
 
                 $product->product_stock -= $quantity;
@@ -180,10 +183,13 @@ class CustomerBuyProductController extends Controller
                     'transaction_id' => $transactionHeader->transaction_id,
                     'product_id' => $productId,
                     'quantity' => $quantity,
+                    'unit_price_at_buy' => $unitPrice,
                 ]);
             }
 
-            if ($request->payment_method_id == 1) {
+            $transactionHeader->load('mspaymentmethod');
+
+            if ($transactionHeader->mspaymentmethod->payment_method_name == 'Application Balance') {
                 if ($customers->customer_balance < $totalPrice) {
                     throw new \Exception('Oops! Your current balance isn’t enough. Your current balance is Rp' . number_format($customers->customer_balance, 2));
                 }
@@ -191,6 +197,15 @@ class CustomerBuyProductController extends Controller
                 $customers->customer_balance -= $totalPrice;
                 $customers->save();
             }
+
+            // if ($request->payment_method_id == 1) {
+            //     if ($customers->customer_balance < $totalPrice) {
+            //         throw new \Exception('Oops! Your current balance isn’t enough. Your current balance is Rp' . number_format($customers->customer_balance, 2));
+            //     }
+
+            //     $customers->customer_balance -= $totalPrice;
+            //     $customers->save();
+            // }
 
             DB::commit();
             session()->forget(['checkout_cart', 'checkout_product_id', 'checkout_quantity']);

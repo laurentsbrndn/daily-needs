@@ -34,4 +34,32 @@ class TransactionHeader extends Model
     public function msshipment(){
         return $this->hasOne(MsShipment::class, 'transaction_id', 'transaction_id');
     }
+
+    public function mscustomeraddress(){
+        return $this->belongsTo(MsCustomerAddress::class, 'customer_address_id', 'customer_address_id');
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->transactiondetail->sum(function ($detail) {
+            return $detail->unit_price_at_buy * $detail->quantity;
+        });
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['status'] ?? false, function ($query, $status) {
+            $query->where('transaction_status', $status);
+        });
+
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
+                $q->where('product_name', 'like', '%' . $search . '%');
+            });
+        });
+    }
+
 }
+
+
+

@@ -23,7 +23,7 @@
                     <span>Courier Profile</span>
                 </div>
             </a>
-            <a href="/courier/deliverproduct" style="text-decoration: none; color: inherit;">
+            <a href="/courier/deliver-order" style="text-decoration: none; color: inherit;">
                 <div class = "menu-item">
                     <i class="bi bi-truck" style="color: #D1D88D;"></i>
                     <span>Deliver Order</span>

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('shipment_id');
             $table->dateTime('shipment_date_start', precision: 0);
             $table->dateTime('shipment_date_end', precision: 0)->nullable();
-            $table->string('shipment_recipient', length: 200);
-            $table->enum('shipment_status', ['Pending', 'Completed']);
+            $table->string('shipment_recipient_name', length: 200)->nullable();
+            $table->enum('shipment_status', ['In Progress', 'Delivered']);
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('courier_id')->nullable();
             $table->timestamps();

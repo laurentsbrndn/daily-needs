@@ -22,6 +22,10 @@ class CategoriesController extends Controller
         $categories = MsCategory::all();
         $category = MsCategory::where('category_slug', $category_slug)->first();
 
+        if (!$category){
+            abort(404);
+        }
+
         if ($category) {
             $products = MsProduct::with(['msbrand', 'mscategory'])
                 ->where('category_id', $category->category_id)

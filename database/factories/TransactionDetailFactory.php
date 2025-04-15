@@ -32,6 +32,7 @@ class TransactionDetailFactory extends Factory
             'transaction_id' => $transaction->transaction_id,
             'product_id' => $product->product_id,
             'quantity' => $this->faker->numberBetween(1, 10),
+            'unit_price_at_buy' => $this->faker->randomFloat(2, 0, 10000000000),
         ];
     }
 

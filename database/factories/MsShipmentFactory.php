@@ -21,12 +21,11 @@ class MsShipmentFactory extends Factory
         return [
             'shipment_date_start' => $this->faker->dateTimeThisYear(),
             'shipment_date_end' => $this->faker->dateTimeThisYear(),
-            'shipment_recipient' => $this->faker->name,
-            'shipment_status' => $this->faker->randomElement(['Pending', 'Completed']),
+            'shipment_recipient_name' => $this->faker->name,
+            'shipment_status' => $this->faker->randomElement(['In Progress', 'Delivered']),
 
             'transaction_id' => TransactionHeader::inRandomOrder()->first()->transaction_id ?? TransactionHeader::factory(),
             'courier_id' => MsCourier::inRandomOrder()->first()->courier_id ?? MsCourier::factory(),
-
         ];
     }
 }

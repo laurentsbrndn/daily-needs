@@ -30,10 +30,18 @@ class ProductsController extends Controller
     {
         $categories = MsCategory::all();
         $brands = MsBrand::where('brand_slug', $brand_slug)->firstOrFail();
+        if (!$brands) {
+            abort(404);
+        }
+
         $product = MsProduct::where('product_slug', $product_slug)
             ->where('brand_id', $brands->brand_id)
             ->with(['msbrand', 'mscategory']) 
             ->firstOrFail();
+        
+        if (!$products){
+            abort(404);
+        }
 
         return view('product.index', compact('product', 'categories', 'brands'));
     }

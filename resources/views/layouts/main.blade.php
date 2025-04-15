@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Daily Needs</title>
     <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/login.css">
-    {{-- <link rel="stylesheet" href="/css/signup.css"> --}}
+    {{-- <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/signup.css"> --}}
     <link rel="stylesheet" href="/css/product.css">
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/css/checkout.css">

@@ -86,4 +86,10 @@ class MsCustomer extends Authenticatable
     {
         return $this->hasMany(MsCustomer::class, 'customer_id', 'customer_id');
     }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->customer_first_name} {$this->customer_last_name}";
+    }
+
 }

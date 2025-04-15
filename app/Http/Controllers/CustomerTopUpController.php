@@ -20,6 +20,12 @@ class CustomerTopUpController extends Controller
     {
         $customers = Auth::guard('customer')->user();
 
+        $paymentMethod = MsPaymentMethod::where('payment_method_name', 'Bank Transfer')->first();
+
+        if (!$paymentMethod) {
+            return back()->with('error', 'Payment method not found.');
+        }
+
         $validateData = $request->validate([
             'customer_balance' => 'nullable|numeric|min:1',
         ]);
@@ -36,7 +42,7 @@ class CustomerTopUpController extends Controller
             'top_up_amount' => $validateData['customer_balance'],
             'top_up_date' => now(),
             'customer_id' => $customers->customer_id,
-            'payment_method_id' => 2,
+            'payment_method_id' => $paymentMethod->payment_method_id,
         ]);
 
         $request->session()->flash('success', 'Your top up was successful! Your balance has been updated.');

@@ -22,7 +22,10 @@ use App\Http\Controllers\CourierUpdateProfileController;
 use App\Http\Controllers\CustomerUpdateProfileController;
 use App\Http\Controllers\CustomerPurchaseHistoryController;
 use App\Http\Controllers\CustomerAddressController;
-
+use App\Http\Controllers\AdminProcessingOrderController;
+use App\Http\Controllers\AdminTransactionHistoryController;
+use App\Http\Controllers\CourierDeliverOrderController;
+use App\Http\Controllers\ErrorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +72,8 @@ Route::middleware(['auth:customer', 'customer.access'])->group(function () {
         Route::get('/topup', [CustomerTopUpController::class, 'show'])->name('topup.show');
         Route::put('/topup/update', [CustomerTopUpController::class, 'update']);
 
-        Route::get('/purchasehistory', [CustomerPurchaseHistoryController::class, 'index']);
+        Route::get('/purchasehistory', [CustomerPurchaseHistoryController::class, 'index'])->name('purchasehistory.show');
+        Route::patch('/purchasehistory/cancel-order/{transaction_id}', [CustomerPurchaseHistoryController::class, 'cancelOrder'])->name('purchasehistory.cancel');
     });
 });
 
@@ -94,6 +98,11 @@ Route::prefix('admin')->group(function(){
         Route::get('/productlist/categories/{category_slug}', [AdminCategoriesController::class, 'filterByCategory']);
         Route::get('/productlist/{product_slug}', [AdminUpdateProductController::class, 'show']);
         Route::put('/productlist/{product_slug}/update', [AdminUpdateProductController::class, 'update']); 
+
+        Route::get('/processing-order', [AdminProcessingOrderController::class, 'index']);
+        Route::post('/processing-order/confirm/{transaction_id}', [AdminProcessingOrderController::class, 'store'])->name('admin.confirm');
+
+        Route::get('/transaction-history', [AdminTransactionHistoryController::class, 'index']);
     });
 });
 
@@ -109,9 +118,13 @@ Route::prefix('courier')->group(function(){
         Route::get('/myprofile', [CourierUpdateProfileController::class, 'show']);
         Route::get('/', [CourierUpdateProfileController::class, 'show']);
         Route::put('/myprofile/update', [CourierUpdateProfileController::class, 'update']);
+
+        Route::get('/deliver-order', [CourierDeliverOrderController::class, 'show']);
     });
 
 });
 
 Route::get('{brand_slug}/{product_slug}', [ProductsController::class, 'show'])->middleware('customer.access');
 Route::get('/{category_slug}', [CategoriesController::class, 'filterByCategory'])->middleware('customer.access');
+
+Route::fallback([ErrorController::class, 'notFound']);

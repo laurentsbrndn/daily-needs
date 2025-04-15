@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/admin-sidebar.css">
     <link rel="stylesheet" href="/css/admin-addproduct.css">
+    <link rel="stylesheet" href="/css/admin-processingorder.css">
 </head>
 
 <body>
@@ -34,10 +35,17 @@
                 </div>
             </a>
 
-            <a href="/admin/transactions" style="text-decoration: none; color: inherit;">
+            <a href="/admin/processing-order" style="text-decoration: none; color: inherit;">
                 <div class = "menu-item">
                     <i class="bi bi-wallet2" style="color: #D1D88D;"></i>
-                    <span>Transactions</span>
+                    <span>Processing Order</span>
+                </div>
+            </a>
+
+            <a href="/admin/transaction-history" style="text-decoration: none; color: inherit;">
+                <div class = "menu-item">
+                    <i class="bi bi-clock-history" style="color: #D1D88D;"></i>
+                    <span>Transaction History</span>
                 </div>
             </a>
 
@@ -56,5 +64,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/admin-productstock.js"></script>
     <script src="/js/admin-addproduct.js"></script>
+    <script src="/js/admin-processingorder.js"></script>
 </body>
 </html>
