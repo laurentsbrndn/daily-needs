@@ -1,24 +1,19 @@
 .courier-login-container{
     margin: auto;
     width:500px;
-    justify-content: center;
-    align-items: center;
     padding: 20px;
     border-radius: 5%;
 }
 
 body{
     background-color: #C7C2AB !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
-    
 }
 
 .go-signup{
     color: #FF0004;
+    text-decoration: none;
 }
 
 .signup{

@@ -4,13 +4,15 @@
     <div class="content">
         <h2 class="mb-4">Purchase History</h2>
         <ul class="nav nav-tabs mb-4">
-            @foreach(['Pending', 'Processing', 'Shipped', 'Completed', 'Cancelled'] as $tabStatus)
+            @foreach($statusMap as $urlStatus => $label)
                 <li class="nav-item">
-                    <a class="nav-link {{ $status == $tabStatus ? 'active' : '' }}" href="{{ route('purchasehistory.show', ['status' => $tabStatus]) }}">
-                        {{ $tabStatus }}
+                    <a class="nav-link {{ $status == $label ? 'active' : '' }}"
+                       href="{{ route('purchasehistory.show', ['status' => $urlStatus]) }}">
+                        {{ $label }}
                     </a>
                 </li>
             @endforeach
+
         </ul>
 
         <form method="get" action="{{ url('/dashboard/purchasehistory') }}" class="mb-4">
@@ -50,16 +52,14 @@
                         <h6 class="fw-bold mb-0 me-2">Payment Method:</h6>
                         <span>{{ $transaction->mspaymentmethod->payment_method_name }}</span>
                     </div>
-                
-                    {{-- @if($transaction->transaction_status == 'Order Completed')
-                        <span class="badge bg-success rounded-pill">Order Completed</span>
-                    @elseif($transaction->transaction_status == 'Pending')
-                        <span class="badge bg-warning text-dark rounded-pill">Pending</span>
-                    @endif --}}
 
                     @if($transaction->transaction_status == 'Pending')
                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
                             Cancel Order
+                        </button>
+                    @elseif($transaction->transaction_status == 'Shipped')
+                        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#completeOrderModal">
+                            Complete Order
                         </button>
                     @endif
                 </div>
@@ -80,6 +80,28 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                     <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="completeOrderModal" tabindex="-1" aria-labelledby="confirmOrderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="{{ route('purchasehistory.confirm', $transaction->transaction_id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelOrderModalLabel">Order Confirmation Complete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to complete your order?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-success">Yes</button>
                                 </div>
                             </form>
                         </div>

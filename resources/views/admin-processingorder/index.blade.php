@@ -42,11 +42,10 @@
           </tbody>
       </table>
       <div class="d-flex justify-content-center mt-4">
-        {{ $transactions->links('pagination::bootstrap-5') }}  <!-- Gunakan view pagination Bootstrap-5 -->
+        {{ $transactions->links('pagination::bootstrap-5') }}
     </div>
-    
-    
   </div>
+  
   <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-scrollable" style="max-width: 800px;">
         <div class="modal-content">
