@@ -85,17 +85,62 @@
                 <table class="w-100 border-collapse text-center">
                     <thead>
                         <tr>
-                            <th>Shipment ID</th>
-                            <th>Customer</th>
-                            <th>Delivered On</th>
+                            <th class="p-2">Shipment Number</th>
+                            <th class="p-2">Customer</th>
+                            <th class="p-2">Payment Method</th>
+                            <th class="p-2">City</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $shipment)
-                        <tr class="delivered">
-                            <td>{{ $shipment->shipment_id }}</td>
-                            <td>{{ $shipment->transactionheader->mscustomer->customer_name }}</td>
-                            <td>{{ $shipment->shipment_date_end }}</td>
+                        <tr class="text-center table-row-hover delivered"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deliveredStatusModal"
+                            data-shipment-id-delivered="{{ $shipment->shipment_id }}"
+                            data-transaction-id-delivered="{{ $shipment->transactionheader->transaction_id }}"
+                            data-customer-name-delivered="{{ $shipment->transactionheader->mscustomer->full_name }}"
+                            data-shipment-start-date-delivered="{{ \Carbon\Carbon::parse($shipment->shipment_date_start)->format('l, d F Y \| H:i:s') }}"
+                            data-shipment-end-date-delivered="{{ \Carbon\Carbon::parse($shipment->shipment_date_end)->format('l, d F Y \| H:i:s') }}"
+                            data-address-delivered="{{ $shipment->transactionheader->mscustomeraddress->customer_full_address_name }}"
+                            data-payment-method-delivered="{{ $shipment->transactionheader->mspaymentmethod->payment_method_name }}"
+                            data-shipment-recipient-name-delivered="{{ $shipment->shipment_recipient_name }}"
+                            data-total-amount-delivered="Rp {{ number_format($shipment->transactionheader->total_price, 2, ',', '.') }}">
+                            <td class="p-2">{{ $shipment->shipment_id }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mscustomer->full_name }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mspaymentmethod->payment_method_name }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mscustomeraddress->customer_short_address_name }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            
+            @elseif($status === 'cancelled')
+                <table class="w-100 border-collapse text-center">
+                    <thead>
+                        <tr>
+                            <th class="p-2">Shipment Number</th>
+                            <th class="p-2">Customer</th>
+                            <th class="p-2">Payment Method</th>
+                            <th class="p-2">City</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $shipment)
+                        <tr class="text-center table-row-hover cancelled"
+                            data-bs-toggle="modal"
+                            data-bs-target="#cancelledStatusModal"
+                            data-shipment-id-cancelled="{{ $shipment->shipment_id }}"
+                            data-transaction-id-cancelled="{{ $shipment->transactionheader->transaction_id }}"
+                            data-customer-name-cancelled="{{ $shipment->transactionheader->mscustomer->full_name }}"
+                            data-shipment-start-date-cancelled="{{ \Carbon\Carbon::parse($shipment->shipment_date_start)->format('l, d F Y \| H:i:s') }}"
+                            data-shipment-end-date-cancelled="{{ \Carbon\Carbon::parse($shipment->shipment_date_end)->format('l, d F Y \| H:i:s') }}"
+                            data-address-cancelled="{{ $shipment->transactionheader->mscustomeraddress->customer_full_address_name }}"
+                            data-payment-method-cancelled="{{ $shipment->transactionheader->mspaymentmethod->payment_method_name }}"
+                            data-total-amount-cancelled="Rp {{ number_format($shipment->transactionheader->total_price, 2, ',', '.') }}">
+                            <td class="p-2">{{ $shipment->shipment_id }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mscustomer->full_name }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mspaymentmethod->payment_method_name }}</td>
+                            <td class="p-2">{{ $shipment->transactionheader->mscustomeraddress->customer_short_address_name }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -108,7 +153,7 @@
         <div class="modal-dialog modal-dialog-scrollable" style="max-width: 800px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delivery Notes</h5>
+                    <h5 class="modal-title">Shipment Summary</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -120,7 +165,7 @@
                 <div class="modal-footer">
                     <form id="confirmForm" method="post">
                         @csrf
-                        <button type="submit" class="btn btn-success">Confirm Delivery</button>
+                        <button type="submit" class="btn btn-success">Start Delivery</button>
                     </form>
                 </div>
             </div>
@@ -150,7 +195,7 @@
         <div class="modal-dialog modal-dialog-scrollable" style="max-width: 700px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delivery List</h5>
+                    <h5 class="modal-title">Shipment Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -159,20 +204,70 @@
                     <p><strong>Shipment Date Start:</strong> <span id="modalShipmentDateStart"></span></p>
                     <p><strong>Address:</strong> <span id="modalAddressInProgress"></span></p>
                     <p><strong>Payment Method:</strong> <span id="modalPaymentInProgress"></span></p>
-                    <div class="mb-3">
-                        <label for="recipientName" class="form-label"><strong>Recipient Name:</strong></label>
-                        <input type="text" class="form-control" id="recipientName" name="shipment_recipient_name" required>
-                    </div>                    
-                </div>
-                <div class="modal-footer">
                     <form id="inProgressConfirmForm" method="POST">
                         @csrf
                         <input type="hidden" name="shipment_id" id="hiddenShipmentId">
                         <input type="hidden" name="transaction_id" id="hiddenTransactionId">
                         <input type="hidden" name="shipment_date_end" value="{{ now() }}">
-                        <input type="hidden" name="shipment_recipient_name" id="hiddenRecipientName">
-                        <button type="submit" class="btn btn-success">Finish Delivery</button>
+                        
+                        <div class="mb-3">
+                            <label for="recipientName" class="form-label"><strong>Recipient Name:</strong></label>
+                            <input 
+                                type="text" 
+                                class="form-control @error('shipment_recipient_name') is-invalid @enderror" 
+                                id="recipientName" 
+                                name="shipment_recipient_name" 
+                                value="{{ old('shipment_recipient_name') }}">
+                            <div class="invalid-feedback" id="recipientError"></div>
+                        </div> 
+                    
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Mark as Delivered</button>
+                        </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deliveredStatusModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Shipment History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Shipment Number:</strong> <span id="modalShipmentNumberDelivered"></span></p>
+                    <p><strong>Transaction Number:</strong> <span id="modalTransactionNumberDelivered"></span></p>
+                    <p><strong>Customer Name:</strong> <span id="modalCustomerNameDelivered"></span></p>
+                    <p><strong>Shipment Start Date:</strong> <span id="modalShipmentDateStartDelivered"></span></p>
+                    <p><strong>Shipment End Date:</strong> <span id="modalShipmentDateEndDelivered"></span></p>
+                    <p><strong>Address:</strong> <span id="modalAddressDelivered"></span></p>
+                    <p><strong>Payment Method:</strong> <span id="modalPaymentDelivered"></span></p>
+                    <p><strong>Recipient Name:</strong> <span id="modalRecipientNameDelivered"></span></p>
+                    <p><strong>Total Price:</strong> <span id="modalTotalPriceDelivered"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cancelledStatusModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" style="max-width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Shipment History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Shipment Number:</strong> <span id="modalShipmentNumberCancelled"></span></p>
+                    <p><strong>Transaction Number:</strong> <span id="modalTransactionNumberCancelled"></span></p>
+                    <p><strong>Customer Name:</strong> <span id="modalCustomerNameCancelled"></span></p>
+                    <p><strong>Shipment Start Date:</strong> <span id="modalShipmentDateStartCancelled"></span></p>
+                    <p><strong>Shipment End Date:</strong> <span id="modalShipmentDateEndCancelled"></span></p>
+                    <p><strong>Address:</strong> <span id="modalAddressCancelled"></span></p>
+                    <p><strong>Payment Method:</strong> <span id="modalPaymentCancelled"></span></p>
+                    <p><strong>Total Price:</strong> <span id="modalTotalPriceCancelled"></span></p>
                 </div>
             </div>
         </div>

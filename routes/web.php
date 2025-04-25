@@ -123,7 +123,7 @@ Route::prefix('courier')->group(function(){
         Route::get('/delivery-order', [CourierDeliveryOrderController::class, 'show'])->name('courier.delivery');
         Route::post('/delivery-order/to-ship/{transaction_id}', [CourierDeliveryOrderController::class, 'store'])->name('courier.to-ship');
     
-        Route::post('delivery-order/in-progress/{shipment_id}', [CourierDeliveryOrderController::class, 'update'])->name('courier.in-progress');
+        Route::post('delivery-order/in-progress/{shipment_id}', [CourierDeliveryOrderController::class, 'update'])->name('courier.confirm');
         Route::post('delivery-order/in-progress/cancel/{shipment_id}', [CourierDeliveryOrderController::class, 'cancel'])->name('courier.in-progress');
     });
 });
@@ -131,4 +131,4 @@ Route::prefix('courier')->group(function(){
 Route::get('{brand_slug}/{product_slug}', [ProductsController::class, 'show'])->middleware('customer.access');
 Route::get('/{category_slug}', [CategoriesController::class, 'filterByCategory'])->middleware('customer.access');
 
-Route::fallback([ErrorController::class, 'notFound']);
+// Route::fallback([ErrorController::class, 'notFound']);

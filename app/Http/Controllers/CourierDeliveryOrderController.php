@@ -46,8 +46,16 @@ class CourierDeliveryOrderController extends Controller
             $data = MsShipment::with('transactionheader.mscustomer')
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
-                                        ->filter(['delivery_status' => 'Delivered'])
+                                        ->filter(['shipment_status' => 'Delivered'])
                                         ->get();   
+        }
+
+        else if ($status === 'cancelled'){
+            $data = MsShipment::with('transactionheader.mscustomer')
+                                        ->whereNotNull('shipment_date_end')
+                                        ->where('courier_id', $courier->courier_id)
+                                        ->filter(['shipment_status' => 'Cancelled'])
+                                        ->get();
         }
 
         else {
@@ -87,6 +95,7 @@ class CourierDeliveryOrderController extends Controller
         if ($shipment->courier_id !== $courier->courier_id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
+
 
         $validateData = $request->validate([
             'shipment_recipient_name' => 'required|max:199',

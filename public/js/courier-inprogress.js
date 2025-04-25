@@ -8,13 +8,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const hiddenShipmentId = document.getElementById('hiddenShipmentId');
     const hiddenTransactionId = document.getElementById('hiddenTransactionId');
-    const hiddenRecipientName = document.getElementById('hiddenRecipientName');
     const recipientNameInput = document.getElementById('recipientName');
     const confirmForm = document.getElementById('inProgressConfirmForm');
+    const recipientError = document.getElementById('recipientError');
+
+    let lastSelectedShipmentId = null;
+
+    function resetModal() {
+        recipientNameInput.classList.remove('is-invalid');
+        if (recipientError) recipientError.textContent = '';
+
+        if (lastSelectedShipmentId === null || recipientNameInput.value === '') {
+            recipientNameInput.value = '';
+        }
+    }
 
     if (confirmForm) {
-        confirmForm.addEventListener('submit', function () {
-            hiddenRecipientName.value = recipientNameInput.value;
+        confirmForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            recipientNameInput.classList.remove('is-invalid');
+            if (recipientError) recipientError.textContent = '';
+
+            const shipmentId = hiddenShipmentId.value;
+            const formData = new FormData(confirmForm);
+
+            fetch(`/courier/delivery-order/in-progress/${shipmentId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(async response => {   
+                if (!response.ok) {
+                    const data = await response.json();
+                    if (data.errors && data.errors.shipment_recipient_name) {
+                        recipientNameInput.classList.add('is-invalid');
+                        if (recipientError) {
+                            recipientError.textContent = data.errors.shipment_recipient_name[0];
+                        }
+                    }
+                } 
+                else {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('AJAX error:', error);
+            });
         });
     }
 
@@ -29,6 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalPrice,
             } = row.dataset;
 
+            if (shipmentId !== lastSelectedShipmentId) {
+                resetModal();
+            }
+
             document.getElementById('modalShipmentNumber').textContent = shipmentId;
             document.getElementById('modalTransactionNumber').textContent = transactionId;
             document.getElementById('modalShipmentDateStart').textContent = shipmentDate;
@@ -39,17 +85,29 @@ document.addEventListener('DOMContentLoaded', function () {
             hiddenShipmentId.value = shipmentId;
             hiddenTransactionId.value = transactionId;
 
-            confirmForm.setAttribute('action', `/courier/delivery-order/in-progress/${shipmentId}`)
+            confirmForm.setAttribute('action', `/courier/delivery-order/in-progress/${shipmentId}`);
 
             if (paymentMethod === 'Cash on Delivery') {
                 codModal.show();
 
                 document.getElementById('cod-no').onclick = function () {
-                    codModal.hide();
-                    setTimeout(() => {
-                        window.location.href = `/courier/delivery-order/in-progress/cancel/${shipmentId}`;
-                    }, 200);
+                    fetch(`/courier/delivery-order/in-progress/cancel/${hiddenShipmentId.value}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error("Gagal cancel pengiriman.");
+                        codModal.hide();
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Cancel Error:', error);
+                    });
                 };
+                
 
                 document.getElementById('cod-yes').onclick = function () {
                     codModal.hide();
@@ -57,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         detailModal.show();
                     }, 200);
                 };
-                
             } 
             else {
                 detailModal.show();

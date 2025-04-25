@@ -33,8 +33,15 @@
         <select id="paymentMethod" class="form-select">
             @foreach ($paymentMethods as $paymentMethod)
                 <option value="{{ $paymentMethod->payment_method_id }}"
-                    {{ $loop->first ? 'selected' : '' }}>
+                    data-name="{{ $paymentMethod->payment_method_name }}"
+                    {{ $loop->first ? 'selected' : '' }}
+                    @if ($paymentMethod->payment_method_name == 'Application Balance')
+                        data-balance="{{ $customers->customer_balance }}"
+                    @endif>
                     {{ $paymentMethod->payment_method_name }}
+                    @if ($paymentMethod->payment_method_name == 'Application Balance')
+                        <p class="ml-5">Your Balance: Rp{{ number_format($customers->customer_balance, 0, ',', '.') }}</p>
+                    @endif
                 </option>
             @endforeach
         </select>
@@ -152,7 +159,6 @@
                         <button type="button" class="btn btn-primary" id="saveAddress" data-url="{{ route('address.store') }}">Save</button>
                     </div>
                 </form>
-                
             </div>
         </div>
     </div>
@@ -241,15 +247,15 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-              <h5 class="modal-title" id="insufficientBalanceLabel">Oops! You don't have enough balance.</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                <h5 class="modal-title" id="insufficientBalanceLabel">Oops! You don't have enough balance.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
-              <p>Your current balance is:</p> <strong id="currentBalanceText">Rp0</strong></p>
-              <p>Looks like your purchase total is higher than your balance. Please top up or select another payment method to continue.</p>
+                <p>Your current balance is:</p> <strong id="currentBalanceText">Rp0</strong></p>
+                <p>Looks like your purchase total is higher than your balance. Please top up or select another payment method to continue.</p>
             </div>
             <div class="modal-footer">
-              <a href="{{ route('topup.show') }}" class="btn btn-warning">Top Up</a>
+                <a href="{{ route('topup.show') }}" class="btn btn-warning">Top Up</a>
             </div>
           </div>
         </div>
