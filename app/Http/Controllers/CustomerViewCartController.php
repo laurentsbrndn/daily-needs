@@ -45,7 +45,9 @@ class CustomerViewCartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $customers = auth('customer')->user();
+       // $customers = auth('customer')->user();
+       $customers = auth::guard('customer') ->user();
+
 
         $cartItems = MsCart::CartItem($customers->customer_id, $request->product_id)->first();
 
