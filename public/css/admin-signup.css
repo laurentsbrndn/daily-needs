@@ -1,0 +1,243 @@
+body{
+    overflow: auto;
+    background:  #cac1ac !important;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    
+}
+.login a{
+    text-decoration: none;
+    color: salmon;
+}
+
+h1{
+    margin-top: 3rem;
+    margin-left: 7rem;
+    font-weight: bold;
+}
+
+p{
+    font-size: large;
+    /* margin-left: 7rem !important;  */
+}
+
+form{
+    margin-left: 7rem;
+}
+
+form > div {
+    display: block;
+}
+
+label {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black !important;
+    opacity: 0.5 ;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    outline: none;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 90%;
+}
+
+.password-container input {
+    flex: 1; 
+    padding: 10px;
+    padding-right: 40px; 
+    border-radius: 5px;
+    border: 1px solid black !important;
+    opacity: 0.5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    outline: none;
+}
+
+.password-container i {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    color: black;
+}
+
+form input[type="file"]{
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+}
+div:nth-child(7), 
+div:nth-child(8)   {
+    grid-column: span 2; 
+}
+
+div:nth-child(8) label {
+    display: inline;
+    margin-right: 10px;
+}
+
+form input[type="radio"] {
+    margin-right: 5px;
+}
+
+form > div:last-child {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    grid-column: span 2; 
+}
+
+.form-btn {
+    width: 30%;
+    padding: 10px 20px;
+    background-color: #ffd54f;
+    color: #333;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 22px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.form-btn:hover{
+    background-color: #fbc02d;
+    color: white;
+} 
+
+/* versi awal */
+/* body{
+    overflow: auto;
+    background-color: #cac1ac; 
+}
+.login a{
+    text-decoration: none;
+    color: salmon;
+}
+
+h1{
+    margin-top: 3rem;
+    margin-left: 7rem;
+    font-weight: bold;
+}
+
+p{
+    font-size: large;
+    margin-left: 7rem;
+}
+
+form{
+    margin-left: 7rem;
+}
+
+form > div {
+    display: block;
+}
+
+label {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black !important;
+    opacity: 0.5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    outline: none;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 90%;
+}
+
+.password-container input {
+    flex: 1; 
+    padding: 10px;
+    padding-right: 40px; 
+    border-radius: 5px;
+    border: 1px solid black !important;
+    opacity: 0.5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    outline: none;
+}
+
+.password-container i {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    color: black;
+}
+
+form input[type="file"]{
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+}
+div:nth-child(7), 
+div:nth-child(8)   {
+    grid-column: span 2; 
+}
+
+div:nth-child(8) label {
+    display: inline;
+    margin-right: 10px;
+}
+
+form input[type="radio"] {
+    margin-right: 5px;
+}
+
+form > div:last-child {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    grid-column: span 2; 
+}
+
+
+
+
+.form-btn {
+    width: 30%;
+    padding: 10px 20px;
+    background-color: #D1D88D;
+    color: black;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 22px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.form-btn:hover{
+    background-color: #485935;
+}
+ */
