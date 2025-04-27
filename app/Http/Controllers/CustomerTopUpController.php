@@ -14,7 +14,7 @@ class CustomerTopUpController extends Controller
     {
         $customers = Auth::guard('customer')->user();
         $paymentMethods = MsPaymentMethod::all(); 
-       // dd($paymentMethods); -> commenting by jess for test
+        dd($paymentMethods); // tadinya commenting by jess for test
         return view('topup.index', compact('customers', 'paymentMethods'));
     }
 
@@ -24,7 +24,8 @@ class CustomerTopUpController extends Controller
 
         $validateData = $request->validate([
             'customer_balance' => 'nullable|numeric|min:1',
-            'payment_method' => 'required|exists:ms_payment_methods,payment_method_id', //add by jess
+            //tadinya tambahin by jess
+           // 'payment_method' => 'required|exists:ms_payment_methods,payment_method_id', //add by jess
         ]);
 
         if (empty($request->customer_balance)) {
@@ -35,7 +36,7 @@ class CustomerTopUpController extends Controller
         $customers->customer_balance += $validateData['customer_balance'];
 
         $customers->save();
-       // dd($request->all());  -> commenting by jess for test
+        dd($request->all());  //tadinya commenting by jess for test
 
         MsTopUp::create([
             'top_up_amount' => $validateData['customer_balance'],
