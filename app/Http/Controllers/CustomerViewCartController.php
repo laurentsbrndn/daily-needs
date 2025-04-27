@@ -32,7 +32,8 @@ class CustomerViewCartController extends Controller
         }
 
         $subtotal = MsCart::filterSubtotal($customer->customer_id, $selectedProducts);
-
+        //add validation by jess
+        $subtotal = is_numeric($subtotal) ? (float)$subtotal : 0;
         $subtotal = number_format($subtotal, 0, ',', '.');
         return response()->json(['subtotal' => $subtotal]);
     }
