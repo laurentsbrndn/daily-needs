@@ -19,7 +19,7 @@ h1{
 
 p{
     font-size: large;
-    margin-left: 7rem !important; 
+    /* margin-left: 7rem !important;  */
 }
 
 form{
@@ -43,7 +43,7 @@ form input[type="password"] {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid black !important;
-    opacity: 0.5;
+    opacity: 0.5 ;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
     outline: none;
 }
