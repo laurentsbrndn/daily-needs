@@ -1,4 +1,88 @@
+body{
+    background-color: #C7C2AB !important;
+    margin: 0;
+    height: 100vh;
+}
+
+
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #C7C2AB;
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.left-side {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-side .image {
+    width: 130%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    background-color: black; 
+    
+}
+
+.form-container {
+    flex: 0 0 40%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    margin-left: 200px !important;
+}
+
+.left-side, .form-container {
+    flex: 1;
+    min-width: 0; 
+}
+
+.customer-login-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.signup{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 .signup a{
     text-decoration: none;
     color: salmon;
+}
+
+p{
+    margin-left: 0px !important;
+}
+
+h1{
+    margin-left: 0px !important;
+}
+
+.container-button{
+    margin-top: 30px;
+    margin-right: 35px;
+}
+
+.container-button button{
+    width: 100%;
+    background-color: #D1D88D;
+    margin-top: 22px;
+    padding: 10px 20px;
+    color: black;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.form-group {
+    margin-bottom: 15px; 
 }
