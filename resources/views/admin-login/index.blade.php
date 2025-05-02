@@ -26,7 +26,7 @@
 
 <form action="/admin/login" method="post" class= "admin-login-container">
     @csrf
-    <div>
+    <div class="title">
        <h1>Login</h1>
     </div>
     <div>
