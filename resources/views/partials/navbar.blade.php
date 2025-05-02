@@ -40,7 +40,8 @@
                 </a>
                 
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="/dashboard/myprofile"><i class="bi bi-person-circle"></i> My Dashboard</a></li>
+                    <li><a class="dropdown-item" href="/dashboard/myprofile"><i class="bi bi-person-circle"></i> Account</a></li>
+                    <li>{{ $customers->customer_balance }}</li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="/logout" method="post">
