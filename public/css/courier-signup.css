@@ -1,0 +1,89 @@
+body{
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    height: auto;           
+    margin: 0;    
+}
+.go-signup a{
+    text-decoration: none;
+    color: salmon;
+}
+
+.form-container{
+    width: 450px;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
+    margin-top: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-container > div {
+    margin-bottom: 16px;
+}
+
+.button-submit{
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+}
+
+.button-submit button{
+    margin-bottom: 60px;
+    padding: 10px 20px; 
+    font-size: 16px; 
+    width: 30%; 
+    background-color: #D1D88D;
+    color: black;
+    border: none;
+    border-radius: 5px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+}
+
+.button-submit button:hover{
+    background-color: #485935;
+    color: white;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-photo {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #D1D88D;
+    color: black;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease, box-shadow 0.3s ease;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+.upload-photo:hover {
+    background-color: #485935;
+    color: white;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; 
+}
