@@ -10,6 +10,10 @@
 
 }
 
+.title{
+    margin-top: 40px;
+}
+
 body{
     background-color: #C7C2AB !important;
     display: flex;
@@ -48,7 +52,7 @@ label{
 .admin-login-container button{
     margin-top: 22px;
     padding: 10px 20px; 
-    font-size: 20px; 
+    font-size: 16px; 
     width: 100%; 
     background-color: #D1D88D;
     color: black;
@@ -60,7 +64,7 @@ label{
 
 .admin-login-container button:hover{
     background-color: #485935;
-   
+   color: white;
 }
 
 .password-wrapper {

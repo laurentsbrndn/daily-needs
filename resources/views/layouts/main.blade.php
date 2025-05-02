@@ -11,6 +11,7 @@
     {{-- <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/css/signup.css"> --}}
     <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/products.css">
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/css/checkout.css">
 </head>
