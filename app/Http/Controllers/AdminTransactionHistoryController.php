@@ -10,15 +10,78 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminTransactionHistoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $admins = Auth::guard('admin')->user();
 
-        $transactions = TransactionHeader::with('mscustomer')
-            ->where('admin_id', $admins->admin_id)
-            ->whereIn('transaction_status', ['Processing', 'Shipped', 'Completed', 'Cancelled'])
-            ->get();
+        $statusLink = [
+            'processing' => 'Processing',
+            'out-for-delivery' => 'Out for Delivery',
+            'shipped' => 'Shipped',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ];
 
-        return view('admin-transactionhistory.index', compact('transactions'));
+        $status = $request->query('status', 'completed');
+
+        if ($status === 'processing')
+        {
+            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+                                    ->where('admin_id', $admins->admin_id)
+                                    ->where('transaction_status', 'Processing')
+                                    ->whereDoesntHave('msshipment')
+                                    ->orderBy('transaction_date', 'desc')
+                                    ->paginate(10);
+        }
+
+        else if ($status === 'out-for-delivery')
+        {
+            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+                                    ->where('admin_id', $admins->admin_id)
+                                    ->where('transaction_status', 'Out for Delivery')
+                                    ->whereHas('msshipment', function ($query) use ($status) {
+                                        $query->filter(['shipment_status' => 'In Progress']);
+                                    })
+                                    ->orderBy('transaction_date', 'desc')
+                                    ->paginate(10);
+        }
+
+        else if ($status === 'shipped')
+        {
+            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+                                    ->where('admin_id', $admins->admin_id)
+                                    ->where('transaction_status', 'Shipped')
+                                    ->whereHas('msshipment', function ($query) use ($status) {
+                                        $query->filter(['shipment_status' => 'Delivered']);
+                                    })
+                                    ->orderBy('transaction_date', 'desc')
+                                    ->paginate(10);
+        }
+
+        else if ($status === 'completed')
+        {
+            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+                                    ->where('admin_id', $admins->admin_id)
+                                    ->where('transaction_status', 'Completed')
+                                    ->whereHas('msshipment', function ($query) use ($status) {
+                                        $query->filter(['shipment_status' => 'Delivered']);
+                                    })
+                                    ->orderBy('transaction_date', 'desc')
+                                    ->paginate(10);
+        }
+
+        else if ($status === 'cancelled')
+        {
+            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+                                    ->where('admin_id', $admins->admin_id)
+                                    ->where('transaction_status', 'Cancelled')
+                                    ->whereHas('msshipment', function ($query) use ($status) {
+                                        $query->filter(['shipment_status' => 'Cancelled']);
+                                    })
+                                    ->orderBy('transaction_date', 'desc')
+                                    ->paginate(10); 
+        }
+
+        return view('admin-transactionhistory.index', compact('data', 'statusLink', 'status'));
     }
 }

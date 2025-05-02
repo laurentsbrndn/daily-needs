@@ -42,7 +42,7 @@
                 </div>
             </a>
 
-            <a href="/admin/transaction-history" style="text-decoration: none; color: inherit;">
+            <a href="{{ route('admin.transaction-history', ['status' => 'completed']) }}" style="text-decoration: none; color: inherit;">
                 <div class = "menu-item">
                     <i class="bi bi-clock-history" style="color: #D1D88D;"></i>
                     <span>Transaction History</span>

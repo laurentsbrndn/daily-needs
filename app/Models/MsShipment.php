@@ -29,11 +29,11 @@ class MsShipment extends Model
             $query->where('shipment_status', $status);
         });
 
-        // $query->when($filters['search'] ?? false, function ($query, $search) {
-        //     $query->whereHas('transactionheader.mscustomer', function ($q) use ($search) {
-        //         $q->where('full_name', 'like', '%' . $search . '%');
-        //     });
-        // });
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->whereHas('transactionheader.mscustomeraddress', function ($q) use ($search) {
+                $q->where('customer_address_regency_city', 'like', '%' . $search . '%');
+            });
+        });
     }
 
 }

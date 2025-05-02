@@ -103,7 +103,7 @@ Route::prefix('admin')->group(function(){
         Route::get('/processing-order', [AdminProcessingOrderController::class, 'index']);
         Route::post('/processing-order/confirm/{transaction_id}', [AdminProcessingOrderController::class, 'store'])->name('admin.confirm');
 
-        Route::get('/transaction-history', [AdminTransactionHistoryController::class, 'index']);
+        Route::get('/transaction-history', [AdminTransactionHistoryController::class, 'index'])->name('admin.transaction-history');
     });
 });
 

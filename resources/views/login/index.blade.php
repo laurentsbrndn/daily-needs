@@ -41,7 +41,7 @@
             </div>
             <div class="form-group">    
                 <label for="customer_email">Email</label>
-                <input type="email" name="customer_email" id="customer_email" class="form-control @error('customer_email') is-invalid @enderror" placeholder="Enter your email" value="{{ old('customer_email') }}" autofocus required>
+                <input type="email" name="customer_email" id="customer_email" class="form-control @error('customer_email') is-invalid @enderror" placeholder="Enter your email" value="{{ old('customer_email') }}" autofocus>
                 @error('customer_email')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -51,7 +51,12 @@
     
             <div>
                 <label for="customer_password">Password</label>
-                <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror" placeholder="Enter your password" required>
+                <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror" placeholder="Enter your password">
+                @error('customer_password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
         </div>
     

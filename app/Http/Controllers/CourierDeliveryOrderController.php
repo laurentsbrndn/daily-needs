@@ -30,7 +30,12 @@ class CourierDeliveryOrderController extends Controller
             $data = TransactionHeader::with(['msshipment', 'mscustomer'])
                                         ->where('transaction_status', 'Processing')
                                         ->whereDoesntHave('msshipment')
-                                        ->get();
+                                        ->filter([
+                                            'status' => 'Processing',
+                                            'search' => request('search')
+                                        ])
+                                        ->paginate(10)
+                                        ->withQueryString();
         }
 
         else if ($status === 'in-progress') { 
@@ -39,7 +44,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->whereNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter(['shipment_status' => 'In Progress'])
-                                        ->get();
+                                        ->paginate(10);
         }
 
         else if ($status === 'delivered'){
@@ -47,7 +52,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter(['shipment_status' => 'Delivered'])
-                                        ->get();   
+                                        ->paginate(10);   
         }
 
         else if ($status === 'cancelled'){
@@ -55,7 +60,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter(['shipment_status' => 'Cancelled'])
-                                        ->get();
+                                        ->paginate(10);
         }
 
         else {

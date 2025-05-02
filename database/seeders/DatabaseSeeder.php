@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         MsCustomerAddress::factory(30)->create();
         TransactionHeader::factory(30)->create();
         MsProduct::factory(20)->create();
-        TransactionDetail::factory(50)->create();
+        // TransactionDetail::factory(50)->create();
         MsShipment::factory(30)->create();
         MsCart::factory(20)->create();
     }

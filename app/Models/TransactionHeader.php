@@ -46,6 +46,19 @@ class TransactionHeader extends Model
         });
     }
 
+    // public function scopeFilter($query, array $filters)
+    // {
+    //     $query->when($filters['status'] ?? false, function ($query, $status) {
+    //         $query->where('transaction_status', $status);
+    //     });
+
+    //     $query->when($filters['search'] ?? false, function ($query, $search) {
+    //         $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
+    //             $q->where('product_name', 'like', '%' . $search . '%');
+    //         });
+    //     });
+    // }
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['status'] ?? false, function ($query, $status) {
@@ -53,11 +66,17 @@ class TransactionHeader extends Model
         });
 
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
-                $q->where('product_name', 'like', '%' . $search . '%');
+            $query->where(function ($query) use ($search) {
+                $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
+                    $q->where('product_name', 'like', '%' . $search . '%');
+                })
+                ->orWhereHas('mscustomeraddress', function ($q) use ($search) {
+                    $q->where('customer_address_regency_city', 'like', '%' . $search . '%');
+                });
             });
         });
     }
+
 
 }
 

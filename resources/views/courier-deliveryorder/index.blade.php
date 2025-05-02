@@ -22,6 +22,13 @@
     
         <div class="tab-content mt-3">
             @if($status === 'to-ship')
+                <form method="get" action="{{ url('/courier/delivery-order') }}" class="mb-4">
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                    <div class="input-group mb-3" style="max-width: 400px;">
+                        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Search here">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
@@ -50,6 +57,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $data->links() }}
 
             @elseif($status === 'in-progress')
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
@@ -80,6 +88,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $data->links() }}
                 
             @elseif($status === 'delivered')
                 <table class="w-100 border-collapse text-center">
@@ -113,6 +122,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $data->links() }}
             
             @elseif($status === 'cancelled')
                 <table class="w-100 border-collapse text-center">
@@ -145,6 +155,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $data->links() }}
             @endif
         </div>
     </div>

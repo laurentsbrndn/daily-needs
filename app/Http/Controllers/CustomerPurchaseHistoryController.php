@@ -10,24 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerPurchaseHistoryController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $customers = Auth::guard('customer')->user();
-    //     $status = $request->query('status', 'Completed');
-
-        
-    //     $transactions = TransactionHeader::with(['transactiondetail.msproduct', 'mspaymentmethod', 'mscustomeraddress'])
-    //         ->where('customer_id', $customers->customer_id)
-    //         ->filter([
-    //             'status' => $status,
-    //             'search' => $request->query('search')
-    //         ])
-    //         ->orderBy('transaction_date', 'desc')
-    //         ->get();
-
-    //     return view('purchasehistory.index', compact('transactions', 'status'));
-    // }
-
     public function index(Request $request)
     {
         $customers = Auth::guard('customer')->user();

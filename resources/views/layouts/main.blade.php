@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/product.css">
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/css/checkout.css">
+    <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
     <div>
@@ -35,5 +36,6 @@
     <script src="/js/paymentmethod.js"></script>
     <script src="/js/insufficientbalance.js"></script>
     <script src="/js/disablebuyandaddtocart.js"></script>
+    <script src="/js/footer.js"></script>
 </body>
 </html>

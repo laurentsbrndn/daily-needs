@@ -1,6 +1,3 @@
-
-<link rel="stylesheet" href="/css/footer.css">
-
 <footer>
     <div class="content">
         <div>
@@ -31,5 +28,3 @@
     </div>
 
 </footer>
-
-<script src="/js/footer.js"></script>

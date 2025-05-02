@@ -39,7 +39,7 @@ $(document).ready(function() {
                                 data-country="${address.customer_address_country}"
                                 data-postal="${address.customer_address_postal_code}"
                                 data-bs-toggle="modal" data-bs-target="#updateAddressModal">
-                                Edit
+                                <i class="bi bi-pencil-square"></i>
                             </button>
                             <form class="delete-address" action="/address/delete/${address.customer_address_id}" method="POST">
                                 <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
