@@ -1,0 +1,82 @@
+.content {
+    background: #f8f9fd;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    padding: 50px;
+}
+
+.wallet-bg {
+    width: 100%;
+    height: 15rem;
+    background: linear-gradient(135deg, #a2d4c5, rgb(173, 206, 234));
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.wallet-bg h2{
+    color: rgb(108, 186, 169);
+    font-size: 5rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Kotak konten utama */
+.wrapper {
+    background: white;
+    width: 100%;
+    height: 100vh;
+    padding: 25px; 
+    position: relative;
+    margin-top: -60px; 
+    border-radius: 4rem 4rem 15px 15px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.wrapper h3 {
+    color: rgb(93, 124, 112);
+    font-size: 1.7rem;
+    font-style: oblique;
+    margin: 2rem 0 1rem 0;
+}
+
+.wrapper h2{
+    color: rgb(108, 186, 169);
+    font-size: 3rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.form-group label{
+    color: rgb(93, 124, 112);
+    font-size: 1.2rem;
+    font-style: oblique;
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.btn-success {
+    width: 10rem;
+    padding: 12px;
+    font-size: 1.5rem;
+    color: rgb(78, 156, 139);
+    transition: 0.4s ease-in-out;
+    margin: 2rem auto 0 auto; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5rem;
+    background-color: #a2d4c5;
+}
+
+.btn-success:hover {
+    color: rgb(93, 124, 112);
+    transform: scale(0.9);
+}

@@ -67,3 +67,7 @@ footer .scroll-up {
 .up:hover {
     color: #555;
 }
+
+main {
+    margin-bottom: 100px; /* Sesuaikan 100px dengan tinggi footer Anda */
+}
