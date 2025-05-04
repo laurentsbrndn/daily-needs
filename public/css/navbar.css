@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .navbar{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 400;
     font-size: 25px;
-    color: white;
-    background-color: #283106;
+    color: black;
+    background-color: white;
     width: 100%;
     position: fixed !important; 
     flex-wrap: nowrap !important;
@@ -50,7 +52,7 @@
 
 .nav-right .bi.bi-cart2 {
     margin-right: 50px;
-    color: white !important;
+    color: black !important;
 }
 
 .nav-right .nav-links a:hover{
@@ -109,7 +111,7 @@
 }
 
 .nav-links button:hover {
-    color: white;
+    color: #0B4000;
     background-color: rgba(209, 216, 141, 0.7); 
 }
 
