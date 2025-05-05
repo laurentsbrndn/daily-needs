@@ -46,19 +46,6 @@ class TransactionHeader extends Model
         });
     }
 
-    // public function scopeFilter($query, array $filters)
-    // {
-    //     $query->when($filters['status'] ?? false, function ($query, $status) {
-    //         $query->where('transaction_status', $status);
-    //     });
-
-    //     $query->when($filters['search'] ?? false, function ($query, $search) {
-    //         $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
-    //             $q->where('product_name', 'like', '%' . $search . '%');
-    //         });
-    //     });
-    // }
-
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['status'] ?? false, function ($query, $status) {
@@ -69,15 +56,33 @@ class TransactionHeader extends Model
             $query->where(function ($query) use ($search) {
                 $query->whereHas('transactiondetail.msproduct', function ($q) use ($search) {
                     $q->where('product_name', 'like', '%' . $search . '%');
-                })
-                ->orWhereHas('mscustomeraddress', function ($q) use ($search) {
-                    $q->where('customer_address_regency_city', 'like', '%' . $search . '%');
                 });
             });
         });
+
+        $query->when($filters['payment_method'] ?? false, function ($query, $payment_method) {
+            $query->whereHas('mspaymentmethod', function ($q) use ($payment_method) {
+                $q->where('payment_method_slug', $payment_method);
+            });
+        });
+
+        $query->when($filters['courier_to_ship_search'] ?? false, function ($query, $courier_to_ship_search) {
+            $query->where(function ($query) use ($courier_to_ship_search) {
+                $query->whereHas('mscustomeraddress', function ($q) use ($courier_to_ship_search) {
+                    $q->where('customer_address_street', 'like', '%' . $courier_to_ship_search . '%')
+                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_to_ship_search . '%')
+                        ->orWhere('customer_address_district', 'like', '%' . $courier_to_ship_search . '%')    
+                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_to_ship_search . '%')
+                        ->orWhere('customer_address_province', 'like', '%' . $courier_to_ship_search . '%')  
+                        ->orWhere('customer_address_country', 'like', '%' . $courier_to_ship_search . '%');
+                })
+                ->orWhereHas('mscustomer', function ($q) use ($courier_to_ship_search) {
+                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_to_ship_search . '%']);
+                })
+                ->orWhere('transaction_id', 'like', '%' . $courier_to_ship_search . '%');
+            });
+        });
     }
-
-
 }
 
 

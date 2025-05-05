@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\MsShipment;  
 use App\Models\MsCourier;
 use App\Models\TransactionHeader;
+use App\Models\MsPaymentMethod;
 use Illuminate\Support\Facades\Auth;
 
 class CourierDeliveryOrderController extends Controller
@@ -14,6 +15,7 @@ class CourierDeliveryOrderController extends Controller
     public function show(Request $request){
         $courier = Auth::guard('courier')->user();
         $status = $request->query('status', 'to-ship');
+        $paymentMethods = MsPaymentMethod::all();
 
         $statusLink = [
             'to-ship' => 'To Ship',
@@ -32,42 +34,70 @@ class CourierDeliveryOrderController extends Controller
                                         ->whereDoesntHave('msshipment')
                                         ->filter([
                                             'status' => 'Processing',
-                                            'search' => request('search')
+                                            'courier_to_ship_search' => $request->input('courier_to_ship_search'),
+                                            'payment_method' => $request->input('payment_method')
                                         ])
                                         ->paginate(10)
                                         ->withQueryString();
         }
 
-        else if ($status === 'in-progress') { 
-            $data = MsShipment::with('transactionheader.mscustomer')
+        else if ($status === 'in-progress') {
+            $data = MsShipment::with([
+                                        'transactionheader.mscustomer',
+                                        'transactionheader.mscustomeraddress',
+                                        'transactionheader.transactiondetail',
+                                        'transactionheader.mspaymentmethod'
+                                        ])
                                         ->whereNotNull('shipment_date_start')
                                         ->whereNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
-                                        ->filter(['shipment_status' => 'In Progress'])
-                                        ->paginate(10);
+                                        ->filter([
+                                            'shipment_status' => 'In Progress',
+                                            'courier_in_progress_search' => $request->input('courier_in_progress_search'),
+                                            'payment_method' => $request->input('payment_method')
+                                        ])
+                                        ->paginate(10)
+                                        ->withQueryString();
         }
 
+
         else if ($status === 'delivered'){
-            $data = MsShipment::with('transactionheader.mscustomer')
+            $data = MsShipment::with([
+                                        'transactionheader.mscustomer',
+                                        'transactionheader.mscustomeraddress',
+                                        'transactionheader.transactiondetail',
+                                        'transactionheader.mspaymentmethod'
+                                        ])
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
-                                        ->filter(['shipment_status' => 'Delivered'])
-                                        ->paginate(10);   
+                                        ->filter([
+                                            'shipment_status' => 'Delivered',
+                                            'courier_delivered_search' => $request->input('courier_delivered_search'),
+                                            'payment_method' => $request->input('payment_method')
+                                        ])
+                                        ->paginate(10)
+                                        ->withQueryString();
         }
+        
 
         else if ($status === 'cancelled'){
             $data = MsShipment::with('transactionheader.mscustomer')
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
-                                        ->filter(['shipment_status' => 'Cancelled'])
-                                        ->paginate(10);
+                                        ->filter([
+                                            'shipment_status' => 'Cancelled',
+                                            'courier_cancelled_search' => $request->input('courier_cancelled_search'),
+                                            'payment_method' => $request->input('payment_method')
+                                        ])
+                                        ->paginate(10)
+                                        ->withQueryString();
         }
 
         else {
             $data = collect();
         }
         
-        return view('courier-deliveryorder.index', compact('data', 'status', 'statusLink'));
+        return view('courier-deliveryorder.index', compact('data', 'status', 'statusLink', 'paymentMethods'));
     }
 
     public function store(Request $request, $transaction_id)

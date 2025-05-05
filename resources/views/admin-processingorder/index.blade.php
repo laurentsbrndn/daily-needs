@@ -41,9 +41,13 @@
               @endforelse
           </tbody>
       </table>
-      <div class="d-flex justify-content-center mt-4">
-        {{ $transactions->links('pagination::bootstrap-5') }}
-    </div>
+      
+      <div class="pagination-container">
+        <div class="d-flex justify-content-center mt-4">
+            {{ $transactions->links('pagination::bootstrap-5') }}
+        </div>
+      </div>
+    
   </div>
   
   <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">

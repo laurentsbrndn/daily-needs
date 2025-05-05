@@ -3,7 +3,7 @@
 @section('container')
 
     <div class="content">
-        <h2 class="text-xl font-bold mb-4">Courier Deliveries</h2>
+        <h2 class="text-xl font-bold mb-4">Delivery Order</h2>
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -22,13 +22,31 @@
     
         <div class="tab-content mt-3">
             @if($status === 'to-ship')
-                <form method="get" action="{{ url('/courier/delivery-order') }}" class="mb-4">
-                    <input type="hidden" name="status" value="{{ request('status') }}">
-                    <div class="input-group mb-3" style="max-width: 400px;">
-                        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Search here">
+                <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <form method="get" action="{{ route('courier.delivery') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                    <div class="input-group">
+                        <input type="text" name="courier_to_ship_search" value="{{ request('courier_to_ship_search') }}" class="form-control" placeholder="Type here to search">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
+
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
@@ -57,9 +75,43 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $data->links() }}
+                <div class="pagination-container">
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $data->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
 
-            @elseif($status === 'in-progress')
+                @elseif($status === 'in-progress')
+                    <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                        <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
+                        @if(request('courier_in_progress_search'))
+                            <input type="hidden" name="courier_in_progress_search" value="{{ request('courier_in_progress_search') }}">
+                        @endif
+                    
+                        <label for="payment_method">Payment Method</label>
+                        <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                            <option value="">All</option>
+                            @foreach ($paymentMethods as $method)
+                                <option value="{{ $method->payment_method_slug }}"
+                                    {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                    {{ $method->payment_method_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                
+                    <form method="get" action="{{ route('courier.delivery') }}" class="mb-4" style="max-width: 350px;">
+                        <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
+                        @if(request('payment_method'))
+                            <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                        @endif
+                    
+                        <div class="input-group">
+                            <input type="text" name="courier_in_progress_search" value="{{ request('courier_in_progress_search') }}" class="form-control" placeholder="Type here to search">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+            
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead>
                         <tr>
@@ -88,14 +140,47 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $data->links() }}
+                <div class="pagination-container">
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $data->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
                 
             @elseif($status === 'delivered')
+                <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'delivered') }}">
+                    @if(request('courier_delivered_search'))
+                        <input type="hidden" name="courier_delivered_search" value="{{ request('courier_delivered_search') }}">
+                    @endif
+                
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            
+                <form method="get" action="{{ route('courier.delivery') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'delivered') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                
+                    <div class="input-group">
+                        <input type="text" name="courier_delivered_search" value="{{ request('courier_delivered_search') }}" class="form-control" placeholder="Type here to search">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center">
                     <thead>
                         <tr>
                             <th class="p-2">Shipment Number</th>
-                            <th class="p-2">Customer</th>
+                            <th class="p-2">Customer Name</th>
                             <th class="p-2">Payment Method</th>
                             <th class="p-2">City</th>
                         </tr>
@@ -122,14 +207,47 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $data->links() }}
+                <div class="pagination-container">
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $data->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
             
             @elseif($status === 'cancelled')
+            <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
+                @if(request('courier_cancelled_search'))
+                    <input type="hidden" name="courier_cancelled_search" value="{{ request('courier_cancelled_search') }}">
+                @endif
+            
+                <label for="payment_method">Payment Method</label>
+                <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                    <option value="">All</option>
+                    @foreach ($paymentMethods as $method)
+                        <option value="{{ $method->payment_method_slug }}"
+                            {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                            {{ $method->payment_method_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
+        
+            <form method="get" action="{{ route('courier.delivery') }}" class="mb-4" style="max-width: 350px;">
+                <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
+                @if(request('payment_method'))
+                    <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                @endif
+            
+                <div class="input-group">
+                    <input type="text" name="courier_cancelled_search" value="{{ request('courier_cancelled_search') }}" class="form-control" placeholder="Type here to search">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
                 <table class="w-100 border-collapse text-center">
                     <thead>
                         <tr>
                             <th class="p-2">Shipment Number</th>
-                            <th class="p-2">Customer</th>
+                            <th class="p-2">Customer Name</th>
                             <th class="p-2">Payment Method</th>
                             <th class="p-2">City</th>
                         </tr>
@@ -155,7 +273,11 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $data->links() }}
+                <div class="pagination-container">
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $data->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
             @endif
         </div>
     </div>

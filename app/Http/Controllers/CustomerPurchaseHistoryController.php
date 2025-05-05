@@ -42,7 +42,6 @@ class CustomerPurchaseHistoryController extends Controller
         ]);
     }
 
-
     public function cancelOrder($transaction_id)
     {
         $transaction = TransactionHeader::with('transactiondetail.msproduct', 'mspaymentmethod')->findOrFail($transaction_id);
