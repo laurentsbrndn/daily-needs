@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/css/checkout.css">
     <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/viewcart.css">
 </head>
 <body>
     <div>
