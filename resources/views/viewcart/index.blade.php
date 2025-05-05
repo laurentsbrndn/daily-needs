@@ -22,7 +22,7 @@
                         <th class="checkbox"></th>
                         <th>Product</th>
                         <th>Quantity</th>
-                        <th>Total</th>
+                        <th>Subtotal</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -70,7 +70,7 @@
             </table>
 
             <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-                <h4>Subtotal</h4>
+                <h4>Total</h4>
                 <h4 id="total-price">0</h4>
             </div>
 

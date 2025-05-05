@@ -1,6 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/sidebar.css">
-
 <div class="sidebar">
     <div class="logo-container">
         <img src="{{ asset('assets/image/Title Icon.jpeg') }}" alt="Logo" class="logo">
