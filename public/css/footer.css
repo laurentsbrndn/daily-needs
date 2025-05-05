@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 footer {
-    background-color: #ccc7b1;
-    color: #000;
+    background-color: #0B4000;
+    color: #fff;
     padding: 40px 50px;
     align-items: flex-start;
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
     position: relative;
 }
 
@@ -14,13 +17,13 @@ footer h2 {
 }
 
 footer .content{
-    background-color: #ccc7b1;
-    color: #000;
+    background-color: #0B4000;
+    color: #fff;
     padding: 10px 10px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    font-family: Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
     position: relative;
 }
 
@@ -42,7 +45,7 @@ footer .scroll-up {
     left: 50%;
     transform: translateX(-50%);
     background: #fff;
-    border: 2px solid #000;
+    border: 2px solid #fff;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -59,13 +62,13 @@ footer .scroll-up {
     transform: translateX(-50%);
     font-size: 36px;
     cursor: pointer;
-    color: #000;
+    color: #fff;
     transition: color 0.3s;
     margin-top: 15px;
 }
 
 .up:hover {
-    color: #555;
+    color: rgba(209, 216, 141, 1);
 }
 
 main {
