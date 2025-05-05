@@ -200,3 +200,29 @@ form input[type="radio"]{
     background-color: #485935;
     color: white;
 }
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+  
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* ruang untuk ikon */
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+  
+#togglePassword{
+    position: absolute;
+    right: 12px;
+    top: 41%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+  }
+  
