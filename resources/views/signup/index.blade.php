@@ -46,13 +46,17 @@
 
             <div>
                 <label for="customer_password">Password</label>
-                <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror mb-3" placeholder="Enter your password">
+                <div class="password-container">
+                    <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror mb-3" placeholder="Enter your password">
+                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                </div>
                 @error('customer_password')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
                 @enderror
             </div>
+
         </div>
 
         <div class="column2">

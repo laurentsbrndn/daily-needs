@@ -49,15 +49,20 @@
                 @enderror
             </div>
     
-            <div>
+            <div class="form-group password-wrapper">
                 <label for="customer_password">Password</label>
-                <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror" placeholder="Enter your password">
+                <div class="input-icon-wrapper">
+                    <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror" placeholder="Enter your password">
+                    <i class="bi bi-eye-slash toggle-password" id="togglePassword"></i>
+
+                </div>
                 @error('customer_password')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
+
         </div>
     
         <div class="container-button">
