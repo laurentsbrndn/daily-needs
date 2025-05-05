@@ -27,8 +27,7 @@
     align-items: center;
     flex-grow: 1;
     margin: 0 50px !important;
-    gap: 70px;
-    
+    gap: 70px;   
 }
 
 .nav-left .nav-item:before{
@@ -136,4 +135,3 @@
     text-decoration-thickness: 2px !important;
     text-underline-offset: 6px;
 }
-

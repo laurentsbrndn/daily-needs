@@ -49,12 +49,18 @@
                 @enderror
             </div>
     
-            <div class="form-group password-wrapper">
+            <div class="form-group">
                 <label for="customer_password">Password</label>
                 <div class="input-icon-wrapper">
-                    <input type="password" name="customer_password" id="customer_password" class="form-control @error('customer_password') is-invalid @enderror" placeholder="Enter your password">
-                    <i class="bi bi-eye-slash toggle-password" id="togglePassword"></i>
-
+                    <input 
+                        type="password" 
+                        name="customer_password" 
+                        id="customer_password" 
+                        class="form-control @error('customer_password') is-invalid @enderror" 
+                        placeholder="Enter your password"
+                        
+                    >
+                    <i class="bi bi-eye-slash toggle-password"></i>
                 </div>
                 @error('customer_password')
                     <div class="invalid-feedback">
@@ -62,7 +68,6 @@
                     </div>
                 @enderror
             </div>
-
         </div>
     
         <div class="container-button">
@@ -72,9 +77,5 @@
         </form>
     </div>
 </div>
-
-
-
-
 
 @endsection

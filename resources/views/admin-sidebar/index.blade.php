@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/admin-sidebar.css">
     <link rel="stylesheet" href="/css/admin-addproduct.css">
     <link rel="stylesheet" href="/css/admin-processingorder.css">
+    <link rel="stylesheet" href="/css/admin-transactionhistory.css">
 </head>
 
 <body>
@@ -65,5 +66,10 @@
     <script src="/js/admin-productstock.js"></script>
     <script src="/js/admin-addproduct.js"></script>
     <script src="/js/admin-processingorder.js"></script>
+    <script src="/js/admin-transactionhistory-processing.js"></script>
+    <script src="/js/admin-transactionhistory-outfordelivery.js"></script>
+    <script src="/js/admin-transactionhistory-shipped.js"></script>
+    <script src="/js/admin-transactionhistory-completed.js"></script>
+    <script src="/js/admin-transactionhistory-cancelled.js"></script>
 </body>
 </html>

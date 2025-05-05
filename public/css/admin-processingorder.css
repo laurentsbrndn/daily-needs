@@ -1,9 +1,9 @@
-.table-row-hover {
+.pending {
     transition: background-color 0.15s;
 }
 
-.table-row-hover:hover {
-    background-color: #eaeaea;
+.pending:hover {
+    background-color: #eeeeee;
     cursor: pointer;
 }
 

@@ -127,5 +127,11 @@
                 </div>
             </div>
         @endforeach
+
+        <div class="pagination-container">
+            <div class="d-flex justify-content-center mt-4">
+                {{ $transactions->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
     </div>
 @endsection

@@ -47,7 +47,7 @@
                     </div>
                 </form>
 
-                <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
+                <table class="w-100 border-collapse text-center pb-3" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
                             <th class="p-2">Transaction Number</th>

@@ -27,6 +27,7 @@ body {
     color: white;
     position: fixed;
     padding-top: 20px;
+    z-index: 1000;
 }
 
 .sidebar .menu-item, .sidebar .menu-item-logout{

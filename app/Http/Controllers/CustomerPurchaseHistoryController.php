@@ -33,7 +33,8 @@ class CustomerPurchaseHistoryController extends Controller
                 'search' => $request->query('search')
             ])
             ->orderBy('transaction_date', 'desc')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('purchasehistory.index', [
             'transactions' => $transactions,

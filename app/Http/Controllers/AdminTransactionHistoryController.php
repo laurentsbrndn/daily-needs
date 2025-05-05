@@ -7,6 +7,7 @@ use App\Models\TransactionHeader;
 use App\Models\TransactionDetail;
 use App\Models\MsAdmin;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AdminTransactionHistoryController extends Controller
 {
@@ -26,7 +27,7 @@ class AdminTransactionHistoryController extends Controller
 
         if ($status === 'processing')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
                                     ->where('transaction_status', 'Processing')
                                     ->whereDoesntHave('msshipment')
@@ -36,7 +37,7 @@ class AdminTransactionHistoryController extends Controller
 
         else if ($status === 'out-for-delivery')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment','transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
                                     ->where('transaction_status', 'Out for Delivery')
                                     ->whereHas('msshipment', function ($query) use ($status) {
@@ -48,7 +49,7 @@ class AdminTransactionHistoryController extends Controller
 
         else if ($status === 'shipped')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
                                     ->where('transaction_status', 'Shipped')
                                     ->whereHas('msshipment', function ($query) use ($status) {
@@ -60,7 +61,7 @@ class AdminTransactionHistoryController extends Controller
 
         else if ($status === 'completed')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
                                     ->where('transaction_status', 'Completed')
                                     ->whereHas('msshipment', function ($query) use ($status) {
@@ -72,7 +73,7 @@ class AdminTransactionHistoryController extends Controller
 
         else if ($status === 'cancelled')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
                                     ->where('transaction_status', 'Cancelled')
                                     ->whereHas('msshipment', function ($query) use ($status) {
@@ -81,6 +82,10 @@ class AdminTransactionHistoryController extends Controller
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10); 
         }
+
+        $data->each(function ($data) {
+            $data->transactiondetail->each->append('subtotal');
+        });
 
         return view('admin-transactionhistory.index', compact('data', 'statusLink', 'status'));
     }

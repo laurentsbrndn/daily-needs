@@ -102,8 +102,7 @@ h1{
 
 .input-icon-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
+    width: 100%;
 }
 
 .input-icon-wrapper input {
@@ -111,13 +110,13 @@ h1{
     padding-right: 40px; 
 }
 
+
 .toggle-password {
     position: absolute;
-    right: 60px;
+    right: 60px; 
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #666;
-    font-size: 18px;
+    font-size: 18px; 
 }
-

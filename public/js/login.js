@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword = document.querySelector(".toggle-password");
     const password = document.getElementById('customer_password');
 
     togglePassword.addEventListener('click', function () {
