@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('container')
-
+<div class="container">
     <div class="mt-10">
         <h1><strong>Checkout</strong></h1>
     </div>
@@ -9,56 +9,91 @@
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif  
-
-    @foreach($products as $product)
-        <div class="checkout-card">
-            <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
-            <div class="checkout-details">
-                <div><strong>{{ $product->product_name }}</strong></div>
-                <div>Quantity: {{ $product->cart_quantity }}</div>
-            </div>
-            <div class="checkout-total">
-                Rp{{ number_format($product->product_price * $product->cart_quantity, 0, ',', '.') }}
+    <div class="container-main">
+        <div class="container-kiri">
+            <div class="card ">
+                <h4 class="mb-3">Shipping Details</h4>
+                <div>
+                    <!-- <h6>Send To</h6> -->
+                    <p id="selectedAddressText" class="receiver">No address selected</p>
+                </div> 
+                <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addressModal">
+                    <i class="fas fa-map-marker-alt"></i> Select Address
+                </button>
+                <span class="error-message text-danger" id="error_customer_address"></span>
             </div>
         </div>
-    @endforeach
 
-    <hr>
-    <div class="checkout-total" style="margin-top: 20px;">
-        <strong>Total:</strong> Rp{{ number_format($totalPrice, 0, ',', '.') }}
-    </div>
-
-    <div class="payment-method-selector mt-3 mb-5">
-        <p><strong>Payment Method</strong></p>
-        <select id="paymentMethod" class="form-select">
-            @foreach ($paymentMethods as $paymentMethod)
-                <option value="{{ $paymentMethod->payment_method_id }}"
-                    data-name="{{ $paymentMethod->payment_method_name }}"
-                    {{ $loop->first ? 'selected' : '' }}
-                    @if ($paymentMethod->payment_method_name == 'Application Balance')
-                        data-balance="{{ $customers->customer_balance }}"
-                    @endif>
-                    {{ $paymentMethod->payment_method_name }}
-                    @if ($paymentMethod->payment_method_name == 'Application Balance')
-                        <p class="ml-5">Your Balance: Rp{{ number_format($customers->customer_balance, 0, ',', '.') }}</p>
-                    @endif
-                </option>
+        <div class="container-kanan">
+            <h4 class="mb-3">Your Order</h4>
+            @foreach($products as $product)
+                <div class="checkout-card">
+                    <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
+                    <div class="checkout-details">
+                        <div><strong>{{ $product->product_name }}</strong></div>
+                        <div>Qty: {{ $product->cart_quantity }}</div>
+                    </div>
+                    <div class="checkout-total">
+                        Rp{{ number_format($product->product_price * $product->cart_quantity, 0, ',', '.') }}
+                    </div>
+                </div>
             @endforeach
-        </select>
-        <span class="error-message text-danger" id="error_payment_method"></span>
+
+            
+            <div class="checkout-total" style="margin-top: 12px;">
+                <div class="checkout-kiri"><strong style="text-align:left;">Total</strong></div>
+                <div class="checkout-kanan">Rp{{ number_format($totalPrice, 0, ',', '.') }}</div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="card p-3 shadow-sm">
-        <h3 class="mb-3">Select Address</h3>
-        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addressModal">
-            <i class="fas fa-map-marker-alt"></i> Choose Address
-        </button>
-        <div class="mt-3">
-            <h5>Send To:</h5>
-            <p id="selectedAddressText">No address selected</p>
-        </div> 
-        <span class="error-message text-danger" id="error_customer_address"></span>
+    <div class="payment-method-selector mt-3">
+        <div class="payment-method-selector-kiri">
+            <p><strong id="payment-method">Payment Methods</strong></p>
+            <select id="paymentMethod" class="form-select">
+                @foreach ($paymentMethods as $paymentMethod)
+                    <option value="{{ $paymentMethod->payment_method_id }}"
+                        data-name="{{ $paymentMethod->payment_method_name }}"
+                        {{ $loop->first ? 'selected' : '' }}
+                        @if ($paymentMethod->payment_method_name == 'Application Balance')
+                            data-balance="{{ $customers->customer_balance }}"
+                        @endif>
+                        {{ $paymentMethod->payment_method_name }}
+                        @if ($paymentMethod->payment_method_name == 'Application Balance')
+                            <p class="ml-5">: Rp{{ number_format($customers->customer_balance, 0, ',', '.') }}</p>
+                        @endif
+                    </option>
+                @endforeach
+            </select>
+            <span class="error-message text-danger" id="error_payment_method"></span>
+        </div>
+
+        <div class="payment-method-selector-kanan">
+            <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
+                @csrf
+
+                @if(isset($quantity) && count($products) === 1)
+                    <input type="hidden" name="product_id" value="{{ $products[0]->product_id }}">
+                    <input type="hidden" name="quantity" value="{{ $quantity }}">
+                    <input type="hidden" id="totalPrice" value="{{ $products[0]->product_price * $quantity }}">
+                @else
+                    @foreach ($products as $product)
+                        <input type="hidden" name="product_ids[]" value="{{ $product->product_id }}">
+                        <input type="hidden" name="quantities[]" value="{{ $product->cart_quantity ?? 1 }}">
+                    @endforeach
+                    <input type="hidden" id="totalPrice" value="{{ $totalPrice }}">
+                @endif
+
+                <input type="hidden" name="payment_method_id" id="selectedPayment" value="">
+                <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
+                <input type="hidden" id="customerBalance" value="{{ $customers->customer_balance }}">
+
+                <button type="submit" class="btn btn-primary" id="place-order">Place Order</button>
+            </form>
+        </div>
     </div>
+
     
     <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -70,8 +105,8 @@
                 <div class="modal-body">
                     <div class="notification"></div>
                     <div id="address-list">
-                        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                            Add New Address
+                        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addAddressModal" id="newaddress">
+                        <i class="bi bi-plus-circle"></i> New Address 
                         </button>
                         @foreach ($addresses as $address)
                         <div class="card p-3 mb-2">
@@ -94,8 +129,8 @@
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </form>
-                            <strong>{{ $address->customer_address_name }}</strong>
-                            <p>{{ $address->customer_address_street }}, {{ $address->customer_address_district }}, {{ $address->customer_address_regency_city }}, {{ $address->customer_address_province }}, {{ $address->customer_address_country }}, {{ $address->customer_address_postal_code }}</p>
+                            <strong>Receiver Name: {{ $address->customer_address_name }}</strong>
+                            <p>Address: <br>{{ $address->customer_address_street }}, {{ $address->customer_address_district }}, {{ $address->customer_address_regency_city }}, {{ $address->customer_address_province }}, {{ $address->customer_address_country }}, {{ $address->customer_address_postal_code }}</p>
                             <button class="btn btn-success btn-sm select-address" data-id="{{ $address->customer_address_id }}">
                                 Select
                             </button>
@@ -221,7 +256,7 @@
         </div>
     </div>
 
-    <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
+    <!-- <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
         @csrf
 
         @if(isset($quantity) && count($products) === 1)
@@ -240,8 +275,8 @@
         <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
         <input type="hidden" id="customerBalance" value="{{ $customers->customer_balance }}">
 
-        <button type="submit" class="btn btn-primary">Place order</button>
-    </form>
+        <button type="submit" class="btn btn-primary" id="place-order">Place Order</button>
+    </form> -->
 
     <div class="modal fade" id="insufficientBalanceModal" tabindex="-1" aria-labelledby="insufficientBalanceLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -260,5 +295,5 @@
           </div>
         </div>
     </div>
-
+</div> 
 @endsection
