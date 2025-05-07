@@ -8,6 +8,7 @@
             </div>
         @endif
         <h2 class="mb-4">Transaction History</h2>
+
         <ul class="nav nav-tabs">
             @foreach($statusLink as $key => $label)
                 <li class="nav-item">
@@ -21,6 +22,30 @@
 
         <div class="tab-content mt-3">
             @if($status === 'processing')
+                <form method="get" action="{{ route('admin.transaction-history') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <form method="get" action="{{ route('admin.transaction-history') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                    <div class="input-group">
+                        <input type="text" name="admin_search" value="{{ request('admin_search') }}" class="form-control" placeholder="Type here to search">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
@@ -61,6 +86,30 @@
                 </div>
 
             @elseif($status === 'out-for-delivery')
+                <form method="get" action="{{ route('admin.transaction-history') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <form method="get" action="{{ route('admin.transaction-history') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                    <div class="input-group">
+                        <input type="text" name="admin_search" value="{{ request('admin_search') }}" class="form-control" placeholder="Type here to search">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
@@ -103,6 +152,30 @@
                 </div>
             
             @elseif($status === 'shipped')
+                <form method="get" action="{{ route('admin.transaction-history') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <form method="get" action="{{ route('admin.transaction-history') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                    <div class="input-group">
+                        <input type="text" name="admin_search" value="{{ request('admin_search') }}" class="form-control" placeholder="Type here to search">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>
@@ -147,6 +220,30 @@
                 </div>
             
             @elseif($status === 'completed')
+                <form method="get" action="{{ route('admin.transaction-history') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    <label for="payment_method">Payment Method</label>
+                    <select name="payment_method" class="form-select" onchange="document.getElementById('paymentMethodForm').submit();">
+                        <option value="">All</option>
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->payment_method_slug }}"
+                                {{ request('payment_method') === $method->payment_method_slug ? 'selected' : '' }}>
+                                {{ $method->payment_method_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            
+                <form method="get" action="{{ route('admin.transaction-history') }}" class="mb-4" style="max-width: 350px;">
+                    <input type="hidden" name="status" value="{{ request('status', 'to-ship') }}">
+                    @if(request('payment_method'))
+                        <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
+                    @endif
+                    <div class="input-group">
+                        <input type="text" name="admin_search" value="{{ request('admin_search') }}" class="form-control" placeholder="Type here to search">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <table class="w-100 border-collapse text-center" style="table-layout: fixed;">
                     <thead class="text-center">
                         <tr>

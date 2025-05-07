@@ -42,7 +42,7 @@
                         <input type="hidden" name="payment_method" value="{{ request('payment_method') }}">
                     @endif
                     <div class="input-group">
-                        <input type="text" name="courier_to_ship_search" value="{{ request('courier_to_ship_search') }}" class="form-control" placeholder="Type here to search">
+                        <input type="text" name="courier_search" value="{{ request('courier_search') }}" class="form-control" placeholder="Type here to search">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
@@ -85,7 +85,7 @@
                     <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
                         <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
                         @if(request('courier_in_progress_search'))
-                            <input type="hidden" name="courier_in_progress_search" value="{{ request('courier_in_progress_search') }}">
+                            <input type="hidden" name="courier_search" value="{{ request('courier_search') }}">
                         @endif
                     
                         <label for="payment_method">Payment Method</label>
@@ -107,7 +107,7 @@
                         @endif
                     
                         <div class="input-group">
-                            <input type="text" name="courier_in_progress_search" value="{{ request('courier_in_progress_search') }}" class="form-control" placeholder="Type here to search">
+                            <input type="text" name="courier_search" value="{{ request('courier_search') }}" class="form-control" placeholder="Type here to search">
                             <button type="submit" class="btn btn-primary">Search</button>
                         </div>
                     </form>
@@ -149,8 +149,8 @@
             @elseif($status === 'delivered')
                 <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
                     <input type="hidden" name="status" value="{{ request('status', 'delivered') }}">
-                    @if(request('courier_delivered_search'))
-                        <input type="hidden" name="courier_delivered_search" value="{{ request('courier_delivered_search') }}">
+                    @if(request('courier_search'))
+                        <input type="hidden" name="courier_search" value="{{ request('courier_search') }}">
                     @endif
                 
                     <label for="payment_method">Payment Method</label>
@@ -172,7 +172,7 @@
                     @endif
                 
                     <div class="input-group">
-                        <input type="text" name="courier_delivered_search" value="{{ request('courier_delivered_search') }}" class="form-control" placeholder="Type here to search">
+                        <input type="text" name="courier_search" value="{{ request('courier_search') }}" class="form-control" placeholder="Type here to search">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
@@ -216,8 +216,8 @@
             @elseif($status === 'cancelled')
             <form method="get" action="{{ route('courier.delivery') }}" id="paymentMethodForm" class="mb-3" style="max-width: 250px;">
                 <input type="hidden" name="status" value="{{ request('status', 'in-progress') }}">
-                @if(request('courier_cancelled_search'))
-                    <input type="hidden" name="courier_cancelled_search" value="{{ request('courier_cancelled_search') }}">
+                @if(request('courier_search'))
+                    <input type="hidden" name="courier_search" value="{{ request('courier_search') }}">
                 @endif
             
                 <label for="payment_method">Payment Method</label>
@@ -239,7 +239,7 @@
                 @endif
             
                 <div class="input-group">
-                    <input type="text" name="courier_cancelled_search" value="{{ request('courier_cancelled_search') }}" class="form-control" placeholder="Type here to search">
+                    <input type="text" name="courier_search" value="{{ request('courier_search') }}" class="form-control" placeholder="Type here to search">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>

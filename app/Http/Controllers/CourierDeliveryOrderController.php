@@ -34,7 +34,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->whereDoesntHave('msshipment')
                                         ->filter([
                                             'status' => 'Processing',
-                                            'courier_to_ship_search' => $request->input('courier_to_ship_search'),
+                                            'courier_search' => $request->input('courier_search'),
                                             'payment_method' => $request->input('payment_method')
                                         ])
                                         ->paginate(10)
@@ -53,7 +53,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter([
                                             'shipment_status' => 'In Progress',
-                                            'courier_in_progress_search' => $request->input('courier_in_progress_search'),
+                                            'courier_search' => $request->input('courier_search'),
                                             'payment_method' => $request->input('payment_method')
                                         ])
                                         ->paginate(10)
@@ -72,7 +72,7 @@ class CourierDeliveryOrderController extends Controller
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter([
                                             'shipment_status' => 'Delivered',
-                                            'courier_delivered_search' => $request->input('courier_delivered_search'),
+                                            'courier_search' => $request->input('courier_search'),
                                             'payment_method' => $request->input('payment_method')
                                         ])
                                         ->paginate(10)
@@ -81,12 +81,15 @@ class CourierDeliveryOrderController extends Controller
         
 
         else if ($status === 'cancelled'){
-            $data = MsShipment::with('transactionheader.mscustomer')
+            $data = MsShipment::with(['transactionheader.mscustomer',
+                                        'transactionheader.mscustomeraddress',
+                                        'transactionheader.transactiondetail',
+                                        'transactionheader.mspaymentmethod'])
                                         ->whereNotNull('shipment_date_end')
                                         ->where('courier_id', $courier->courier_id)
                                         ->filter([
                                             'shipment_status' => 'Cancelled',
-                                            'courier_cancelled_search' => $request->input('courier_cancelled_search'),
+                                            'courier_search' => $request->input('courier_search'),
                                             'payment_method' => $request->input('payment_method')
                                         ])
                                         ->paginate(10)

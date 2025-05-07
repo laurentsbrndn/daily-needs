@@ -35,68 +35,25 @@ class MsShipment extends Model
             });
         });
 
-        $query->when($filters['courier_in_progress_search'] ?? false, function ($query, $courier_in_progress_search) {
-            $query->where(function ($query) use ($courier_in_progress_search) {
-                $query->whereHas('transactionheader.mscustomeraddress', function ($q) use ($courier_in_progress_search) {
-                    $q->where('customer_address_street', 'like', '%' . $courier_in_progress_search . '%')
-                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_in_progress_search . '%')
-                        ->orWhere('customer_address_district', 'like', '%' . $courier_in_progress_search . '%')    
-                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_in_progress_search . '%')
-                        ->orWhere('customer_address_province', 'like', '%' . $courier_in_progress_search . '%')  
-                        ->orWhere('customer_address_country', 'like', '%' . $courier_in_progress_search . '%');
+        $query->when($filters['courier_search'] ?? false, function ($query, $courier_search) {
+            $query->where(function ($query) use ($courier_search) {
+                $query->whereHas('transactionheader.mscustomeraddress', function ($q) use ($courier_search) {
+                    $q->where('customer_address_street', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_district', 'like', '%' . $courier_search . '%')    
+                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_province', 'like', '%' . $courier_search . '%')  
+                        ->orWhere('customer_address_country', 'like', '%' . $courier_search . '%');
                 })
-                ->orWhereHas('transactionheader.mscustomer', function ($q) use ($courier_in_progress_search) {
-                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_in_progress_search . '%']);
+                ->orWhereHas('transactionheader.mscustomer', function ($q) use ($courier_search) {
+                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_search . '%']);
                 })
-                ->orWhereHas('transactionheader', function ($q) use ($courier_in_progress_search) {
-                    $q->where('transaction_id', 'like', '%' . $courier_in_progress_search . '%');
+                ->orWhereHas('transactionheader', function ($q) use ($courier_search) {
+                    $q->where('transaction_id', 'like', '%' . $courier_search . '%');
                 })
-                ->orWhere('shipment_id', 'like', '%' . $courier_in_progress_search . '%'); 
+                ->orWhere('shipment_id', 'like', '%' . $courier_search . '%')
+                ->orWhere('shipment_recipient_name', 'like', '%' . $courier_search . '%');
             });
         });
-
-        $query->when($filters['courier_delivered_search'] ?? false, function ($query, $courier_delivered_search) {
-            $query->where(function ($query) use ($courier_delivered_search) {
-                $query->whereHas('transactionheader.mscustomeraddress', function ($q) use ($courier_delivered_search) {
-                    $q->where('customer_address_street', 'like', '%' . $courier_delivered_search . '%')
-                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_delivered_search . '%')
-                        ->orWhere('customer_address_district', 'like', '%' . $courier_delivered_search . '%')    
-                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_delivered_search . '%')
-                        ->orWhere('customer_address_province', 'like', '%' . $courier_delivered_search . '%')  
-                        ->orWhere('customer_address_country', 'like', '%' . $courier_delivered_search . '%');
-                })
-                ->orWhereHas('transactionheader.mscustomer', function ($q) use ($courier_delivered_search) {
-                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_delivered_search . '%']);
-                })
-                ->orWhereHas('transactionheader', function ($q) use ($courier_delivered_search) {
-                    $q->where('transaction_id', 'like', '%' . $courier_delivered_search . '%');
-                })
-                ->orWhere('shipment_id', 'like', '%' . $courier_delivered_search . '%')
-                ->orWhere('shipment_recipient_name', 'like', '%' . $courier_delivered_search . '%'); 
-            });
-        });
-
-        $query->when($filters['courier_cancelled_search'] ?? false, function ($query, $courier_cancelled_search) {
-            $query->where(function ($query) use ($courier_cancelled_search) {
-                $query->whereHas('transactionheader.mscustomeraddress', function ($q) use ($courier_cancelled_search) {
-                    $q->where('customer_address_street', 'like', '%' . $courier_cancelled_search . '%')
-                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_cancelled_search . '%')
-                        ->orWhere('customer_address_district', 'like', '%' . $courier_cancelled_search . '%')    
-                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_cancelled_search . '%')
-                        ->orWhere('customer_address_province', 'like', '%' . $courier_cancelled_search . '%')  
-                        ->orWhere('customer_address_country', 'like', '%' . $courier_cancelled_search . '%');
-                })
-                ->orWhereHas('transactionheader.mscustomer', function ($q) use ($courier_cancelled_search) {
-                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_cancelled_search . '%']);
-                })
-                ->orWhereHas('transactionheader', function ($q) use ($courier_cancelled_search) {
-                    $q->where('transaction_id', 'like', '%' . $courier_cancelled_search . '%');
-                })
-                ->orWhere('shipment_id', 'like', '%' . $courier_cancelled_search . '%'); 
-            });
-        });
-
-        
     }
-
 }

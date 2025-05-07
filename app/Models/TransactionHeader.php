@@ -66,24 +66,45 @@ class TransactionHeader extends Model
             });
         });
 
-        $query->when($filters['courier_to_ship_search'] ?? false, function ($query, $courier_to_ship_search) {
-            $query->where(function ($query) use ($courier_to_ship_search) {
-                $query->whereHas('mscustomeraddress', function ($q) use ($courier_to_ship_search) {
-                    $q->where('customer_address_street', 'like', '%' . $courier_to_ship_search . '%')
-                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_to_ship_search . '%')
-                        ->orWhere('customer_address_district', 'like', '%' . $courier_to_ship_search . '%')    
-                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_to_ship_search . '%')
-                        ->orWhere('customer_address_province', 'like', '%' . $courier_to_ship_search . '%')  
-                        ->orWhere('customer_address_country', 'like', '%' . $courier_to_ship_search . '%');
+        $query->when($filters['admin_search'] ?? false, function ($query, $admin_search) {
+            $query->where(function ($query) use ($admin_search){
+                $query->whereHas('mscustomeraddress', function ($q) use ($admin_search) {
+                    $q->where('customer_address_street', 'like', '%' . $admin_search . '%')
+                        ->orWhere('customer_address_postal_code', 'like', '%' . $admin_search . '%')
+                        ->orWhere('customer_address_district', 'like', '%' . $admin_search . '%')    
+                        ->orWhere('customer_address_regency_city', 'like', '%' . $admin_search . '%')
+                        ->orWhere('customer_address_province', 'like', '%' . $admin_search . '%')  
+                        ->orWhere('customer_address_country', 'like', '%' . $admin_search . '%');
                 })
-                ->orWhereHas('mscustomer', function ($q) use ($courier_to_ship_search) {
-                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_to_ship_search . '%']);
+                ->orWhereHas('mscustomer', function ($q) use ($admin_search) {
+                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $admin_search . '%']);
                 })
-                ->orWhere('transaction_id', 'like', '%' . $courier_to_ship_search . '%');
+                ->orWhere('transaction_id', 'like', '%' . $admin_search . '%')
+                ->orWhereHas('msshipment', function ($q) use ($admin_search) {
+                    $q->where('shipment_id', 'like', '%' . $admin_search . '%')
+                        ->orwhere('shipment_recipient_name', 'like', '%' . $admin_search . '%');
+                })
+                ->orWhereHas('transactiondetail.msproduct', function ($q) use ($admin_search) {
+                    $q->where('product_name', 'like', '%' . $admin_search . '%');
+                });
+            });
+        });
+
+        $query->when($filters['courier_search'] ?? false, function ($query, $courier_search) {
+            $query->where(function ($query) use ($courier_search) {
+                $query->whereHas('mscustomeraddress', function ($q) use ($courier_search) {
+                    $q->where('customer_address_street', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_postal_code', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_district', 'like', '%' . $courier_search . '%')    
+                        ->orWhere('customer_address_regency_city', 'like', '%' . $courier_search . '%')
+                        ->orWhere('customer_address_province', 'like', '%' . $courier_search . '%')  
+                        ->orWhere('customer_address_country', 'like', '%' . $courier_search . '%');
+                })
+                ->orWhereHas('mscustomer', function ($q) use ($courier_search) {
+                    $q->whereRaw("CONCAT(customer_first_name, ' ', customer_last_name) LIKE ?", ['%' . $courier_search . '%']);
+                })
+                ->orWhere('transaction_id', 'like', '%' . $courier_search . '%');
             });
         });
     }
 }
-
-
-

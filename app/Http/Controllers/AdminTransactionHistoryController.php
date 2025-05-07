@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TransactionHeader;
 use App\Models\TransactionDetail;
 use App\Models\MsAdmin;
+use App\Models\MsPaymentMethod;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -14,6 +15,8 @@ class AdminTransactionHistoryController extends Controller
     public function index(Request $request)
     {
         $admins = Auth::guard('admin')->user();
+
+        $paymentMethods = MsPaymentMethod::all();
 
         $statusLink = [
             'processing' => 'Processing',
@@ -27,58 +30,78 @@ class AdminTransactionHistoryController extends Controller
 
         if ($status === 'processing')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'mscustomeraddress', 'mspaymentmethod', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
-                                    ->where('transaction_status', 'Processing')
                                     ->whereDoesntHave('msshipment')
+                                    ->filter([
+                                        'status' => 'Processing',
+                                        'admin_search' => $request->input('admin_search'),
+                                        'payment_method' => $request->input('payment_method')
+                                    ])
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10);
         }
 
         else if ($status === 'out-for-delivery')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment','transactiondetail.msproduct'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'mscustomeraddress', 'mspaymentmethod', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
-                                    ->where('transaction_status', 'Out for Delivery')
                                     ->whereHas('msshipment', function ($query) use ($status) {
                                         $query->filter(['shipment_status' => 'In Progress']);
                                     })
+                                    ->filter([
+                                        'status' => 'Out for Delivery',
+                                        'admin_search' => $request->input('admin_search'),
+                                        'payment_method' => $request->input('payment_method')
+                                    ])
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10);
         }
 
         else if ($status === 'shipped')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'mscustomeraddress', 'mspaymentmethod', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
-                                    ->where('transaction_status', 'Shipped')
                                     ->whereHas('msshipment', function ($query) use ($status) {
                                         $query->filter(['shipment_status' => 'Delivered']);
                                     })
+                                    ->filter([
+                                        'status' => 'Shipped',
+                                        'admin_search' => $request->input('admin_search'),
+                                        'payment_method' => $request->input('payment_method')
+                                    ])
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10);
         }
 
         else if ($status === 'completed')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'mscustomeraddress', 'mspaymentmethod', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
-                                    ->where('transaction_status', 'Completed')
                                     ->whereHas('msshipment', function ($query) use ($status) {
                                         $query->filter(['shipment_status' => 'Delivered']);
                                     })
+                                    ->filter([
+                                        'status' => 'Completed',
+                                        'admin_search' => $request->input('admin_search'),
+                                        'payment_method' => $request->input('payment_method')
+                                    ])
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10);
         }
 
         else if ($status === 'cancelled')
         {
-            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'transactiondetail.msproduct'])
+            $data = TransactionHeader::with(['mscustomer', 'msshipment', 'mscustomeraddress', 'mspaymentmethod', 'transactiondetail.msproduct'])
                                     ->where('admin_id', $admins->admin_id)
-                                    ->where('transaction_status', 'Cancelled')
                                     ->whereHas('msshipment', function ($query) use ($status) {
                                         $query->filter(['shipment_status' => 'Cancelled']);
                                     })
+                                    ->filter([
+                                        'status' => 'Cancelled',
+                                        'admin_search' => $request->input('admin_search'),
+                                        'payment_method' => $request->input('payment_method')
+                                    ])
                                     ->orderBy('transaction_date', 'desc')
                                     ->paginate(10); 
         }
@@ -87,6 +110,6 @@ class AdminTransactionHistoryController extends Controller
             $data->transactiondetail->each->append('subtotal');
         });
 
-        return view('admin-transactionhistory.index', compact('data', 'statusLink', 'status'));
+        return view('admin-transactionhistory.index', compact('data', 'statusLink', 'status', 'paymentMethods'));
     }
 }
