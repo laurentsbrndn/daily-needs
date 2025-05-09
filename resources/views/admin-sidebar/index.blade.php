@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/admin-addproduct.css">
     <link rel="stylesheet" href="/css/admin-processingorder.css">
     <link rel="stylesheet" href="/css/admin-transactionhistory.css">
+    <link rel="stylesheet" href="/css/products.css">
 </head>
 
 <body>
