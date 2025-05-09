@@ -60,15 +60,15 @@
                     <div class="products-cover">
                         <div class="products-card">
                             <img src="{{ asset('storage/product_photos/' . $product->product_image) }}" class="card-img-top" alt="{{ $product->product_name }}">
-                            <div class="card-body">
-                                <h3 class="products-card-name">{{ $product->product_name }}</h3>
-                                <p class="products-card-price">Rp{{ number_format($product->product_price, 2, ',', '.') }}</p>
-                            </div>
-                            <div class="card-body">
+                            <div class="card-body info-row">
+                                <div class="product-text">
+                                    <h3 class="products-card-name">{{ $product->product_name }}</h3>
+                                    <p class="products-card-price">Rp{{ number_format($product->product_price, 2, ',', '.') }}</p>
+                                </div>
                                 <a href="{{ url('/admin/productlist/' . $product->product_slug) }}">
                                     <i class="bi bi-pencil-square"></i>
-                                </a>
-                            </div>
+                                </a>  
+                            </div> 
                         </div>
                     </div>
                 @endforeach
