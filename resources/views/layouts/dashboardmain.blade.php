@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/topup-balance.css">
+    <link rel="stylesheet" href="/css/purchase-history.css">
 </head>
    
 <body>
