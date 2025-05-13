@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/admin-addproduct.css">
     <link rel="stylesheet" href="/css/admin-processingorder.css">
     <link rel="stylesheet" href="/css/admin-transactionhistory.css">
+    <link rel="stylesheet" href="/css/admin-myprofile.css">
 </head>
 
 <body>
@@ -71,5 +72,6 @@
     <script src="/js/admin-transactionhistory-shipped.js"></script>
     <script src="/js/admin-transactionhistory-completed.js"></script>
     <script src="/js/admin-transactionhistory-cancelled.js"></script>
+    <script src="/js/admin-myprofile.js"></script>
 </body>
 </html>
