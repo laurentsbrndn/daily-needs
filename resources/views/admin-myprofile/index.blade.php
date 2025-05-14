@@ -21,18 +21,14 @@
                 <div class="form-group">
                     <div id="profile-pic">
                         <div class="form-wrapper">
-                            <!-- Profile Image Preview -->
                             @if(auth('admin')->user()->admin_photo)
                                 <img src="{{ asset('storage/admin_photos/' . auth('admin')->user()->admin_photo) }}" alt="Profile Photo" width="100" id="profile-image">
                             @else
-                                <!-- Default person icon when no profile photo is uploaded -->
                                 <img src="{{ asset('path/to/default-icon.png') }}" alt="Default Profile" width="100" id="profile-image">
                             @endif
                             
-                            <!-- Hidden File Input for Uploading -->
                             <input type="file" name="admin_photo" class="form-control-file" id="profile-photo" style="display: none;" onchange="previewImage(event)">
                             
-                            <!-- Pen Icon to Trigger File Input -->
                             <label for="profile-photo" class="pen-icon-label">
                                 <i class="bi bi-pencil-square"></i>
                             </label>
@@ -40,7 +36,6 @@
                     </div>
                 </div>
 
-                <!-- First Name -->
                 <div class="form-group">
                     <label>First Name</label>
                     <div class="form-wrapper">
@@ -54,7 +49,6 @@
                     </div>
                 </div>
 
-                <!-- Last Name -->
                 <div class="form-group">
                     <label>Last Name</label>
                     <div class="form-wrapper">
@@ -68,7 +62,6 @@
                     </div>
                 </div>
 
-                <!-- Phone Number -->
                 <div class="form-group">
                     <label>Phone Number</label>
                     <div class="form-wrapper">
@@ -82,7 +75,6 @@
                     </div>
                 </div>
 
-                <!-- Address -->
                 <div class="form-group">
                     <label>Address</label>
                     <div class="form-wrapper">
@@ -96,7 +88,6 @@
                     </div>
                 </div>
 
-                <!-- Password -->
                 <div class="form-group">
                     <label>Password (Leave blank if you do not want to change it)</label>
                     <div class="form-wrapper">
