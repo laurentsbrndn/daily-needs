@@ -30,14 +30,14 @@ h4{
     box-sizing: border-box;
 }
 
-
-
+/* check */
 .btn{
     background-color: #D1D88D;
     border: none;
     color: black;
 }
 
+/* check */
 .btn-success {
     background-color: #D1D88D;
     border: none;
@@ -155,6 +155,7 @@ p#selectedAddressText.receiver{
     
 }
 
+/* check */
 .btn-danger{
     background-color: rgba(255, 0, 0, 0);
     font-weight: bold;

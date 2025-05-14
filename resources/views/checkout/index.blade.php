@@ -11,7 +11,7 @@
     @endif  
     <div class="container-main">
         <div class="container-kiri">
-            <div class="card ">
+            <div class="card">
                 <h4 class="mb-3">Shipping Details</h4>
                 <div>
                     <p id="selectedAddressText" class="receiver">No address selected</p>
@@ -109,7 +109,7 @@
                         </button>
                         @foreach ($addresses as $address)
                         <div class="card p-3 mb-2">
-                            <button class="btn btn-warning btn-sm edit-address"
+                            <button class="btn edit-address"
                                 data-id="{{ $address->customer_address_id }}"
                                 data-name="{{ $address->customer_address_name }}"
                                 data-street="{{ $address->customer_address_street }}"
@@ -254,28 +254,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
-        @csrf
-
-        @if(isset($quantity) && count($products) === 1)
-            <input type="hidden" name="product_id" value="{{ $products[0]->product_id }}">
-            <input type="hidden" name="quantity" value="{{ $quantity }}">
-            <input type="hidden" id="totalPrice" value="{{ $products[0]->product_price * $quantity }}">
-        @else
-            @foreach ($products as $product)
-                <input type="hidden" name="product_ids[]" value="{{ $product->product_id }}">
-                <input type="hidden" name="quantities[]" value="{{ $product->cart_quantity ?? 1 }}">
-            @endforeach
-            <input type="hidden" id="totalPrice" value="{{ $totalPrice }}">
-        @endif
-
-        <input type="hidden" name="payment_method_id" id="selectedPayment" value="">
-        <input type="hidden" name="customer_address_id" id="selectedAddress" value="">
-        <input type="hidden" id="customerBalance" value="{{ $customers->customer_balance }}">
-
-        <button type="submit" class="btn btn-primary" id="place-order">Place Order</button>
-    </form> --}}
 
     <div class="modal fade" id="insufficientBalanceModal" tabindex="-1" aria-labelledby="insufficientBalanceLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

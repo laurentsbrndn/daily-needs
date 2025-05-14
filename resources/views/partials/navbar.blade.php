@@ -126,7 +126,7 @@
                 <ul x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                     <li>
                         <a href="/dashboard/myprofile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                            <i class="bi bi-person-circle mr-2"></i> My Dashboard
+                            <i class="bi bi-person-circle mr-2"></i> My Account
                         </a>
                     </li>
                     <li><hr class="my-1 border-gray-200"></li>
