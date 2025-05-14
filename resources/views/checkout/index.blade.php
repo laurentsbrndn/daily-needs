@@ -14,7 +14,6 @@
             <div class="card ">
                 <h4 class="mb-3">Shipping Details</h4>
                 <div>
-                    <!-- <h6>Send To</h6> -->
                     <p id="selectedAddressText" class="receiver">No address selected</p>
                 </div> 
                 <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addressModal">
@@ -129,8 +128,8 @@
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </form>
-                            <strong>Receiver Name: {{ $address->customer_address_name }}</strong>
-                            <p>Address: <br>{{ $address->customer_address_street }}, {{ $address->customer_address_district }}, {{ $address->customer_address_regency_city }}, {{ $address->customer_address_province }}, {{ $address->customer_address_country }}, {{ $address->customer_address_postal_code }}</p>
+                            <strong>{{ $address->customer_address_name }}</strong>
+                            <p>{{ $address->customer_address_street }}, {{ $address->customer_address_district }}, {{ $address->customer_address_regency_city }}, {{ $address->customer_address_province }}, {{ $address->customer_address_country }}, {{ $address->customer_address_postal_code }}</p>
                             <button class="btn btn-success btn-sm select-address" data-id="{{ $address->customer_address_id }}">
                                 Select
                             </button>
@@ -256,7 +255,7 @@
         </div>
     </div>
 
-    <!-- <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
+    {{-- <form action="{{ route('checkout.payment') }}" method="post" id="checkoutForm">
         @csrf
 
         @if(isset($quantity) && count($products) === 1)
@@ -276,7 +275,7 @@
         <input type="hidden" id="customerBalance" value="{{ $customers->customer_balance }}">
 
         <button type="submit" class="btn btn-primary" id="place-order">Place Order</button>
-    </form> -->
+    </form> --}}
 
     <div class="modal fade" id="insufficientBalanceModal" tabindex="-1" aria-labelledby="insufficientBalanceLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
