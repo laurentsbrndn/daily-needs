@@ -116,7 +116,7 @@
                 @enderror
             </div>
     
-            <button type="submit" class="btn btn-success">Save Changes</button>
+            <button type="submit" class="button-submit-profile">Save Changes</button>
         </form>
     </div>
 

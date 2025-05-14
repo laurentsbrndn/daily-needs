@@ -27,9 +27,8 @@
             @foreach($transactions as $transaction)
             <div class="transaction-card">
                 <div class="transaction-header">
-                    <span class="order-id">Order #{{ $transaction->transaction_id }}</span>
                     <span class="order-date">
-                        {{ \Carbon\Carbon::parse($transaction->transaction_date)->format('d M Y H:i') }}
+                        {{ \Carbon\Carbon::parse($transaction->transaction_date)->format('d M Y | H:i') }}
                     </span>
                     <span class="order-status {{ strtolower($transaction->transaction_status) }}">{{ $transaction->transaction_status }}</span>
                 </div>
@@ -54,7 +53,7 @@
                         </div>
                         <div class="summary-row">
                             <span>Shipping Address:</span>
-                            <span>{{ $transaction->mscustomeraddress->address }}</span>
+                            <span>{{ $transaction->mscustomeraddress->customer_full_address_name }}</span>
                         </div>
                         <div class="summary-row total">
                             <span>Total:</span>
@@ -65,27 +64,67 @@
 
                 <div class="transaction-footer">
                     @if($transaction->transaction_status == 'Pending')
-                        <form action="{{ route('purchasehistory.cancel', $transaction->transaction_id) }}" method="POST" class="action-form">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="cancel-btn">Cancel Order</button>
-                        </form>
-                    @endif
-
-                    @if($transaction->transaction_status == 'Shipped')
-                        <form action="{{ route('purchasehistory.confirm', $transaction->transaction_id) }}" method="POST" class="action-form">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="confirm-btn">Confirm Receipt</button>
-                        </form>
+                        <button type="button" class="cancel-btn" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+                            Cancel Order
+                        </button>
+                    @elseif($transaction->transaction_status == 'Shipped')
+                        <button type="button" class="confirm-btn" data-bs-toggle="modal" data-bs-target="#completeOrderModal">
+                            Complete Order
+                        </button>
                     @endif
                 </div>
             </div>
             @endforeach
         </div>
 
-        <div class="pagination-links">
-            {{ $transactions->links() }}
+        <div class="pagination-container">
+            <div class="d-flex justify-content-center mt-4">
+                {{ $transactions->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
+
+        <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('purchasehistory.cancel', $transaction->transaction_id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelOrderModalLabel">Cancellation Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to cancel your order?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="completeOrderModal" tabindex="-1" aria-labelledby="confirmOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('purchasehistory.confirm', $transaction->transaction_id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelOrderModalLabel">Order Confirmation Complete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to complete your order?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-success">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     @endif
 </div>

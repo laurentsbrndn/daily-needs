@@ -154,10 +154,10 @@ label[for="customer_gender"] {
 }
 
 .form-group input[name="customer_password"] {
-    margin-bottom: 1rem; /* Adds space between password input and confirm password label */
+    margin-bottom: 1rem;
 }
 
-button[type="submit"].btn {
+.button-submit-profile {
     display: block; 
     width: 100%; 
     max-width: 300px; 
@@ -171,8 +171,6 @@ button[type="submit"].btn {
     transition: background-color 0.3s ease; 
 }
 
-button[type="submit"].btn:hover {
+.button-submit-profile:hover {
     background-color: #b1b67c; 
 }
-
-

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/topup-balance.css">
     <link rel="stylesheet" href="/css/purchase-history.css">
+    <link rel="stylesheet" href="/css/myprofile.css">
+    <link rel="stylesheet" href="/css/footer-sidebar.css">
 </head>
    
 <body>
@@ -21,6 +23,11 @@
         @yield('container')
     </div>
 
+    <div>
+        @include('footer-sidebar.index')
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/myprofile.js"></script>
 </body>
 </html>

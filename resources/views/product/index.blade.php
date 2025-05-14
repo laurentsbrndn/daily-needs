@@ -47,8 +47,12 @@
                     <button type="submit" class="btn btn-success" {{ $product->product_stock == 0 ? 'disabled data-bs-toggle=tooltip data-bs-placement=top title=Stok%20habis%2C%20tidak%20bisa%20ditambahkan%20ke%20keranjang' : '' }}>Add to Cart</button>
                     <div id="quantity-cart-error"></div>
                 </form>
+
+                <div id="cartPopup">
+                    Item successfully added to cart! <a href="/cart" >View your cart</a>
+                </div>  
             @else
-                <a href="{{ route('login') }}"><button type="submit" class="btn btn-success">Add to Cart</button></a>
+                <a href="{{ route('login') }}"><button type="submit" class="add-to-cart-btn">Add to Cart</button></a>
             @endauth
 
             @auth('customer')
@@ -59,13 +63,13 @@
                     <button type="submit" class="btn btn-primary" {{ $product->product_stock == 0 ? 'disabled data-bs-toggle=tooltip data-bs-placement=top title=Stok%20habis%2C%20tidak%20bisa%20dibeli' : '' }}>Buy</button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary">Buy</a>
+                <a href="{{ route('login') }}" class="buy-btn">Buy</a>
             @endauth
     </div>
 
 
-    </div>
-    <!-- <div class="product-detail">
+    {{-- </div>
+    <div class="product-detail">
         <a href="/"><i class="bi bi-arrow-left-circle"></i></a>
         <img src="{{ asset('storage/product_photos/' . $product->product_image) }}" alt="{{ $product->product_name }}">
         <h1>{{ $product->product_name }}</h1>
@@ -114,5 +118,5 @@
         @else
             <a href="{{ route('login') }}" class="btn btn-primary">Buy</a>
         @endauth        
-    </div> -->
+    </div> --}}
 @endsection
