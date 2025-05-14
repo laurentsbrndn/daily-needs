@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/admin-processingorder.css">
     <link rel="stylesheet" href="/css/admin-transactionhistory.css">
     <link rel="stylesheet" href="/css/admin-myprofile.css">
+    <link rel="stylesheet" href="/css/admin-products.css">
 </head>
 
 <body>

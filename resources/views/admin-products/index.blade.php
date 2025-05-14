@@ -3,7 +3,7 @@
 @section('container')
 
     <div class="content">
-        <h2>Edit Product</h2>
+        <h2>Product List</h2>
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -75,7 +75,7 @@
             </div>
     
         @else
-            <p>No Product found.</p>
+            <p>No Products found.</p>
         @endif
     </div>
 

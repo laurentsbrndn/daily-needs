@@ -10,19 +10,8 @@
     font-family: "Karla", sans-serif;
 }
 
-.title{
-    margin-top: 40px;
-}
-
-h1{
-    font-family: "Poppins", sans-serif;  
-}
-
 body{
     background-color: white !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
     
@@ -31,6 +20,7 @@ body{
 .go-signup{
     color: #05D716;
     font-family: "Karla", sans-serif;  
+    text-decoration: none;
 }
 
 .signup{
@@ -57,7 +47,7 @@ label{
 .admin-login-container button{
     margin-top: 22px;
     padding: 10px 20px; 
-    font-size: 16px; 
+    font-size: 20px; 
     width: 100%; 
     background-color: #D1D88D;
     color: black;
@@ -69,7 +59,7 @@ label{
 
 .admin-login-container button:hover{
     background-color: #485935;
-   color: white;
+    color: white;
 }
 
 .password-wrapper {

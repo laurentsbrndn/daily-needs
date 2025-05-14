@@ -3,6 +3,8 @@
 .courier-login-container{
     margin: auto;
     width:500px;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
     border-radius: 5%;
     font-family: "Karla", sans-serif !important;
@@ -61,7 +63,7 @@ h1{
 
 .courier-login-container button:hover{
     background-color: #485935;
-   
+    color: white;
 }
 
 .password-wrapper {
