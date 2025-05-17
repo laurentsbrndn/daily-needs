@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/courier-sidebar.css">
     <link rel="stylesheet" href="/css/courier-deliveryorder.css">
     <link rel="stylesheet" href="/css/courier-login.css">
+    <link rel="stylesheet" href="/css/courier-myprofile.css">
 </head>
 
 <body>
@@ -50,6 +51,7 @@
     <script src="/js/courier-inprogress.js"></script>
     <script src="/js/courier-delivered.js"></script>
     <script src="/js/courier-cancelled.js"></script>
+    <script src="/js/courier-myprofile.js"></script>
 </body>
 </html>
     
