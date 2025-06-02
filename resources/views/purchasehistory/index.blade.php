@@ -16,6 +16,7 @@
 
     <div class="search-box">
         <form action="" method="GET">
+            <input type="hidden" name="status" value="{{ request('status', 'completed') }}">
             <input type="text" name="search" placeholder="Search transactions..." value="{{ request('search') }}">
             <button type="submit"><i class="bi bi-search"></i></button>
         </form>
