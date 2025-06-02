@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/css/admin-transactionhistory.css">
     <link rel="stylesheet" href="/css/admin-myprofile.css">
     <link rel="stylesheet" href="/css/admin-products.css">
-    <link rel="stylesheet" href="/css/admin-product.css">
 </head>
 
 <body>
@@ -75,6 +74,5 @@
     <script src="/js/admin-transactionhistory-completed.js"></script>
     <script src="/js/admin-transactionhistory-cancelled.js"></script>
     <script src="/js/admin-myprofile.js"></script>
-    <script src="/js/admin-product.js"></script>
 </body>
 </html>

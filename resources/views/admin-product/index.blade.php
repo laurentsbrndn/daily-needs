@@ -1,5 +1,7 @@
 @extends('admin-sidebar.index')
 
+<link rel="stylesheet" href="/css/admin-product.css">
+
 @section('container')
 
 <div class="content">
@@ -119,5 +121,7 @@
         </div>
     </form> 
 </div>
+
+<script src="/js/admin-product.js"></script>
 
 @endsection
