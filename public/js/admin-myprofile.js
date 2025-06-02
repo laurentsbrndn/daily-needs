@@ -1,16 +1,26 @@
 function previewImage(event) {
-    const image = event.target.files[0];
-    if (image) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.querySelector('#profile-image');
-            img.src = e.target.result;
-            img.width = 100; // Ensure the image is properly sized
+    const file = event.target.files[0];
+    const reader = new FileReader(); 
+
+    reader.onload = function() {
+        const output = document.getElementById('profile-photo-preview');
+        if (output) {
+            output.src = reader.result; 
+        } else {
+            const placeholder = document.querySelector('.profile-photo-placeholder');
+            const imgElement = document.createElement('img');
+            imgElement.src = reader.result;
+            imgElement.alt = "Profile Photo";
+            imgElement.classList.add('profile-photo');
+            placeholder.innerHTML = ''; 
+            placeholder.appendChild(imgElement); 
         }
-        reader.readAsDataURL(image);
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
     }
 }
-
 
 setTimeout(function() {
     const alert = document.getElementById('success-alert');
@@ -24,5 +34,5 @@ setTimeout(function() {
 
 function hidePenIcon(iconId) {
     var icon = document.getElementById(iconId);
-    icon.style.display = 'none'; // Hide the pen icon
+    icon.style.display = 'none';
 }

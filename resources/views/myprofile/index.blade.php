@@ -5,10 +5,10 @@
     <div class="content">
 
         <div class="header-container">
-            <a href="{{ url()->previous() }}" class="back-button">
-                <i class="bi bi-arrow-left-circle"></i>
+            <a href="{{ url()->previous() }}" class="back">
+                <i class="bi bi-arrow-left"></i>
             </a>
-            <h2>Edit Profile</h2>
+            <h2 class="edit-profile">Edit Profile</h2>
         </div>
     
         @if(session('success'))
@@ -26,12 +26,13 @@
                 <input id="customer_photo_input" type="file" name="customer_photo" class="form-control" style="display: none;" onchange="previewImage(event)">
                     
                 <label for="customer_photo_input" style="cursor: pointer;">
-                    @php
-                        $photo = auth('customer')->user()->customer_photo;
-                    @endphp
-
-                    @if($photo && Storage::disk('public')->exists('customer_photos/' . $photo))
-                        <img src="{{ asset('storage/customer_photos/' . auth('customer')->user()->customer_photo) }}" alt="Profile Photo" class="profile-photo" id="profile-photo-preview">
+                    @if(auth('customer')->user()->customer_photo && Storage::disk('public')->exists('customer_photos/' . auth('customer')->user()->customer_photo))
+                        <img 
+                            src="{{ asset('storage/customer_photos/' . auth('customer')->user()->customer_photo) }}" 
+                            alt="Profile Photo" 
+                            class="profile-photo" 
+                            id="profile-photo-preview"
+                        >
                     @else
                         <div class="profile-photo-placeholder">
                             <i class="bi bi-person-circle"></i>

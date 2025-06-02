@@ -2,10 +2,12 @@
 
 @section('container')
 
-<div class="content">
+<div class="content-myprofile">
     <div class="container-header">
-        <i class="bi bi-arrow-left-circle"></i>
-        <h2>Edit Profile</h2>
+        <a href="{{ url()->previous() }}" class="back">
+            <i class="bi bi-arrow-left-circle"></i>
+        </a>
+        <h2 class="edit-profile">Edit Profile</h2>
     </div>
     <div class="container">
         @if(session('success'))
@@ -20,21 +22,27 @@
 
             <div class="form-group">
                 <div id="profile-pic">
+                    <label>Profile Photo</label>
                     <div class="form-wrapper">
-                        @if(auth('courier')->user()->courier_photo)
-                            <img src="{{ asset('storage/courier_photos/' . auth('courier')->user()->courier_photo) }}" alt="Profile Photo" width="100" id="profile-image">
-                        @else
-                            <img src="{{ asset('path/to/default-icon.png') }}" alt="Default Profile" width="100" id="profile-image">
-                        @endif
-                        <input type="file" name="courier_photo" class="form-control-file" id="profile-photo" style="display: none;" onchange="previewImage(event)">
-                        <label for="profile-photo" class="pen-icon-label">
-                            <i class="bi bi-pencil-square"></i>
+                        <input id="courier_photo_input" type="file" name="courier_photo" class="form-control" style="display: none;" onchange="previewImage(event)">
+                        <label for="courier_photo_input" style="cursor: pointer;">
+                            @if(auth('courier')->user()->courier_photo && Storage::disk('public')->exists('courier_photos/' . auth('courier')->user()->courier_photo))
+                                <img 
+                                    src="{{ asset('storage/courier_photos/' . auth('courier')->user()->courier_photo) }}" 
+                                    alt="Profile Photo" 
+                                    class="profile-photo" 
+                                    id="profile-photo-preview"
+                                >
+                            @else
+                                <div class="profile-photo-placeholder">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                            @endif
                         </label>
                     </div>
                 </div>
             </div>
 
-            <!-- First Name -->
             <div class="form-group">
                 <label>First Name</label>
                 <div class="form-wrapper">
@@ -46,7 +54,6 @@
                 </div>
             </div>
 
-            <!-- Last Name -->
             <div class="form-group">
                 <label>Last Name</label>
                 <div class="form-wrapper">
@@ -58,7 +65,6 @@
                 </div>
             </div>
 
-            <!-- Phone Number -->
             <div class="form-group">
                 <label>Phone Number</label>
                 <div class="form-wrapper">
@@ -70,7 +76,6 @@
                 </div>
             </div>
 
-            <!-- Address -->
             <div class="form-group">
                 <label>Address</label>
                 <div class="form-wrapper">
@@ -82,7 +87,6 @@
                 </div>
             </div>
 
-            <!-- Password -->
             <div class="form-group">
                 <label>Password (Leave blank if you do not want to change it)</label>
                 <div class="form-wrapper">

@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <div id="profile-pic">
                         <div class="form-wrapper">
-                            @if(auth('admin')->user()->admin_photo)
+                            {{-- @if(auth('admin')->user()->admin_photo)
                                 <img src="{{ asset('storage/admin_photos/' . auth('admin')->user()->admin_photo) }}" alt="Profile Photo" width="100" id="profile-image">
                             @else
                                 <img src="{{ asset('path/to/default-icon.png') }}" alt="Default Profile" width="100" id="profile-image">
@@ -31,6 +31,23 @@
                             
                             <label for="profile-photo" class="pen-icon-label">
                                 <i class="bi bi-pencil-square"></i>
+                            </label> --}}
+                            <label>Profile Photo</label>
+                            <input id="admin_photo_input" type="file" name="admin_photo" class="form-control" style="display: none;" onchange="previewImage(event)">
+                
+                            <label for="admin_photo_input" style="cursor: pointer;">
+                                @if(auth('admin')->user()->admin_photo && Storage::disk('public')->exists('admin_photos/' . auth('admin')->user()->admin_photo))
+                                    <img 
+                                        src="{{ asset('storage/admin_photos/' . auth('admin')->user()->admin_photo) }}" 
+                                        alt="Profile Photo" 
+                                        class="profile-photo" 
+                                        id="profile-photo-preview"
+                                    >
+                                @else
+                                    <div class="profile-photo-placeholder">
+                                        <i class="bi bi-person-circle"></i>
+                                    </div>
+                                @endif
                             </label>
                         </div>
                     </div>

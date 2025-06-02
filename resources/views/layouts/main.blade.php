@@ -13,9 +13,8 @@
     <link rel="stylesheet" href="/css/products.css">
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/css/checkout.css">
-    <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/viewcart.css">
-    <link rel="stylesheet" href="/css/checkout.css">
+    <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
     <div>
@@ -39,5 +38,6 @@
     <script src="/js/insufficientbalance.js"></script>
     <script src="/js/disablebuyandaddtocart.js"></script>
     <script src="/js/footer.js"></script>
+    <script src="/js/category-scroll.js"></script>
 </body>
 </html>

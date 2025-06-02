@@ -8,6 +8,7 @@ footer {
     align-items: flex-start;
     font-family: "Poppins", sans-serif;
     position: relative;
+    margin-top: 100px;
 }
 
 footer h2 {
@@ -72,5 +73,5 @@ footer .scroll-up {
 }
 
 main {
-    margin-bottom: 100px; /* Sesuaikan 100px dengan tinggi footer Anda */
+    margin-bottom: 100px;
 }

@@ -112,6 +112,7 @@ body {
     font-size: 20px;
     color: #333;
     text-decoration: none;
+    transition: 0.15s ease;
 }
 
 .card-body.info-row a:hover {
@@ -134,4 +135,9 @@ body {
 
 .balance h3 {
     color: #485935;
+}
+
+.image-per-product{
+    
+    background-color: rgb(250, 250, 250);
 }

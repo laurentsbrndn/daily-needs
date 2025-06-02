@@ -3,7 +3,14 @@
 @section('container')
 
     <div class="content">
-        <h2 class="text-xl font-bold mb-4">Delivery Order</h2>
+
+        <div class="container-header-delivery">
+            <a href="{{ url()->previous() }}" class="back-delivery">
+                <i class="bi bi-arrow-left-circle"></i>
+            </a>
+            <h2 class="delivery-order">Delivery Order</h2>
+        </div>
+
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -13,7 +20,7 @@
         <ul class="nav nav-tabs">
             @foreach($statusLink as $key => $label)
                 <li class="nav-item">
-                    <a class="nav-link {{ $status == $key ? 'active' : '' }}" href="{{ route('courier.delivery', ['status' => $key]) }}">
+                    <a class="nav-link delivery-status {{ $status == $key ? 'active' : '' }}" href="{{ route('courier.delivery', ['status' => $key]) }}">
                         {{ $label }}
                     </a>
                 </li>
@@ -43,7 +50,7 @@
                     @endif
                     <div class="input-group">
                         <input type="text" name="courier_search" value="{{ request('courier_search') }}" class="form-control" placeholder="Type here to search">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-success">Search</button>
                     </div>
                 </form>
 

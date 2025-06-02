@@ -2,7 +2,7 @@
 
 @section('container')
 <div class="container">
-    <div class="mt-10">
+    <div class="checkout-title">
         <h1><strong>Checkout</strong></h1>
     </div>
     
@@ -27,7 +27,7 @@
             <h4 class="mb-3">Your Order</h4>
             @foreach($products as $product)
                 <div class="checkout-card">
-                    <img src="{{ asset('storage/' . $product->product_image ) }}" alt="{{ $product->product_name }}">
+                    <img src="{{ asset('storage/product_photos/' . $product->product_image) }}" class="card-img-top" alt="{{ $product->product_name }}">
                     <div class="checkout-details">
                         <div><strong>{{ $product->product_name }}</strong></div>
                         <div>Qty: {{ $product->cart_quantity }}</div>

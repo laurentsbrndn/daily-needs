@@ -1,11 +1,15 @@
-h1{
+/* h1{
     font-weight: normal;
     padding-left: 60px;
-}
+} */
 
 .container{
-    margin-top: 30px;
     margin-left: 70px;
+    padding-top: 50px;
+}
+
+.checkout-title{
+    padding-top: 60px;
 }
 
 .container-main{
@@ -43,7 +47,6 @@ h4{
     border: none;
     color: black;
     transition: background-color 0.2s ease;
-    font-size: smaller;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);;
 }
 
@@ -161,9 +164,9 @@ p#selectedAddressText.receiver{
     font-weight: bold;
 }
 
-.btn-primary{
+/* .btn-primary{
     margin-left: 17px;
-}
+} */
 
 #newaddress{
     background-color: #124108;

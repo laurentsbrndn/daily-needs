@@ -17,7 +17,7 @@
 <body>
     <div class="sidebar">
         <div class="logo-container">
-            <img src="{{ asset('assets/image/Title Icon.jpeg') }}" alt="Logo" class="logo">
+            <img src="{{ asset('assets/image/Title-Icon.jpeg') }}" alt="Logo" class="logo">
 
         </div>
         <div class="sidebar-container">

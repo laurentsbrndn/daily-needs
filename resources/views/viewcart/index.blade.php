@@ -12,10 +12,11 @@
     @endif
 
 
-    <div class="container my-5" id="container">
-        
+    <div class="container" id="container">
         <div class="card p-15 ">
-            <h1 class="mb-4 text-center">Shopping Cart</h1>
+            <div class="cart-title d-flex justify-content-center pt-5 mr-15">
+                <h1 class="mb-4">Shopping Cart</h1>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -37,7 +38,7 @@
                         </td>
                         <td class="align-middle">
                             <a href="{{ url($item->msproduct->msbrand->brand_slug . '/' . $item->msproduct->product_slug) }}" class="d-flex align-items-center text-decoration-none text-dark">
-                                <img src="{{ asset('storage/products/' . ($item->msproduct->product_image ?? 'default.png')) }}" 
+                                <img src="{{ asset('storage/product_photos/' . ($item->msproduct->product_image ?? 'default.png')) }}" 
                                 alt="{{ $item->msproduct->product_name }}" 
                                 class="img-thumbnail me-5" width="120" height="120">
                                 {{ $item->msproduct->product_name }}
